@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.2</version>
 		</dependency>
 
 		<!-- 스프링의 파일 업로드 기능을 사용하기 위한 라이브러리 설정 -->

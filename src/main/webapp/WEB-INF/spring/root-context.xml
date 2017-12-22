@@ -24,7 +24,7 @@
 			<value>bread</value>
 		</property>
 		<property name="password">
-			<value>bread</value>
+			<value>bread123</value>
 		</property>
 	</bean>
 
