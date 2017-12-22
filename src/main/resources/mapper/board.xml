@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<!-- blognotice 테이블의 데이터를 notice_date의 내림차순으로 정렬해서 첫번째부터 5개의 데이터를 가져오는 sql -->
+	<select id="selectNoticeList" resultType="com.choongang.blog.dto.NoticeDto">
+		select *
+		from (select rownum rnum, notice_num,notice_subject, notice_content,
+		notice_readcount, notice_date	from
+		(select * from blognotice	order by notice_date desc))
+		where rnum &lt;= 5
+	</select>
+
+	<!-- 글번호를 매개변수로 받아서 BlogNotice 테이블에서 글번호에 해당하는 데이터의 notice_readcount를 1증가시켜 
+		주는 sql -->
+	<update id="updateNotice" parameterType="Integer">
+		update blognotice set notice_readcount = notice_readcount+1
+		where notice_num = #{num}
+	</update>
+
+	<!-- 정수를 매개변수로 받아서 blognotice 테이블에서 notice_num에 해당하는 데이터의 모든 컬럼을 NoticeDto 
+		타입으로 리턴해주는 sql -->
+	<select id="getNotice" parameterType="Integer"
+		resultType="com.choongang.blog.dto.NoticeDto">
+		select * from blognotice where notice_num = #{num}
+	</select>
+
+	<!-- blognotice 테이블에서 가장 큰 notice_num의 값을 리턴해주는 sql -->
+	<select id="maxNoticeNum" resultType="Integer">
+		select max(notice_num)	from blognotice
+	</select>
+	
+	<!-- NoticeDto를 매개변수로 받아서 notice_Num, notice_Subject, notice_Content, notice_Readcount, 
+		오늘 날짜를 blognotice 테이블에 삽입하는 sql -->
+	<insert id="insertNotice" parameterType="com.choongang.blog.dto.NoticeDto">
+		insert into blognotice	values(#{notice_Num},#{notice_Subject},
+		#{notice_Content},#{notice_Readcount},sysdate)
+	</insert>
+
+	<!-- blogboard 테이블의 데이터 개수를 리턴해주는 sql -->
+	<select id="countBoardList" resultType="Integer">
+		select count(*)	from blogboard
+	</select>
+
+	<!-- start와 end의 값을 맵으로 받아서 board_date로 내림차순 정렬한 후 start와 end 번째에 해당하는 데이터를 
+		찾아와서 BoardDto 타입으로 리턴해주는 sql -->
+	<select id="selectBoardList" parameterType="java.util.Map"
+		resultType="com.choongang.blog.dto.BoardDto">
+		select * from (select rownum rnum, board_num,
+		board_id, board_subject, board_content,
+		board_file, board_readcount, board_date,
+		board_ip from(select * from blogboard order by board_date desc))
+		where rnum &gt;=#{start} and rnum &lt;=#{end}
+
+	</select>
+
+	<!-- 정수 1개를 받아서 blogboard 테이블에서 board_num과 일치하는 데이터를 찾아서 모든 컬럼을 BoardDto 
+		타입으로 리턴하는 sql -->
+	<select id="getBoard" parameterType="Integer"
+		resultType="com.choongang.blog.dto.BoardDto">
+		select * from blogboard	where board_num=#{num}
+	</select>
+	
+	<!-- 정수 1개를 받아서 blogboard 테이블에서 board_num과 일치하는 데이터를 찾아서 board_readcount 
+		값을 1증가시켜 주는 sql -->
+	<update id="updateReadcount" parameterType="Integer">
+		update blogboard set board_readcount = board_readcount + 1
+		where board_num=#{num}
+	</update>
+	
+	<!-- blogreply 테이블과 blogmember 테이블을 board_id 와 email을 join 한 후 매개변수로 받은 
+		정수와 board_num이 일치하는 데이터의 board_id, reply_content, name, image를 찾는 sql -->
+	<select id="getReplyList" parameterType="Integer" resultType="java.util.Map">
+		select board_id, reply_content, name, image
+		from blogreply, blogmember
+		where blogreply.board_id = blogmember.email and
+		board_num = #{num}	order by reply_num desc
+	</select>
+
+	<!-- blogreply 테이블에 데이터를 삽입 -->
+	<!-- blogreply 테이블에서 가장 큰 reply_num 리턴하는 sql -->
+	<select id="maxReplyNum" resultType="Integer">
+		select max(reply_num) from blogreply
+	</select>
+	
+	<!-- blogreply 테이블에 데이터를 삽입하는 sql Dto가 없으므로 Map을 이용해서 삽입 -->
+	<insert id="insertReply" parameterType="java.util.Map">
+		insert into blogreply values(#{num}, #{board_num},#{content},#{email})
+	</insert>
+
+	<!-- 게시글 삽입을 위한 sql -->
+	<!-- blogboard 테이블에서 가장 큰 board_num을 찾아오는 sql -->
+	<select id="maxBoardNum" resultType="Integer">
+		select max(board_num) from blogboard
+	</select>
+
+	<insert id="insertBoard" parameterType="com.choongang.blog.dto.BoardDto">
+		insert into blogboard values(#{board_Num},#{board_Id},
+		#{board_Subject},#{board_Content},#{board_file},0,sysdate,#{board_Ip})
+	</insert>
+
+	<!-- Map을 받아서 blogboard 테이블의 데이터를 수정하는 sql -->
+	<update id="updateBoard" parameterType="java.util.Map">
+		update blogboard
+		set
+		board_subject=#{board_subject},
+		board_content=#{board_content},
+		board_file=#{board_file},
+		board_ip=#{board_ip}
+		where board_num=#{board_num}
+	</update>
+
+	<!-- 정수 1개를 받아서 blogboard 테이블에서 정수에 해당하는 board_num 값을 가진 데이터를 삭제하는 sql -->
+	<delete id="deleteBoard" parameterType="Integer">
+		delete from blogboard where board_num=#{num}
+	</delete>
+	
+</mapper>  
+
+
+
+
+
+
+
+
+
+
+
+
