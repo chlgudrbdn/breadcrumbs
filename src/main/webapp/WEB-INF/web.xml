@@ -52,7 +52,7 @@
 		
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
-		<url-pattern>*tree</url-pattern>
+		<url-pattern>*.tree</url-pattern>
 	</servlet-mapping>
 
 </web-app>

@@ -6,7 +6,7 @@
 <mapper namespace="board">
 
 	<!-- blognotice 테이블의 데이터를 notice_date의 내림차순으로 정렬해서 첫번째부터 5개의 데이터를 가져오는 sql -->
-	<select id="selectNoticeList" resultType="com.choongang.blog.dto.NoticeDto">
+	<select id="selectNoticeList" resultType="com.breadcrumbs.breadcrumbs.dto.NoticeDto">
 		select *
 		from (select rownum rnum, notice_num,notice_subject, notice_content,
 		notice_readcount, notice_date	from
@@ -24,7 +24,7 @@
 	<!-- 정수를 매개변수로 받아서 blognotice 테이블에서 notice_num에 해당하는 데이터의 모든 컬럼을 NoticeDto 
 		타입으로 리턴해주는 sql -->
 	<select id="getNotice" parameterType="Integer"
-		resultType="com.choongang.blog.dto.NoticeDto">
+		resultType="com.breadcrumbs.breadcrumbs.dto.NoticeDto">
 		select * from blognotice where notice_num = #{num}
 	</select>
 
@@ -35,7 +35,7 @@
 	
 	<!-- NoticeDto를 매개변수로 받아서 notice_Num, notice_Subject, notice_Content, notice_Readcount, 
 		오늘 날짜를 blognotice 테이블에 삽입하는 sql -->
-	<insert id="insertNotice" parameterType="com.choongang.blog.dto.NoticeDto">
+	<insert id="insertNotice" parameterType="com.breadcrumbs.breadcrumbs.dto.NoticeDto">
 		insert into blognotice	values(#{notice_Num},#{notice_Subject},
 		#{notice_Content},#{notice_Readcount},sysdate)
 	</insert>
@@ -48,7 +48,7 @@
 	<!-- start와 end의 값을 맵으로 받아서 board_date로 내림차순 정렬한 후 start와 end 번째에 해당하는 데이터를 
 		찾아와서 BoardDto 타입으로 리턴해주는 sql -->
 	<select id="selectBoardList" parameterType="java.util.Map"
-		resultType="com.choongang.blog.dto.BoardDto">
+		resultType="com.breadcrumbs.breadcrumbs.dto.BoardDto">
 		select * from (select rownum rnum, board_num,
 		board_id, board_subject, board_content,
 		board_file, board_readcount, board_date,
@@ -60,7 +60,7 @@
 	<!-- 정수 1개를 받아서 blogboard 테이블에서 board_num과 일치하는 데이터를 찾아서 모든 컬럼을 BoardDto 
 		타입으로 리턴하는 sql -->
 	<select id="getBoard" parameterType="Integer"
-		resultType="com.choongang.blog.dto.BoardDto">
+		resultType="com.breadcrumbs.breadcrumbs.dto.BoardDto">
 		select * from blogboard	where board_num=#{num}
 	</select>
 	
@@ -97,7 +97,7 @@
 		select max(board_num) from blogboard
 	</select>
 
-	<insert id="insertBoard" parameterType="com.choongang.blog.dto.BoardDto">
+	<insert id="insertBoard" parameterType="com.breadcrumbs.breadcrumbs.dto.BoardDto">
 		insert into blogboard values(#{board_Num},#{board_Id},
 		#{board_Subject},#{board_Content},#{board_file},0,sysdate,#{board_Ip})
 	</insert>
