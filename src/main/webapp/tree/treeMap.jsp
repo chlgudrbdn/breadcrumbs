@@ -1,100 +1,57 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Spacetree - Tree Animation</title>
-<!-- 출처 http://philogb.github.io/jit/index.html 와 https://github.com/philogb/jit -->
-<!-- CSS Files -->
-<link type="text/css" href="../Jit/Examples/css/base.css" rel="stylesheet" />
-<link type="text/css" href="../Jit/Examples/css/Spacetree.css" rel="stylesheet" />
+<title>js-filter</title>
 
-<!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-<!-- JIT Library File -->
-<script language="javascript" type="text/javascript" src="../Jit/jit.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 
-<!-- Example File -->
-<script language="javascript" type="text/javascript" src="../Jit/Examples/Spacetree/example1.js"></script>
+<link rel="stylesheet" href="./jsfiler.css">
+<script src="./jsfiler.js"></script>
+<link rel="stylesheet" href="./style.min.css">
+
+<script>
+$('#filer-demo').jsfiler({
+	  /* 1 - right-click menu, 2 - icon menu, 3 - both */
+	  menuMode: 1, 
+	  /* path to tree and menu icons */
+	  iconPath: 'icons/', 
+	  /* no tree checkboxes */
+	  checkbox: true, 
+	  /* allow drag & drop */
+	  canDrag: true, 
+	  /* allow multiple roots */
+	  rootSingle: false, 
+	  /* allow leafs for root node */
+	  rootLeaf: true, 
+	  /* root parent id */
+	  rootParent: -1, 
+	  /* save opened/selected state */
+	  saveState: true, 
+	  /* open the node on: 1 - click, 2 - dblclick, 3 - both 04.2017 */
+	  selectOpen: 1, 
+	  /* knots deletion: 0 - empty only, 1 - +copied, 2 - all */
+	  knotRemove: 2, 
+	  /* duplicate child names: 2 - allow, 1 - case-sensitive, 0 - no */
+	  nameDupl: 0, 
+	  /* name trim patterm (leading & trailing spaces */
+	  nameTrim: /^\s+|\s+$/g, 
+	  /* don't vali<a href="https://www.jqueryscript.net/time-clock/">date</a> */
+	  nameValidate: false, 
+	  /* user authorization token */
+	  userAuth: null, 
+	  /* ajax request url */
+	  urlAjax: 'ajax.php' 
+});
+</script>
+
 </head>
 
-<body onload="init();">
-<div id="container">
+<body>
+<div id="filer-demo"></div>
 
-<!-- <div id="left-container"> -->
-
-
-
-<!-- <div id="id-list"></div> -->
-
-
-<!-- <div style="text-align:center;"><a href="example1.js">See the Example Code</a></div>             -->
-<!-- </div> -->
-
-<div id="center-container">
-    <div id="infovis"></div>    
-</div>
-
-
-<div id="left-container" >
-
-<h4>Tree Orientation</h4>
-<table>
-    <tr>
-        <td>
-            <label for="r-left">Left </label>
-        </td>
-        <td>
-            <input type="radio" id="r-left" name="orientation" checked="checked" value="left" />
-        </td>
-    </tr>
-    <tr>
-         <td>
-            <label for="r-top">Top </label>
-         </td>
-         <td>
-            <input type="radio" id="r-top" name="orientation" value="top" />
-         </td>
-    </tr>
-    <tr>
-         <td>
-            <label for="r-bottom">Bottom </label>
-          </td>
-          <td>
-            <input type="radio" id="r-bottom" name="orientation" value="bottom" />
-          </td>
-    </tr>
-    <tr>
-          <td>
-            <label for="r-right">Right </label>
-          </td> 
-          <td> 
-           <input type="radio" id="r-right" name="orientation" value="right" />
-          </td>
-    </tr>
-</table>
-
-<h4>Selection Mode</h4>
-<table>
-    <tr>
-        <td>
-            <label for="s-normal">Normal </label>
-        </td>
-        <td>
-            <input type="radio" id="s-normal" name="selection" checked="checked" value="normal" />
-        </td>
-    </tr>
-<!--     <tr> -->
-<!--          <td> -->
-<!--             <label for="s-root">Set as Root </label> -->
-<!--          </td> -->
-<!--          <td> -->
-<!--             <input type="radio" id="s-root" name="selection" value="root" /> -->
-<!--          </td> -->
-<!--     </tr> -->
-</table>
-
-</div>
-<div id="log"></div>
-</div>
 </body>
 </html>

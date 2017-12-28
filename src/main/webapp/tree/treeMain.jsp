@@ -11,6 +11,13 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <script>
 // $(function(){
 //  $(".mv").mousemove(function(e){
@@ -41,18 +48,18 @@
 
 </head>
 <body>
-<!-- <div class="row"> -->
-	<div class="left" style="width:50%;float:left">
+<div class="row" style="margin:5px">
+<!-- 	<div class="left" style="width:50%;float:left"> -->
 <!-- 	<div class="mv left"> -->
-<!-- 	<div class="col-sm-6 left" style="float:left"> -->
+	<div class="col-sm-6 left" style="float:left">
 			<c:import url="treeMap.jsp"></c:import>
 	</div>
 	
-	<div class="right"style="width:50%;float:right">
+<!-- 	<div class="right"style="width:50%;float:right"> -->
 <!-- 	<div class="mv right"> -->
-<!-- 	<div class="col-sm-6 right"style="float:right"> -->
+	<div class="col-sm-6 right"style="float:right">
 			<c:import url="treeConsole.jsp"></c:import>
 	</div>
-<!-- </div> -->
+</div>
 </body>
 </html>
