@@ -44,7 +44,6 @@ _Aside from this readme you can find a lot more info on [jstree.com](http://www.
   - [wholerow](#wholerow)
   - [More plugins](#more-plugins)
 - [PHP demos moved to new repository](#php-demos-moved-to-new-repository)
-- [License & Contributing](#license--contributing)
 
 <!-- /MarkdownTOC -->
 
