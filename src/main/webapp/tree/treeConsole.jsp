@@ -9,8 +9,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- <link rel="stylesheet" href="../treant-js-master/Treant.css" type="text/css" /> -->
 <title>Insert title here</title>
+
 <script>
 $(document).ready(function(){		
+	
 	
 	// 댓글 작성
 	$("#addNode").click(function(){
@@ -73,7 +75,7 @@ $(document).ready(function(){
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class=accumlatedCodes>
+	<div class="accumlatedCodes h-100 p-3" style="height:50%">
 		<!-- 레코드가 있으면 -->
 		<%-- 	<c:if test="${search_list_count > 0 }"> --%>
 		<%-- 		<c:forEach var="b" items="${search_list}"> --%>
@@ -82,10 +84,11 @@ $(document).ready(function(){
 		<%-- 	</c:if> --%>
 
 <!-- 		<div class="container"> -->
-			<pre>
-각종 코드들.
-</pre>
+<!-- 			<pre> -->
+<p>각종 코드들.</p>
+<!-- </pre> -->
 	</div>
+	<div class="controllPanel h-100 p-3" >
 			<form action="./TreeAddAction.tree" method="post" name="NodeForm">
 				<div class="form-group">
 					<label for="Codes">Codes:</label>
@@ -97,10 +100,9 @@ $(document).ready(function(){
 				<button type="button" class="btn btn-default" id=deactivateTree>비활성화</button>
 				<button type="button" class="btn btn-default" id=delTree>전체 코드 다운로드</button>
 				<button type="button" class="btn btn-default" id=executeTree>선택 코드 실행</button>
-				
 <%-- <input type="button" value="삭제"onclick="location='g_cont.do?g_no=${g.g_no}&state=del'" /> --%>
 			</form>
-<!-- 		</div> -->
+	</div>
 <!-- 	</div> -->
 </body>
 </html>
