@@ -95,11 +95,11 @@ $(document).ready(function(){
 					<textarea class="form-control" name="codeTypingArea" rows="10"
 						id="codeTypingArea" ></textarea>
 				</div>
-				<button type="submit" class="btn btn-default" id=addNode>등록</button>
-				<button type="button" class="btn btn-default" id=delNode>삭제</button>
-				<button type="button" class="btn btn-default" id=deactivateTree>비활성화</button>
-				<button type="button" class="btn btn-default" id=delTree>전체 코드 다운로드</button>
-				<button type="button" class="btn btn-default" id=executeTree>선택 코드 실행</button>
+				<button type="submit" class="btn btn-default" id=addCode>코드 수정/등록</button> <!-- CU -->
+				<button type="button" class="btn btn-default" id=delNode>노드 삭제</button> <!-- D --> <!-- R은 그냥 노드 클릭하면 누적되서 보인다. -->
+				<button type="button" class="btn btn-default" id=deactivateNode>노드 비활성화</button>
+				<button type="button" class="btn btn-default" id=downloadTree>리프노드 코드 다운로드</button>
+				<button type="button" class="btn btn-default" id=executeCode>선택 코드 실행(유료)</button>
 <%-- <input type="button" value="삭제"onclick="location='g_cont.do?g_no=${g.g_no}&state=del'" /> --%>
 			</form>
 	</div>

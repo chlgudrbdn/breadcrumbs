@@ -13,6 +13,21 @@ drop table forum_board purge;
 drop table qna_board purge;
 
 
+alter table node ADD li_attr varchar2(12) CONSTRAINT defaultType DEFAULT 'default' WITH VALUES
+ALTER TABLE node DROP COLUMN li_attr;
+
+---------------수정용----------------------------------
+
+
+create sequence tree_no_seq
+start with 1
+increment by 1
+nocache;
+
+alter table node ADD li_attr varchar2(12) ;
+alter table node MODIFY li_attr DEFAULT 'default';
+
+----------필요 시퀀스-----------------
 
 /* 사용자계정정보 */
 CREATE TABLE useraccount (

@@ -15,9 +15,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="dist/jstree.min.js"></script>
 
-<script>
-	
-</script>
 
 </head>
 
@@ -26,6 +23,7 @@
 	<form id="s">
 	  <input type="search" id="q" class="form-control d-inline-block" placeholder="Search" />
 	  <button type="submit" class="btn btn-default d-inline-block" >Search</button>
+	  <button type="button" class="btn btn-default d-inline-block" >file upload</button>
 	</form>
 </div>
 
@@ -34,11 +32,17 @@
 		$('#container').jstree({
 			"types" : {
 			    "default" : {
-			      "icon" : "glyphicon glyphicon-file"
+			      "icon" : "glyphicon glyphicon-folder-close"
 			    },
 			    "diabled" : { //li 태그에 <li data-jstree='{"opened":true, "type":"demo"}'>같은 느낌으로 type이 부여되야함.
 			      "icon" : "glyphicon glyphicon-er"
-			    }
+			    },
+			    "data" : { //type 부여는 li_attr컬럼에 '{"type":"demo"}' 형식으로 넣어야할 것이다.
+				      "icon" : "glyphicon glyphicon-file"
+				},
+			    "leaf" : { //li 태그에 <li data-jstree='{"opened":true, "type":"demo"}'>같은 느낌으로 type이 부여되야함.
+				      "icon" : "glyphicon glyphicon-leaf"
+				}
 			},
 			"core" : {
 				"check_callback" : function (operation, node, parent, position, more) {
@@ -59,7 +63,15 @@
 				'themes': {
 		            'name': 'proton',
 		            'responsive': true
-		        }
+		        },
+				"check_callback" : function (operation, node, parent, position, more) {//뭔가 변경 있음 항상 체크하게 하는 것.
+					if(operation === "copy_node" || operation === "move_node") {
+			        	if(parent.id === "#") {
+			            	return false; // prevent moving a child above or below the root
+			    		}
+			    	}
+					return true; // allow everything else
+			    }
 			},
 // 				'massload' : { //아직 활성화시킬 수 없다. 한꺼번에 로딩해야할 url을 다르게 하여 반응토록 만들 예정.
 // 			        "url" : "api/nodes",

@@ -7,69 +7,68 @@
  <mapper namespace="nodes">
  
    <!-- 해당 트리의 노드들 전체 출력 -->
-   <select id="node_of_tree_list" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
-    <!-- mybatis 에서 반환 자료형 타입 속성은 resultType이다. -->
-    select * from guest10 order by g_no desc
-   </select>
+<!--    <select id="node_of_tree_list" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto"> -->
+<!--     mybatis 에서 반환 자료형 타입 속성은 resultType이다. -->
+<!--     select * from node order by g_no desc -->
+<!--    </select> -->
 
    <!-- 노드에 해당하는 코드 추출 -->
-   <select id="c_bean" parameterType="java.util.Map"  resultType="c">
-     select * from comment7 where g_no=#{g_no} and comment_no = #{c_max}   
+   <select id="read_node" parameterType="String"  resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+     select * from node where id=#{id}
    </select>   
 
    <!-- 노드 추가 -->
-   <insert id="com_in" parameterType="c">
-    insert into comment7 
-    values(comment_no_seq.nextval,#{comment_name},#{comment_cont},
-    sysdate,#{g_no})
+   <insert id="add_node" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+	    insert into node 
+	    values(#{id}, #{parent}, #{state}, #{text}, #{li_attr})
    </insert>
    
    <!-- 댓글 개수 -->
-   <select id="c_count" parameterType="int" resultType="int">
-    select count(comment_no) from comment7 where g_no=#{g_no}
-   </select>
+<!--    <select id="c_count" parameterType="int" resultType="int"> -->
+<!--     select count(comment_no) from comment7 where g_no=#{g_no} -->
+<!--    </select> -->
    
    <!-- 방명록 조회수 증가 -->
-   <update id="g_hit" parameterType="int">
-    update guest10 set g_hit=g_hit+1 where g_no=#{g_no}
-   </update>
+<!--    <update id="g_hit" parameterType="int"> -->
+<!--     update guest10 set g_hit=g_hit+1 where g_no=#{g_no} -->
+<!--    </update> -->
    
    <!-- 댓글 목록 -->
-   <select id="c_list" parameterType="int"
-   resultType="c">
-     select * from comment7 where g_no=#{g_no} 
-     order by comment_no asc
-   </select>
+<!--    <select id="c_list" parameterType="int" -->
+<!--    resultType="c"> -->
+<!--      select * from comment7 where g_no=#{g_no}  -->
+<!--      order by comment_no asc -->
+<!--    </select> -->
    
    <!-- 가장 마지막 댓글 comment_no 값 구하기 -->
-   <select id="c_max" parameterType="int" resultType="int">
-    select max(comment_no) from comment7 where g_no=#{g_no}
-   </select>   
+<!--    <select id="c_max" parameterType="int" resultType="int"> -->
+<!--     select max(comment_no) from comment7 where g_no=#{g_no} -->
+<!--    </select>    -->
    
     
    
    <!-- 댓글삭제 -->
-   <delete id="c_del" parameterType="int">
-    delete from comment7 where comment_no=#{comment_no}
-   </delete>
+<!--    <delete id="c_del" parameterType="int"> -->
+<!--     delete from comment7 where comment_no=#{comment_no} -->
+<!--    </delete> -->
    
    <!-- 방명록 저장 -->
-   <insert id="g_in" parameterType="c">
-    insert into guest10 (g_no,g_name,g_title,g_pwd,g_cont,
-    g_date) values(g_no_seq10.nextval,#{g_name},#{g_title},
-    #{g_pwd},#{g_cont},sysdate)
-   </insert>
+<!--    <insert id="g_in" parameterType="c"> -->
+<!--     insert into guest10 (g_no,g_name,g_title,g_pwd,g_cont, -->
+<!--     g_date) values(g_no_seq10.nextval,#{g_name},#{g_title}, -->
+<!--     #{g_pwd},#{g_cont},sysdate) -->
+<!--    </insert> -->
    
    <!-- 방명록 수정 -->
-   <update id="g_edit" parameterType="c">
-    update guest10 set g_name=#{g_name},g_title=#{g_title},
-    g_cont=#{g_cont} where g_no=#{g_no}
-   </update>
+<!--    <update id="g_edit" parameterType="c"> -->
+<!--     update guest10 set g_name=#{g_name},g_title=#{g_title}, -->
+<!--     g_cont=#{g_cont} where g_no=#{g_no} -->
+<!--    </update> -->
    
    <!-- 방명록 삭제 -->
-   <delete id="g_del" parameterType="int">
-    delete from guest10 where g_no=#{g_no}
-   </delete>
+<!--    <delete id="g_del" parameterType="int"> -->
+<!--     delete from guest10 where g_no=#{g_no} -->
+<!--    </delete> -->
  </mapper>
  
  

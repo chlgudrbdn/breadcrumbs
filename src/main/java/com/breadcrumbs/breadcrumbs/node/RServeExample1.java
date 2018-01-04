@@ -1,4 +1,4 @@
-package com.breadcrumbs.breadcrumbs.tree;
+package com.breadcrumbs.breadcrumbs.node;
 
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
