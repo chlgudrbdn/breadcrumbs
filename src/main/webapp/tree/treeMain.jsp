@@ -11,42 +11,9 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-
-<script>
-// $(function(){
-//  $(".mv").mousemove(function(e){
-//   var x = e.pageX-$(this).position().left;
-//   var y = e.pageY-$(this).position().top;
-//   var z = $(this).width();
-
-//   if((x>(z-10)&&x<z)){
-//   $("#aaa").html('a');
-//    $(this).css("cursor", "e-resize");
-//    $(this).resizable({
-// //     minHeight:100,
-// //     maxHeight:25,
-// //     maxWidth:500
-//    });
-//   }else{
-//    $(this).css("cursor", "default");
-//   }
-//  }).mouseout(function(){
-//    $(this).css("cursor", "default");
-//  });
-// });
-</script>
-<style>
-/*  .mv{width:50%;border:1px solid blue;float:left;} */
-/*  .right{width:50%;border:1px solid blue;float:right;} */
-</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
 <body>

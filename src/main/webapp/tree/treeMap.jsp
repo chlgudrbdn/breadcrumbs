@@ -23,7 +23,7 @@
 	<form id="s">
 	  <input type="search" id="q" class="form-control d-inline-block" placeholder="Search" />
 	  <button type="submit" class="btn btn-default d-inline-block" >Search</button>
-	  <button type="button" class="btn btn-default d-inline-block" >file upload</button>
+	  <button type="button" class="btn btn-default d-inline-block" >file upload(유료)</button>
 	</form>
 </div>
 
@@ -32,7 +32,7 @@
 		$('#container').jstree({
 			"types" : {
 			    "default" : {
-			      "icon" : "glyphicon glyphicon-folder-close"
+// 			      "icon" : "glyphicon glyphicon-folder-close"
 			    },
 			    "diabled" : { //li 태그에 <li data-jstree='{"opened":true, "type":"demo"}'>같은 느낌으로 type이 부여되야함.
 			      "icon" : "glyphicon glyphicon-er"
@@ -64,14 +64,38 @@
 		            'name': 'proton',
 		            'responsive': true
 		        },
-				"check_callback" : function (operation, node, parent, position, more) {//뭔가 변경 있음 항상 체크하게 하는 것.
-					if(operation === "copy_node" || operation === "move_node") {
-			        	if(parent.id === "#") {
-			            	return false; // prevent moving a child above or below the root
-			    		}
-			    	}
-					return true; // allow everything else
-			    }
+		        'check_callback' : function (operation, node, node_parent, node_position, more) {
+		            // operation can be 'create_node', 'rename_node', 'delete_node', 'move_node', 'copy_node' or 'edit'
+		            // in case of 'rename_node' node_position is filled with the new node name
+// 		            	alert("node_position="+node_position);
+// 		            	alert("node="+node);
+// 		            	alert("node_parent="+node_parent);
+// 		            	alert("more="+more);
+
+		            if(operation==='create_node'){
+		            	 
+		            	$.ajax({
+		 					type:'post',
+		 					url:'/breadcrumbs/NodeAdd.node',
+		 					data: {"id":id,"state":state,"comment_cont":comment_cont}, 			
+		 					/* data : query, */
+		 					dataType:'text', 	 			
+		 					success:function(result){
+		 						$("#comment_cont").val("").focus();//내용 입력후 지우기
+		 						
+		 						alert(result)							
+//		 						console.log("result: " + result);
+		 						var obj = JSON.parse(result);		                     
+		 						
+		 				}});  // ajax() end
+		            	
+		            	return true;
+		            }
+		            
+		            
+		            
+		            return operation === 'create_node' ? true : false;
+		        }
 			},
 // 				'massload' : { //아직 활성화시킬 수 없다. 한꺼번에 로딩해야할 url을 다르게 하여 반응토록 만들 예정.
 // 			        "url" : "api/nodes",
@@ -89,10 +113,11 @@
 				//search : 검색기능
 				//sort : 알파벳 순 정렬. 필요없어서 안넣음.
 		});
-		$("#s").submit(function(e) {
-			e.preventDefault();
-			$("#container").jstree(true).search($("#q").val());
-		});
+		
+		  $('#container').on("changed.jstree", function (e, data) {
+			    console.log("The selected nodes are:");
+			    console.log(data.selected);
+		  });
 	</script>
 
 </body>

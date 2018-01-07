@@ -33,6 +33,11 @@ public class NodeServiceImpl implements NodeService{
 	public void insert(NodeDto node) throws Exception {
 		NodeDao.insertNode(node);
 	}
+	
+
+	public List<String> getRecommendCategoryList(String value) {
+		return NodeDao.getRecommendCategoryList(value);
+	}
 //
 //	/* 게시판 목록 */
 //	public Map<String, Object> board_list(HttpServletRequest request,
@@ -156,5 +161,6 @@ public class NodeServiceImpl implements NodeService{
 //
 //		boardDao.boardReplyOk(b);
 //	}
+
 
 }

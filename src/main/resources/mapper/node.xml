@@ -33,13 +33,15 @@
 <!--     update guest10 set g_hit=g_hit+1 where g_no=#{g_no} -->
 <!--    </update> -->
    
-   <!-- 댓글 목록 -->
-<!--    <select id="c_list" parameterType="int" -->
-<!--    resultType="c"> -->
-<!--      select * from comment7 where g_no=#{g_no}  -->
-<!--      order by comment_no asc -->
-<!--    </select> -->
+   <!-- 해당 트리의 노드 목록-->
+   <select id="nodeList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+     select * from node where IN (select id from t_n_relation where tree_no=#{tree_no} )
+   </select>
    
+      <!-- 유사한 카테고리 목록-->
+   <select id="categoryList" parameterType="String" resultType="String">
+     select * from category where category like CONCAT('%',#{term},'%')
+   </select>
    <!-- 가장 마지막 댓글 comment_no 값 구하기 -->
 <!--    <select id="c_max" parameterType="int" resultType="int"> -->
 <!--     select max(comment_no) from comment7 where g_no=#{g_no} -->

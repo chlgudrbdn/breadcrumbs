@@ -40,10 +40,10 @@ public class NodeController {
 	@Autowired
 	private NodeServiceImpl NodeService;
 	
-	//노드 추가
+	//노드 추가-노드와 연동된 코드 추가와는 다르다.
 	@RequestMapping("/NodeAdd.node")
 	@ResponseBody //이게 있어야 json으로 반환되는데 이건 숫자만 반환하므로 없어도 됨.
-	public void NodeAdd(@RequestParam("email") String email, HttpServletResponse response) throws Exception {
+	public void NodeAdd(@RequestParam("id") String id, HttpServletResponse response) throws Exception {
 			// 데이터 삽입
 		PrintWriter out = response.getWriter();
 //		ModelAndView mav = new ModelAndView();
@@ -61,9 +61,30 @@ public class NodeController {
 //		out.println(req);//callback으로 리턴되는 부분.
 	}
 
+	@RequestMapping("/myTree.node")
+	public String myTreeAction() {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+		return "tree/myTree";
+	}
 	
+	@RequestMapping("/makeTree.node")
+	public String noticeWriteAction() {//트리 새로 만드는 페이지로 가는 경로 지정
+		return "tree/makeTree";
+	}
 	
+
+	@RequestMapping("/checkRecommendCategory.node")
+	@ResponseBody //이게 있어야 json으로 반환	
+	public void checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
+		PrintWriter out = response.getWriter();
+		List<String> result = NodeService.getRecommendCategoryList(value);
+		System.out.println("result="+result);
+		out.println(result);
+	}
 	
+	@RequestMapping("/makeRootNode.node")
+	public String makeRootNode() {
+		return "/";
+	}
 //	
 //	@Autowired
 //	private NoticeListAction noticeListAction;
@@ -80,17 +101,7 @@ public class NodeController {
 //	}
 //
 //	
-//	@Autowired
-//	private NoticeDetailAction noticeDetailAction;
-//
-//	@RequestMapping("/NoticeDetail.board")
-//	public ModelAndView noticeDetail(String num) {
-//		ModelAndView mav = new ModelAndView();
-//		NoticeDto dto = noticeDetailAction.execute(num);
-//		mav.addObject("result", dto);
-//		mav.setViewName("/board/noticeDetail");
-//		return mav;
-//	}
+
 //
 //	@RequestMapping("/NoticeWrite.board")
 //	public ModelAndView noticeWriteView() {

@@ -10,63 +10,6 @@
 <!-- <link rel="stylesheet" href="../treant-js-master/Treant.css" type="text/css" /> -->
 <title>Insert title here</title>
 
-<script>
-$(document).ready(function(){		
-	
-	
-	// 댓글 작성
-	$("#addNode").click(function(){
-		
-		if($.trim($("#codeTypingArea").val()) == ""){
-			 alert("해당 단계의 코드를 입력하세요!");
-			 $("#comment_cont").val("").focus();
-			 return false;
-		 }	
-		
-//		  alert("호출")
-		  var g_no ='${g.node_no}';
-		  var comment_name ='${g.g_name}';
-		  var comment_cont =$("#codeTypingArea").val();
-		  
-		  /* var query = {g_no :'${g.g_no}', 
-				  	   comment_name :'${g.g_name}',
-				  	   comment_cont =$("#comment_cont").val()};	 */		  
-		  
-		  $.ajax({
-				type:'post',
-				url:'/restguestbook/addNode.tree',
-				data: {"g_no":g_no,"comment_name":comment_name,"comment_cont":comment_cont}, 			
-				/* data : query, */
-				dataType:'text', 	 			
-				success:function(result){
-					$("#comment_cont").val("").focus();//내용 입력후 지우기
-					
-					alert(result)							
-					
-//					console.log("result: " + result);
-					
-					var obj = JSON.parse(result);		                     
-					
-					var output='';      					          			
-	          						          			
-						output += "<tr>" + "<td>"		                        
-	                    output += obj.comment_name + "</td>" + "<td>"
-	                    output += obj.comment_date + "삭제</td>" + "</tr><tr><td colspan=2><pre>"
-	                    output += obj.comment_cont + "</pre></td>" + "</tr>"		                       
-	             		       							
-             			$("#reply_count").text(obj.com_count);	// 댓글수 증가 
-	          			$("#allData").append(output); // 댓글을 추가
-					
-			}});  // ajax() end
-			
-	});	// click() end			
-	
-}); // ready() end
-
-// function addNode() {
-// 		NodeForm.submit();
-// 	}
-</script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -89,7 +32,7 @@ $(document).ready(function(){
 <!-- </pre> -->
 	</div>
 	<div class="controllPanel h-100 p-3" >
-			<form action="./TreeAddAction.tree" method="post" name="NodeForm">
+			<form action="./addNode.node" method="post" name="NodeForm">
 				<div class="form-group">
 					<label for="Codes">Codes:</label>
 					<textarea class="form-control" name="codeTypingArea" rows="10"

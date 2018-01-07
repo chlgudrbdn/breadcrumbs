@@ -65,6 +65,12 @@ jQuery, plugin, 사용자스크립트 순으로 적용-->
 					<li><a href="DropView.member">회원탈퇴</a></li>
 				</ul>
 				</li>
+				<li><a href="#">결정트리</a>
+				<ul>
+					<li><a href="makeTree.node">트리 만들기 시작</a></li>
+					<li><a href="myTree.node">내 트리</a></li>
+				</ul>
+				</li>
 			</c:if>
 			
 			<!-- 관리자로 로그인 했을 때 -->
@@ -84,14 +90,9 @@ jQuery, plugin, 사용자스크립트 순으로 적용-->
 			</c:if>
 		</ul>
 	</div>
-	<div>
-		<c:import url="treeMain.jsp"></c:import>
-	</div>
-	
-	
-	
-	
-	
+<!-- 	<div> -->
+<%-- 		<c:import url="tree/treeMain.jsp"></c:import> --%>
+<!-- 	</div> -->
 	
 </body>
 </html>

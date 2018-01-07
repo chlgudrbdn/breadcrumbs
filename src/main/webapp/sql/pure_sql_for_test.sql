@@ -1,21 +1,22 @@
-select * from tab;
-select * from useraccount;
+-- select * from tab;
+-- select * from useraccount;
 
-drop table useraccount purge;
-drop table m_t_relation purge;
-drop table node purge;
-drop table category purge;
-drop table node purge;
-drop table t_n_relation purge;
-drop table choice_list purge;
-drop table c_c_relation purge;
-drop table forum_board purge;
-drop table qna_board purge;
+-- drop table useraccount purge;
+-- drop table m_t_relation purge;
+-- drop table node purge;
+-- drop table category purge;
+-- drop table node purge;
+-- drop table t_n_relation purge;
+-- drop table choice_list purge;
+-- drop table c_c_relation purge;
+-- drop table forum_board purge;
+-- drop table qna_board purge;
 
 
-alter table node ADD li_attr varchar2(12) CONSTRAINT defaultType DEFAULT 'default' WITH VALUES
-ALTER TABLE node DROP COLUMN li_attr;
-
+alter table node ADD li_attr varchar2(12) CONSTRAINT defaultType DEFAULT 'default' WITH VALUES;
+-- ALTER TABLE node DROP COLUMN li_attr;
+ALTER TABLE node MODIFY (state  DEFAULT 'undetermined');
+alter table m_t_relation ADD dataFileName varchar2(3000);
 ---------------수정용----------------------------------
 
 
@@ -389,3 +390,31 @@ ALTER TABLE t_n_relation
 		REFERENCES node (
 			id
 		);
+		
+		
+		
+		
+		
+		
+----------------------pre data setting----------------
+insert into category values('ImageNet Object Detection from Video Challenge');
+insert into category values('Dog Breed Identification');
+insert into category values('Plant Seedlings Classification');
+insert into category values('Digit Recognizer');
+insert into category values('Titanic: Machine Learning from Disaster');
+insert into category values('ImageNet Object Localization Challenge');
+insert into category values('ImageNet Object Detection Challenge');
+insert into category values('Nomad2018 Predicting Transparent Conductors');
+insert into category values('Santa Gift Matching Challenge');
+insert into category values('TensorFlow Speech Recognition Challenge');
+insert into category values('Recruit Restaurant Visitor Forecasting');
+insert into category(category) values("IEEE's Signal Processing Society - Camera Model Identification");--너무 길다. 500byte로 했는데도.
+insert into category values('Corporación Favorita Grocery Sales Forecasting');
+insert into category values('Toxic Comment Classification Challenge');
+insert into category values('Statoil/C-CORE Iceberg Classifier Challenge');
+insert into category values('Mercari Price Suggestion Challenge');
+insert into category values('Zillow Prize: Zillow’s Home Value Prediction (Zestimate)');
+insert into category values('House Prices: Advanced Regression Techniques');
+		
+		
+		

@@ -8,7 +8,8 @@ import com.breadcrumbs.breadcrumbs.dto.NodeDto;
 
 public interface NodeDao {
 
-	List<NodeDto> getNodeList();//목록
+	List<NodeDto> getNodeList(String tree_no);//목록
+	List<String> getRecommendCategoryList(String term);//목록
 	MemberTreeRelationDto getNode(int g_no);//노드 로딩 R
 	void insertNode(NodeDto node);//노드 저장 C
 	void updateNode(int id);//노드의 코드 수정 U

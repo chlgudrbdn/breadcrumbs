@@ -16,56 +16,53 @@ public class NodeDaoImpl implements NodeDao {
 		this.sqlSession = sqlSession;
 	}//스프링 setter DI 의존관계를 설정
 
-	public List<NodeDto> getNodeList() {
+	public List<NodeDto> getNodeList(String tree_no) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
+		return sqlSession.selectList("nodeList");
+	}
+	public List<String> getRecommendCategoryList(String term) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
+		return sqlSession.selectList("categoryList");
+	}
+	public MemberTreeRelationDto getNode(int g_no) {//노드 로딩 R
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MemberTreeRelationDto getNode(int g_no) {
-		// TODO Auto-generated method stub
-		
-		
-		return null;
-	}
-
-	@Override
-	public void insertNode(NodeDto node) {
+	public void insertNode(NodeDto node) {//노드 저장 C
 		// TODO Auto-generated method stub
 		this.sqlSession.insert("add_node", node);
 	}
 
-	public void updateNode(int id) {
+	public void updateNode(int id) {//노드의 코드 수정 U
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public int getNodeCount(int tree_no) {
+	public int getNodeCount(int tree_no) {//각 노드에 노드 개수
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int getNodeDepth(int id) {
+	public int getNodeDepth(int id) {//각 노드의 깊이를
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void node_del(int id) {
+	public void node_del(int id) {//노드삭제
 		// TODO Auto-generated method stub
 		
 	}
 
-	public List<NodeDto> getComList(int tree_no) {
+	public List<NodeDto> getComList(int tree_no) {//전체 노드 목록
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public int getLeafNode(NodeDto id) {
+	public int getLeafNode(NodeDto id) { // 가장 마지막 댓글 comment_no 값 구하기 
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public NodeDto getNodeDto(Map m) {
+	public NodeDto getNodeDto(Map m) {// 입력된 댓글 1개 추출
 		// TODO Auto-generated method stub
 		return null;
 	}

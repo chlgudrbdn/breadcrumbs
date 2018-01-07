@@ -35,7 +35,7 @@
 	</bean>
 	
 	
-	<!-- <bean id="download" class="com.breadcrumbs.breadcrumbs.board.service.DownloadView" /> -->
+	<bean id="download" class="com.breadcrumbs.breadcrumbs.board.service.DownloadView" />
 	
 	
 </beans>
