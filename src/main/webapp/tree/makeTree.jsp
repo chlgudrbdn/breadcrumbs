@@ -51,43 +51,36 @@
 		// 		http://hellogk.tistory.com/74 보고 추천 검색 하도록 한다.
 		$( "#category" ).autocomplete({
 			source : function( request, response ) {
-// 				$.ajax({
-// 		        	type: 'post',
-// 		            url: "/breadcrumbs/checkRecommendCategory.node",
-// 		            dataType: "text",
-// // 		            error:function(request,status,error){ console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error); },
-// // 		            출처: http://withpie.tistory.com/entry/Spring-Ajax-Json-406-error [이상한 나라의 루돌프]
-// // 		            request.term = $("#category").val(),
-// 		            data: { value : request.term },
-// 			            success: function(data) {
-// 			            //서버에서 json 데이터 response 후 목록에 뿌려주기 위함
-// 			            response(
-// 			            	$.map(data, function(item) {
-// 			                	return {
-// 			                    	label: item.data,
-// 			                        value: item.data
-// 			                    }
-// 			                })
-// 			            );
-// 		            }
-// 				});
-				 $.getJSON("/breadcrumbs/checkRecommendCategory.node", request, function(result) {
-		                response($.map(result, function(item) {
-		                    return {
-		                        // following property gets displayed in drop down
-		                        label: item.name,
-		                        // following property gets entered in the textbox
-		                        value: item.name,
-		                    }
-		                }));
-		            });
+				$.ajax({
+		        	type: 'post',
+		            url: "/breadcrumbs/checkRecommendCategory.node",
+		            dataType: "json",
+		            autoFocus: true,
+		            scroll: true,
+// 		            error:function(request,status,error){ console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error); },
+// 		            출처: http://withpie.tistory.com/entry/Spring-Ajax-Json-406-error [이상한 나라의 루돌프]
+// 		            request.term = $("#category").val(),
+		            data: { value : request.term },
+			            success: function(data) {
+			            //서버에서 json 데이터 response 후 목록에 뿌려주기 위함
+			            console.log(data);
+			            response(
+			            	$.map(data, function(item) {
+			                	return {
+			                    	label: item,
+			                        value: item
+			                    }
+			                })
+			            );
+		            }
+				});
 			},
 		    //조회를 위한 최소글자수
 		    minLength: 2,
 		    select: function( event, ui ) {
 		    // 만약 검색리스트에서 선택하였을때 선택한 데이터에 의한 이벤트발생
 				event.preventDefault();
-		    	$("#category").val(ui.item.label);
+		    	$("#category").val(ui.item.value);
 		    }
 		});
 // 	}
@@ -135,7 +128,9 @@
 				</tr>
 				<tr>
 					<td colspan="2"><font size="2">
-							기존 카테고리를 사용할 수록 더 좋은 선택결과를 추천 받을 수 있습니다.</font></td>
+							카테고리는 30자 이하에 대소문자는 구분됩니다.
+							<br>
+							기존 카테고리를 사용할 수록 더 좋은 선택결과를 추천 받을 가능성이 높아집니다.</font></td>
 				</tr>
 				<tr>
 					<td width="17%" bgcolor="#f5f5f5"><font size="2">*카테고리</font>
@@ -152,13 +147,12 @@
 							<span id="dataInputSpan"></span>
 					</td>
 				</tr>
-<!-- 				<tr> -->
-<!-- 					<td bgcolor="#f5f5f5"><font size="2">비밀번호</font> -->
-<!-- 					</td> -->
-<!-- 					<td>&nbsp;&nbsp;&nbsp; <input type="password" name="pw" -->
-<!-- 						size="15" /><span id="pwSpan"></span> -->
-<!-- 					</td> -->
-<!-- 				</tr> -->
+				<tr>
+					<td bgcolor="#f5f5f5"><font size="2">비밀번호</font>
+					</td>
+					<td><input type="password" name="pw" size="15" /><span id="pwSpan"></span>
+					</td>
+				</tr>
 <!-- 				<tr> -->
 <!-- 					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;비밀번호 -->
 <!-- 							확인</font></td> -->

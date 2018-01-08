@@ -56,12 +56,12 @@ public class NodeController {
 	}
 
 	//이게 있어야 json으로 반환	
-	@RequestMapping(value="/checkRecommendCategory.node")
+	@RequestMapping("/checkRecommendCategory.node")
 	@ResponseBody
 //	public @ResponseBody List checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
 	public List<String> checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
-		PrintWriter out = response.getWriter();
-		List result = this.nodeAction.getRecommendCategoryList(value);
+//		PrintWriter out = response.getWriter();
+		List<String> result = this.nodeAction.getRecommendCategoryList(value);
 		System.out.println("result="+result);
 //		out.println(result);
 		return result;

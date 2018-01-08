@@ -72,11 +72,11 @@
 		</dependency>
 
 		<!-- JSON 타입으로 출력하기 위한 라이브러리 설정 -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.0.1</version>
-		</dependency> -->
+		</dependency>
 		
 <!-- 		이하 json관련은 그냥 	의미 없는듯.		 -->
 <!-- 		<dependency> -->
