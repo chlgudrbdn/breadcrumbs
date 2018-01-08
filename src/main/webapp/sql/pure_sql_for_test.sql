@@ -408,7 +408,7 @@ insert into category values('Nomad2018 Predicting Transparent Conductors');
 insert into category values('Santa Gift Matching Challenge');
 insert into category values('TensorFlow Speech Recognition Challenge');
 insert into category values('Recruit Restaurant Visitor Forecasting');
-insert into category(category) values("IEEE's Signal Processing Society - Camera Model Identification");--너무 길다. 500byte로 했는데도.
+--insert into category(category) values("IEEE's Signal Processing Society - Camera Model Identification");--너무 길다. 500byte로 했는데도.
 insert into category values('Corporación Favorita Grocery Sales Forecasting');
 insert into category values('Toxic Comment Classification Challenge');
 insert into category values('Statoil/C-CORE Iceberg Classifier Challenge');

@@ -8,18 +8,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-<script src="//code.jquery.com/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script>
 	//body의 내용을 읽자 마자 호출되는 jquery 이벤트
 	//자바스크립트의 window.onload와 유사하지만 
 	//먼저 호출됩니다.
 	$(function(){
-		//imgInp를 눌러서 파일을 변경하면 함수 호출
+		// 파일을 변경하면 함수 호출
 		$("#dataInput").on('change', function(){
 			readURL(this);
 		});
@@ -51,29 +51,43 @@
 		// 		http://hellogk.tistory.com/74 보고 추천 검색 하도록 한다.
 		$( "#category" ).autocomplete({
 			source : function( request, response ) {
-				$.ajax({
-		        	type: 'post',
-		            url: "/checkRecommendCategory.node",
-		            dataType: "json",
-		            //request.term = $("#autocomplete").val()
-		            data: { value : request.term },
-			            success: function(data) {
-			            //서버에서 json 데이터 response 후 목록에 뿌려주기 위함
-			            response(
-			            	$.map(data, function(item) {
-			                	return {
-			                    	label: item.data,
-			                        value: item.data
-			                    }
-			                })
-			            );
-		            }
-				});
+// 				$.ajax({
+// 		        	type: 'post',
+// 		            url: "/breadcrumbs/checkRecommendCategory.node",
+// 		            dataType: "text",
+// // 		            error:function(request,status,error){ console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error); },
+// // 		            출처: http://withpie.tistory.com/entry/Spring-Ajax-Json-406-error [이상한 나라의 루돌프]
+// // 		            request.term = $("#category").val(),
+// 		            data: { value : request.term },
+// 			            success: function(data) {
+// 			            //서버에서 json 데이터 response 후 목록에 뿌려주기 위함
+// 			            response(
+// 			            	$.map(data, function(item) {
+// 			                	return {
+// 			                    	label: item.data,
+// 			                        value: item.data
+// 			                    }
+// 			                })
+// 			            );
+// 		            }
+// 				});
+				 $.getJSON("/breadcrumbs/checkRecommendCategory.node", request, function(result) {
+		                response($.map(result, function(item) {
+		                    return {
+		                        // following property gets displayed in drop down
+		                        label: item.name,
+		                        // following property gets entered in the textbox
+		                        value: item.name,
+		                    }
+		                }));
+		            });
 			},
 		    //조회를 위한 최소글자수
 		    minLength: 2,
 		    select: function( event, ui ) {
 		    // 만약 검색리스트에서 선택하였을때 선택한 데이터에 의한 이벤트발생
+				event.preventDefault();
+		    	$("#category").val(ui.item.label);
 		    }
 		});
 // 	}

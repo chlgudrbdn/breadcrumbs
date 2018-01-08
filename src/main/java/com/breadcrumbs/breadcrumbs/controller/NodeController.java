@@ -1,44 +1,28 @@
 package com.breadcrumbs.breadcrumbs.controller;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.breadcrumbs.breadcrumbs.board.service.BoardDeleteAction;
-import com.breadcrumbs.breadcrumbs.board.service.BoardDetailAction;
-import com.breadcrumbs.breadcrumbs.board.service.BoardInsertAction;
-import com.breadcrumbs.breadcrumbs.board.service.BoardListAction;
-import com.breadcrumbs.breadcrumbs.board.service.BoardModifyView;
-import com.breadcrumbs.breadcrumbs.board.service.BoardUpdateAction;
-import com.breadcrumbs.breadcrumbs.board.service.NoticeDetailAction;
-import com.breadcrumbs.breadcrumbs.board.service.NoticeListAction;
-import com.breadcrumbs.breadcrumbs.board.service.NoticeWriteAction;
-import com.breadcrumbs.breadcrumbs.board.service.ReplyInsertAction;
-import com.breadcrumbs.breadcrumbs.board.service.ReplyListAction;
-import com.breadcrumbs.breadcrumbs.dto.BoardDto;
-import com.breadcrumbs.breadcrumbs.dto.FormBoardDto;
-import com.breadcrumbs.breadcrumbs.dto.NoticeDto;
-import com.breadcrumbs.breadcrumbs.node.service.NodeServiceImpl;
+import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
+import com.breadcrumbs.breadcrumbs.node.service.NodeAction;
 
 
 @Controller
 public class NodeController {
 	
 	@Autowired
-	private NodeServiceImpl NodeService;
+	private NodeAction nodeAction;
 	
 	//노드 추가-노드와 연동된 코드 추가와는 다르다.
 	@RequestMapping("/NodeAdd.node")
@@ -70,15 +54,17 @@ public class NodeController {
 	public String noticeWriteAction() {//트리 새로 만드는 페이지로 가는 경로 지정
 		return "tree/makeTree";
 	}
-	
 
-	@RequestMapping("/checkRecommendCategory.node")
-	@ResponseBody //이게 있어야 json으로 반환	
-	public void checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
+	//이게 있어야 json으로 반환	
+	@RequestMapping(value="/checkRecommendCategory.node")
+	@ResponseBody
+//	public @ResponseBody List checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
+	public List<String> checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
 		PrintWriter out = response.getWriter();
-		List<String> result = NodeService.getRecommendCategoryList(value);
+		List result = this.nodeAction.getRecommendCategoryList(value);
 		System.out.println("result="+result);
-		out.println(result);
+//		out.println(result);
+		return result;
 	}
 	
 	@RequestMapping("/makeRootNode.node")

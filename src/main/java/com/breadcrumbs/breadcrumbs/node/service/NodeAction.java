@@ -1,26 +1,17 @@
 package com.breadcrumbs.breadcrumbs.node.service;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.breadcrumbs.breadcrumbs.dao.NodeDaoImpl;
+import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto;
 
 
 @Service
-public class NodeServiceImpl implements NodeService{
+public class NodeAction{
 
 	@Autowired
 	private NodeDaoImpl NodeDao;
@@ -35,6 +26,7 @@ public class NodeServiceImpl implements NodeService{
 	}
 	
 
+//	public List<String> getRecommendCategoryList(String value) {
 	public List<String> getRecommendCategoryList(String value) {
 		return NodeDao.getRecommendCategoryList(value);
 	}

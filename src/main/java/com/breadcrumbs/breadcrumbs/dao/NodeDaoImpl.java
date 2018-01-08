@@ -4,29 +4,43 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto;
+import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
 
+@Repository
 public class NodeDaoImpl implements NodeDao {
 
+	@Autowired
 	private SqlSession sqlSession;//mybatis 쿼리문 실행 변수
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}//스프링 setter DI 의존관계를 설정
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public List<NodeDto> getNodeList(String tree_no) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
 		return sqlSession.selectList("nodeList");
 	}
-	public List<String> getRecommendCategoryList(String term) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
-		return sqlSession.selectList("categoryList");
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+//	public List<String> getRecommendCategoryList(String value) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
+	public List<String> getRecommendCategoryList(String value) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
+		return sqlSession.selectList("categoryList", value);
 	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public MemberTreeRelationDto getNode(int g_no) {//노드 로딩 R
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public void insertNode(NodeDto node) {//노드 저장 C
 		// TODO Auto-generated method stub
 		this.sqlSession.insert("add_node", node);

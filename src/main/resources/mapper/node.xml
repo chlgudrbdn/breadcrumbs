@@ -39,8 +39,9 @@
    </select>
    
       <!-- 유사한 카테고리 목록-->
-   <select id="categoryList" parameterType="String" resultType="String">
-     select * from category where category like CONCAT('%',#{term},'%')
+<!--    <select id="categoryList" parameterType="String" resultType="String"> -->
+   <select id="categoryList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.CategoryDto">
+     select * from category where category like '%' || #{value} || '%'
    </select>
    <!-- 가장 마지막 댓글 comment_no 값 구하기 -->
 <!--    <select id="c_max" parameterType="int" resultType="int"> -->
