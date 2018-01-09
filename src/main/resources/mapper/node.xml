@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -55,10 +54,9 @@
 <!--     delete from comment7 where comment_no=#{comment_no} -->
 <!--    </delete> -->
    
-   <!-- 방명록 저장 -->
+   <!-- tree 저장 -->
 <!--    <insert id="g_in" parameterType="c"> -->
-<!--     insert into guest10 (g_no,g_name,g_title,g_pwd,g_cont, -->
-<!--     g_date) values(g_no_seq10.nextval,#{g_name},#{g_title}, -->
+<!--     insert into m_t_relation values(g_no_seq10.nextval,#{g_name},#{g_title}, -->
 <!--     #{g_pwd},#{g_cont},sysdate) -->
 <!--    </insert> -->
    

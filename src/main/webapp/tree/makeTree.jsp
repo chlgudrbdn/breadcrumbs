@@ -147,12 +147,12 @@
 							<span id="dataInputSpan"></span>
 					</td>
 				</tr>
-				<tr>
-					<td bgcolor="#f5f5f5"><font size="2">비밀번호</font>
-					</td>
-					<td><input type="password" name="pw" size="15" /><span id="pwSpan"></span>
-					</td>
-				</tr>
+<!-- 				<tr> -->
+<!-- 					<td bgcolor="#f5f5f5"><font size="2">비밀번호</font> -->
+<!-- 					</td> -->
+<!-- 					<td><input type="password" name="pw" size="15" /><span id="pwSpan"></span> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
 <!-- 				<tr> -->
 <!-- 					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;비밀번호 -->
 <!-- 							확인</font></td> -->

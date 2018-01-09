@@ -46,6 +46,10 @@ public class NodeDaoImpl implements NodeDao {
 		this.sqlSession.insert("add_node", node);
 	}
 
+	public void insertCategory(String category) {
+		// TODO Auto-generated method stub
+		
+	}
 	public void updateNode(int id) {//노드의 코드 수정 U
 		// TODO Auto-generated method stub
 		
@@ -80,6 +84,11 @@ public class NodeDaoImpl implements NodeDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void insertTree() {
+		this.sqlSession.insert("tree_insert");
+	}
+
 
 	/*
 	 *  mybatis 쿼리문 실행 메서드

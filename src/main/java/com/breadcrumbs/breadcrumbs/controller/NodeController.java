@@ -1,11 +1,15 @@
 package com.breadcrumbs.breadcrumbs.controller;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.rosuda.REngine.REXPMismatchException;
+import org.rosuda.REngine.REngineException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
 import com.breadcrumbs.breadcrumbs.node.service.NodeAction;
 
 
 @Controller
+@SessionAttributes("useraccount")
 public class NodeController {
 	
 	@Autowired
@@ -68,8 +74,24 @@ public class NodeController {
 	}
 	
 	@RequestMapping("/makeRootNode.node")
-	public String makeRootNode() {
-		return "/";
+	public String makeRootNode(@RequestParam("category") String category, @RequestParam("dataInput") File dataInput) {
+		this.nodeAction.makeTreeNo(category, dataInput);
+		
+		//할일 : m_t_relation 테이블에 트리 시퀀스+1, 추천수는 0, 카테고리, 세션에 있는 멤버 객체(아마도 useraccount)이메일 넣는다.
+		//       t_n_relation에는 루트 노드로 하나 넣는다. 30자가 넘지 않도로 해야하는데 seq는 27자 까지가 한계. 절충해서 대충 20자 정도만 넣을 수 있게하자.
+		//    node에도 해당 root 노드 추가 시킨다. id, parent, state, text, li_attr 등. 선택지인 text는 일단 비워둔다.
+		//    비슷하게 파일노드도 하나 넣는다. 이때 node의 li_attr에 type을 file로 정해둘 것.
+		//   새로운 카테고리의 경우 추가하는 메소드가 필요하다.
+		
+		
+		//
+		return "tree/treeMain";
+	}
+	
+	@RequestMapping("/executeCode.node")
+	public String noticeWriteView(@RequestParam("codes") String codes) throws REXPMismatchException, REngineException {
+		String result=this.nodeAction.executeCode(codes);
+		return result;
 	}
 //	
 //	@Autowired
@@ -89,12 +111,7 @@ public class NodeController {
 //	
 
 //
-//	@RequestMapping("/NoticeWrite.board")
-//	public ModelAndView noticeWriteView() {
-//		ModelAndView mav = new ModelAndView();
-//		mav.setViewName("/board/noticeWrite");
-//		return mav;
-//	}
+
 //
 //	
 //	@Autowired

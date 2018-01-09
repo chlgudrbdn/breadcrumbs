@@ -9,7 +9,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- <link rel="stylesheet" href="../treant-js-master/Treant.css" type="text/css" /> -->
 <title>Insert title here</title>
+<script>
+$(function(){
+	
+	
 
+	$("#addCode").click(function(){
+// 		$.ajax({
+// 			type:'post',
+// 			url:'/restguestbook/reply.do',
+// 			data: {"g_no":g_no,"comment_name":comment_name,"comment_cont":comment_cont}, 			
+// 			/* data : query, */
+// 			dataType:'text', 	 			
+// 			success:function(result){
+// 				$("#comment_cont").val("").focus();//내용 입력후 지우기
+				
+// 				alert(result)							
+				
+// 		//		console.log("result: " + result);
+				
+// 				var obj = JSON.parse(result);		                     
+				
+// 				var output='';      					          			
+// 		 			$("#reply_count").text(obj.com_count);	// 댓글수 증가 
+// 		  			$("#allData").append(output); // 댓글을 추가
+// 		});  // ajax() end
+	});  // ajax() end
+	
+	$("#executeCode").click(function(){
+		var codes = $("#accumlatedCodes").val();
+		
+		$.ajax({ 
+			url: "/breadcrumbs/executeCode.node",
+		    data: {"codes" : codes},
+		    type: 'post',
+		    success: function(result){
+		    	console.log(result);
+		    	$("#codeExecuteResult").val(result);
+		    }
+		});
+	
+	});
+	
+}
+</script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -18,7 +61,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="accumlatedCodes h-100 p-3" style="height:50%">
+	<div class="h-100 p-3" id ="accumlatedCodes">
 		<!-- 레코드가 있으면 -->
 		<%-- 	<c:if test="${search_list_count > 0 }"> --%>
 		<%-- 		<c:forEach var="b" items="${search_list}"> --%>
@@ -28,23 +71,27 @@
 
 <!-- 		<div class="container"> -->
 <!-- 			<pre> -->
-<p>각종 코드들.</p>
+<p>1+1</p>
 <!-- </pre> -->
 	</div>
-	<div class="controllPanel h-100 p-3" >
-			<form action="./addNode.node" method="post" name="NodeForm">
+	<div class="controllPanel h-50 p-3" >
+			<form action="./addCode.node" method="post" name="NodeForm">
 				<div class="form-group">
 					<label for="Codes">Codes:</label>
 					<textarea class="form-control" name="codeTypingArea" rows="10"
 						id="codeTypingArea" ></textarea>
 				</div>
 				<button type="submit" class="btn btn-default" id=addCode>코드 수정/등록</button> <!-- CU -->
-				<button type="button" class="btn btn-default" id=delNode>노드 삭제</button> <!-- D --> <!-- R은 그냥 노드 클릭하면 누적되서 보인다. -->
-				<button type="button" class="btn btn-default" id=deactivateNode>노드 비활성화</button>
-				<button type="button" class="btn btn-default" id=downloadTree>리프노드 코드 다운로드</button>
+				<button type="button" class="btn btn-default" id=delNode onclick="#">노드 삭제</button> <!-- D --> <!-- R은 그냥 노드 클릭하면 누적되서 보인다. -->
+				<button type="button" class="btn btn-default" id=deactivateNode onclick="#">노드 비활성화</button>
+				<button type="button" class="btn btn-default" id=downloadTree onclick="#">리프노드 코드 다운로드</button>
 				<button type="button" class="btn btn-default" id=executeCode>선택 코드 실행(유료)</button>
 <%-- <input type="button" value="삭제"onclick="location='g_cont.do?g_no=${g.g_no}&state=del'" /> --%>
 			</form>
+	</div>
+	<div class="h-50 p-3" id="codeExecuteResult">
+	
+	
 	</div>
 <!-- 	</div> -->
 </body>

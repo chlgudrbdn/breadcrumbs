@@ -20,4 +20,5 @@ public interface NodeDao {
 	
 	public int getLeafNode(NodeDto id); // 가장 마지막 댓글 comment_no 값 구하기 
 	NodeDto getNodeDto(Map m); // 입력된 댓글 1개 추출
+	void insertTree();
 }

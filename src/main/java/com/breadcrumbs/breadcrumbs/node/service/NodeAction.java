@@ -1,12 +1,15 @@
 package com.breadcrumbs.breadcrumbs.node.service;
 
+import java.io.File;
 import java.util.List;
 
+import org.rosuda.REngine.REXPMismatchException;
+import org.rosuda.REngine.REngineException;
+import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.breadcrumbs.breadcrumbs.dao.NodeDaoImpl;
-import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto;
 
 
@@ -30,7 +33,26 @@ public class NodeAction{
 	public List<String> getRecommendCategoryList(String value) {
 		return NodeDao.getRecommendCategoryList(value);
 	}
-//
+	
+	public void makeTreeNo(String category, File dataInput) {
+		if(dataInput!=null) {
+			NodeDao.insertTree();
+		}
+		NodeDao.insertCategory(category);
+	}
+
+	public String executeCode(String codes)throws REXPMismatchException, REngineException {
+		RServer R;
+		String result = null;
+		try {
+			R = new RServer(codes);
+			result = R.getResult();
+		} catch (RserveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 //	/* 게시판 목록 */
 //	public Map<String, Object> board_list(HttpServletRequest request,
 //			HttpServletResponse response) throws Exception {
@@ -153,6 +175,12 @@ public class NodeAction{
 //
 //		boardDao.boardReplyOk(b);
 //	}
+
+
+
+
+
+
 
 
 }
