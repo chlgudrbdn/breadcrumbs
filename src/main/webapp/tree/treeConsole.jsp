@@ -37,21 +37,24 @@ $(function(){
 	});  // ajax() end
 	
 	$("#executeCode").click(function(){
-		var codes = $("#accumlatedCodes").val();
-		
+		var codes = $("#accumlatedCodes").text().trim().split("\n");
+		console.log(codes);
 		$.ajax({ 
 			url: "/breadcrumbs/executeCode.node",
 		    data: {"codes" : codes},
 		    type: 'post',
+		    dataType:'json', 
 		    success: function(result){
-		    	console.log(result);
-		    	$("#codeExecuteResult").val(result);
+		    	console.log(result)
+// 		    	response(
+			    	$("#codeExecuteResult").text(result)
+// 		    	);
 		    }
 		});
 	
 	});
 	
-}
+});
 </script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -61,30 +64,31 @@ $(function(){
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="h-100 p-3" id ="accumlatedCodes">
+	<div class="h-100 p-3" id="accumlatedCodes">
 		<!-- 레코드가 있으면 -->
 		<%-- 	<c:if test="${search_list_count > 0 }"> --%>
 		<%-- 		<c:forEach var="b" items="${search_list}"> --%>
 		<%-- 			${b.code_of_parentNodes} --%>
 		<%-- 		</c:forEach> --%>
 		<%-- 	</c:if> --%>
+  x1<-c(1,3,5,7,9)
 
-<!-- 		<div class="container"> -->
-<!-- 			<pre> -->
-<p>1+1</p>
-<!-- </pre> -->
+  # x is numeric or character?
+  class(x1)
+  is.numeric(x1)
 	</div>
+
 	<div class="controllPanel h-50 p-3" >
 			<form action="./addCode.node" method="post" name="NodeForm">
 				<div class="form-group">
 					<label for="Codes">Codes:</label>
-					<textarea class="form-control" name="codeTypingArea" rows="10"
+					<textarea class="form-control" name="codeTypingArea" rows="5"
 						id="codeTypingArea" ></textarea>
 				</div>
 				<button type="submit" class="btn btn-default" id=addCode>코드 수정/등록</button> <!-- CU -->
-				<button type="button" class="btn btn-default" id=delNode onclick="#">노드 삭제</button> <!-- D --> <!-- R은 그냥 노드 클릭하면 누적되서 보인다. -->
-				<button type="button" class="btn btn-default" id=deactivateNode onclick="#">노드 비활성화</button>
-				<button type="button" class="btn btn-default" id=downloadTree onclick="#">리프노드 코드 다운로드</button>
+				<button type="button" class="btn btn-default" id=delNode >노드 삭제</button> <!-- D --> <!-- R은 그냥 노드 클릭하면 누적되서 보인다. -->
+				<button type="button" class="btn btn-default" id=deactivateNode>노드 비활성화</button>
+				<button type="button" class="btn btn-default" id=downloadTree>리프노드 코드 다운로드</button>
 				<button type="button" class="btn btn-default" id=executeCode>선택 코드 실행(유료)</button>
 <%-- <input type="button" value="삭제"onclick="location='g_cont.do?g_no=${g.g_no}&state=del'" /> --%>
 			</form>

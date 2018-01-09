@@ -65,7 +65,8 @@ public class NodeController {
 	@RequestMapping("/checkRecommendCategory.node")
 	@ResponseBody
 //	public @ResponseBody List checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
-	public List<String> checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
+	public List<String> checkRecommendCategory(@RequestParam("value") String value,
+			HttpServletResponse response) throws Exception {
 //		PrintWriter out = response.getWriter();
 		List<String> result = this.nodeAction.getRecommendCategoryList(value);
 		System.out.println("result="+result);
@@ -89,7 +90,10 @@ public class NodeController {
 	}
 	
 	@RequestMapping("/executeCode.node")
-	public String noticeWriteView(@RequestParam("codes") String codes) throws REXPMismatchException, REngineException {
+	@ResponseBody
+	public String noticeWriteView(@RequestParam("codes") String codes,
+			HttpServletResponse response) throws REXPMismatchException, REngineException {
+		System.out.println("executeCode");
 		String result=this.nodeAction.executeCode(codes);
 		return result;
 	}
