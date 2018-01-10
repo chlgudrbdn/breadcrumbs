@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.breadcrumbs.breadcrumbs.dao.ReplyDao;
-import com.breadcrumbs.breadcrumbs.dto.BlogMember;
+import com.breadcrumbs.breadcrumbs.dto.UseraccountDto;
 
 @Service
 public class ReplyInsertAction {
@@ -32,7 +32,7 @@ public class ReplyInsertAction {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("content", content);
 		map.put("board_num", num);
-		BlogMember member = (BlogMember) session.getAttribute("member");
+		UseraccountDto member = (UseraccountDto) session.getAttribute("member");
 		map.put("email", member.getEmail());
 		return replyDao.insertReply(map);
 	}

@@ -80,11 +80,11 @@ $(function(){
 		<%-- 			${b.code_of_parentNodes} --%>
 		<%-- 		</c:forEach> --%>
 		<%-- 	</c:if> --%>
-  x1<-c(1,3,5,7,9)
+  <p>x1<-c(1,3,5,7,9)
 
-  # x is numeric or character?
-  class(x1)
-  is.numeric(x1)
+  <p># x is numeric or character?
+  <p>class(x1)
+  <p>is.numeric(x1)
 	</div>
 
 	<div class="controllPanel h-50 p-3" >
