@@ -1,10 +1,13 @@
 package com.breadcrumbs.breadcrumbs.node.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
+import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,16 +44,28 @@ public class NodeAction{
 		NodeDao.insertCategory(category);
 	}
 
-	public String executeCode(String codes)throws REXPMismatchException, REngineException {
-		RServer R;
-		String result = null;
-		try {
-			R = new RServer(codes);
-			result = R.getResult();
-		} catch (RserveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public List<String> executeCode(List<String> codes)throws REXPMismatchException, REngineException {
+		RConnection c = new RConnection();
+		List<String> result = new ArrayList<String>();
+
+		for (String code : codes) {
+			System.out.println("code="+code.replaceAll("(^\\p{Z}+|\\p{Z}+$)", ""));
+			try {
+				if(!code.replaceAll("(^\\p{Z}+|\\p{Z}+$)", "").equals("")
+						|| !code.replaceAll("(^\\p{Z}+|\\p{Z}+$)", "").substring(0).equals("#")) {
+					REXP x = c.eval(code);
+					if(x.asString()!="") {
+						System.out.println("x="+x.asString());
+						result.add(x.asString());
+					}
+					System.out.println("-------------done----------------");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		}
+		System.out.println(result);
 		return result;
 	}
 //	/* 게시판 목록 */

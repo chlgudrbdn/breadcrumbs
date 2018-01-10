@@ -45,10 +45,19 @@ $(function(){
 		    type: 'post',
 		    dataType:'json', 
 		    success: function(result){
-		    	console.log(result)
-// 		    	response(
-			    	$("#codeExecuteResult").text(result)
-// 		    	);
+// 		    	console.log(result)
+		    	$("#codeExecuteResult").val("")
+		    	var arr = $.map(result, function(el) { return el });
+// 		    	console.log(arr)
+				
+		    	var output="<ul>"
+		    	$.each(arr, function(i){
+// 			    	console.log(arr[i])
+					output+="<li>"+arr[i]+"</li>"		    		
+		    	})
+		    	output+="</ul>"
+// 			    	console.log(output)
+			    $("#codeExecuteResult").append(output);
 		    }
 		});
 	
@@ -93,9 +102,8 @@ $(function(){
 <%-- <input type="button" value="삭제"onclick="location='g_cont.do?g_no=${g.g_no}&state=del'" /> --%>
 			</form>
 	</div>
+	<label>Result :</label>
 	<div class="h-50 p-3" id="codeExecuteResult">
-	
-	
 	</div>
 <!-- 	</div> -->
 </body>

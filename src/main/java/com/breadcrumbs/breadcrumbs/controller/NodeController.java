@@ -91,10 +91,10 @@ public class NodeController {
 	
 	@RequestMapping("/executeCode.node")
 	@ResponseBody
-	public String noticeWriteView(@RequestParam("codes") String codes,
+	public List<String> noticeWriteView(@RequestParam("codes[]") List<String> codes,
 			HttpServletResponse response) throws REXPMismatchException, REngineException {
-		System.out.println("executeCode");
-		String result=this.nodeAction.executeCode(codes);
+		System.out.println("executeCode"+codes);
+		List<String> result=this.nodeAction.executeCode(codes);
 		return result;
 	}
 //	
