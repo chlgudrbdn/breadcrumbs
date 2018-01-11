@@ -38,6 +38,6 @@ public class UseraccountDto {
 
 	@Override
 	public String toString() {
-		return "Member [email=" + email + ", pw=" + pass + ", payment_type=" + payment_type+ "]";
+		return "Member [email=" + email + ", pass=" + pass + ", payment_type=" + payment_type+ "]";
 	}
 }

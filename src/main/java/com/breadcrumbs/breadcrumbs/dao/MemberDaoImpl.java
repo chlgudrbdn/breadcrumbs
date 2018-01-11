@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.breadcrumbs.breadcrumbs.dto.BlogMember;
+import com.breadcrumbs.breadcrumbs.dto.UseraccountDto;
 import com.breadcrumbs.breadcrumbs.dto.LoginDto;
 
 @Repository
@@ -18,29 +18,26 @@ public class MemberDaoImpl implements MemberDao {
 	@Autowired
 	private SqlSession sqlSession;
 
-//	public void setSqlSession(SqlSession sqlSession) {
-//		this.sqlSession = sqlSession;
-//	}
-
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public BlogMember login(LoginDto loginDto) {
+	public UseraccountDto login(LoginDto loginDto) {
 		// 1개를 찾아와서 리턴하는 경우
-		List<BlogMember> list = sqlSession.selectList("member.loginMember",
-				loginDto);
+//		System.out.println("login"+loginDto);
+		List<UseraccountDto> list = sqlSession.selectList("member.loginMember", loginDto);
 		// 검색된 데이터가 없는 경우 null 리턴
-		if (list == null || list.size() < 1)
+//		System.out.println(list);
+		if (list == null || list.size() < 1) {
 			return null;
 		// 검색된 데이터가 있으면
 		// 그 중에서 첫번째 데이터 리턴
-		else {
-			// 업데이트 날짜 수정하는 sql 호출
-			int r = sqlSession
-					.update("member.updateLogin", loginDto.getEmail());
-			if (r > 0)
-				return list.get(0);
-			else
-				return null;
+		}else {
+//			// 업데이트 날짜 수정하는 sql 호출
+//			int r = sqlSession
+//					.update("member.updateLogin", loginDto.getEmail());
+//			if (r > 0)
+			return list.get(0);
+//			else
+//				return null;
 		}
 	}
 
@@ -58,7 +55,7 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public boolean insertMember(BlogMember member) {
+	public boolean insertMember(UseraccountDto member) {
 		System.out.println(member);
 		// sql 문장 실행
 		int r = sqlSession.insert("member.insertMember", member);
@@ -73,8 +70,8 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public BlogMember getMember(String email) {
-		List<BlogMember> list = sqlSession.selectList("member.idCheck", email);
+	public UseraccountDto getMember(String email) {
+		List<UseraccountDto> list = sqlSession.selectList("member.idCheck", email);
 		if (list.size() >= 1)
 			return list.get(0);
 		return null;
@@ -82,7 +79,7 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public boolean updateMember(BlogMember member) {
+	public boolean updateMember(UseraccountDto member) {
 		int r = sqlSession.update("member.updateMember", member);
 		if (r > 0)
 			return true;
@@ -92,12 +89,12 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public boolean dropMember(BlogMember member) {
+	public boolean dropMember(UseraccountDto member) {
 		// 패스워드를 찾아오는 sql을 실행
 		List<String> list = sqlSession.selectList("member.pwSelect", member);
 		if (list.size() >= 1) {
 			// 패스워드 비교
-			if (list.get(0).equals(member.getPw())) {
+			if (list.get(0).equals(member.getPass())) {
 				int r = sqlSession.delete("member.deleteMember", member);
 				if (r > 0)
 					return true;
@@ -118,8 +115,8 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public List<BlogMember> getMember() {
-		List<BlogMember> list = sqlSession.selectList("member.selectMember");
+	public List<UseraccountDto> getMember() {
+		List<UseraccountDto> list = sqlSession.selectList("member.selectMember");
 		if (list.size() > 0)
 			return list;
 		else
@@ -128,7 +125,7 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public boolean deleteMember(BlogMember member) {
+	public boolean deleteMember(UseraccountDto member) {
 		boolean result = false;
 
 		int r = sqlSession.delete("member.deleteMember", member);

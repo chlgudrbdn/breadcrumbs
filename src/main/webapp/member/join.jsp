@@ -1,76 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>회원가입</title>
 
-<style>
-span {
-	color: red;
-}
-</style>
 
 <!-- jQuery 사용을 위한 라이브러리 설정 -->
-<script src="js/jquery.js"></script>
+<script src="../js/jquery.js"></script>
 <script>
 	//body의 내용을 읽자 마자 호출되는 jquery 이벤트
 	//자바스크립트의 window.onload와 유사하지만 
 	//먼저 호출됩니다.
 	$(function(){
 		//imgInp를 눌러서 파일을 변경하면 함수 호출
-		$("#imgInp").on('change', function(){
-			readURL(this);
-		});
 	});
 	
-	function readURL(input){
-		//input에 선택된 파일이 있다면
-		if(input.files && input.files[0]){
-			//파일 이름 가져오기
-			var filename = input.files[0].name;
-			//파일 이름에서 확장자 가져오기
-			var ext = 
-				filename.substr(
-				filename.length-3,filename.length);
-			var isCheck = false;
-			if((ext.toLowerCase() == 'jpg' ||
-				 ext.toLowerCase() == "gif")){
-				isCheck=true;
-			}
-			if(isCheck == false){
-				alert("jpg나 gif를 선택하세요");
-				return;
-			}
-			//파일의 내용을 읽을 수 있는 객체 생성
-			var reader = new FileReader();
-			//input.files[0] 파일을 읽기
-			reader.readAsDataURL(input.files[0]);
-			//파일을 전부 읽었으면
-			reader.onload = function(e){
-				$("#image").attr('src', 
-						e.target.result);
-			}
-		}
-	}
 	//mobile에 숫자와 방향키만 사용할 수 있도록
 	//해주는 함수
-	function onlyNum(e){
-		//이벤트 발생 객체 가져오기
-		var event = e || window.event;
-		//누른 키보드 값 가져오기
-		var keycode = event.keyCode || e.which;
-		if(keycode == 8 || 
-			keycode >= 35 && keycode <= 40 ||
-			keycode >= 46 && keycode <= 57 || 
-			keycode >= 96 && keycode <= 105){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+// 	function onlyNum(e){
+// 		//이벤트 발생 객체 가져오기
+// 		var event = e || window.event;
+// 		//누른 키보드 값 가져오기
+// 		var keycode = event.keyCode || e.which;
+// 		if(keycode == 8 || 
+// 			keycode >= 35 && keycode <= 40 ||
+// 			keycode >= 46 && keycode <= 57 || 
+// 			keycode >= 96 && keycode <= 105){
+// 			return true;
+// 		}
+// 		else{
+// 			return false;
+// 		}
+// 	}
 	
 	function confirmId(){	
 		
@@ -85,7 +49,7 @@ span {
 		//ajax 요청
 		//ajax: 페이지 이동이 아니고 페이지의 내용을
 		//가져오는 것
-		$.post("/blog/EmailCheck.member", 
+		$.post("/breadcrumbs/EmailCheck.member", 
 				{"email":joinform.email.value},
 				function(req){
 //					alert(req);
@@ -155,7 +119,13 @@ span {
 
 </head>
 <body>
-	<div align="center">
+<div>
+	<header>
+<%-- 		<c:import url ="<%=request.getContextPath() %>/header.jsp" /> --%>
+		<c:import url ="./header.jsp" />
+	</header>
+</div>
+	<div class="container">
 		<!-- 회원가입 -->
 		<!-- 폼을 생성할 때 파일이 있으면
 		enctype을 설정해야 하고 
@@ -167,25 +137,9 @@ span {
 			<input type="hidden" name="idCheck" value="false" />
 
 			<p align="center">
-			<table border="1" width="60%" height="80%">
+			<table class="table" width="60%" height="80%">
 				<tr>
 					<td colspan="3" align="center"><h2>회원 가입</h2></td>
-				</tr>
-
-				<tr>
-					<td rowspan="9" align="center">
-					<img id="image" width="200"
-						height="200" border="1" /> <br /> 
-						<input type='file' id="imgInp"
-						name="imgInp" /></td>
-				</tr>
-
-				<tr>
-					<td width="17%" bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;이름</font>
-					</td>
-					<td>&nbsp;&nbsp;&nbsp; <input type="text" name="name"
-						size="20" /><span id="nameSpan"></span>
-					</td>
 				</tr>
 
 				<tr>
@@ -193,23 +147,22 @@ span {
 					</td>
 					<td>&nbsp;&nbsp;&nbsp; <input type="text" name="email" id="email"
 						size="20" maxlength=30>
-						<input type=button value="중복확인" onClick="confirmId()" /> 
+						<input type=button class="btn btn-default"  value="중복확인" onClick="confirmId()" /> 
 						<span id="emailSpan"></span>
 					</td>
 				</tr>
 
-
 				<tr>
 					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;비밀번호</font>
 					</td>
-					<td>&nbsp;&nbsp;&nbsp; <input type="password" name="pw"
+					<td>&nbsp;&nbsp;&nbsp; <input type="password" name="pass"
 						size="15" /><span id="pwSpan"></span>
 					</td>
 				</tr>
 				<tr>
 					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;비밀번호
 							확인</font></td>
-					<td>&nbsp;&nbsp;&nbsp; <input type="password" name="pw2"
+					<td>&nbsp;&nbsp;&nbsp; <input type="password" name="pass2"
 						size="15" /><span id="pw2Span"></span>
 					</td>
 				</tr>
@@ -218,36 +171,12 @@ span {
 					<td colspan="2"><font size="2">&nbsp;&nbsp;&nbsp;
 							(비밀번호는 대문자,소문자와 숫자를 조합하여 7~12자리로 만들어 주세요)</font></td>
 				</tr>
-				<tr>
-					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;휴대폰</font>
-					</td>
-					<td>&nbsp;&nbsp;&nbsp; <input type="text" name="mobile"
-						size="11" maxlength="11" style="ime-mode: disabled;"
-						onfocus="this.value='';" onkeydown="return onlyNum(event)" /> <span
-						id="mobileSpan"></span>
-					</td>
-				</tr>
-				<tr>
-					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;기본주소</font>
-					</td>
-
-					<td>&nbsp;&nbsp;&nbsp; <input type="text" name="address1"
-						size="50" />
-					</td>
-				</tr>
-				<tr>
-					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;상세주소</font>
-					</td>
-					<td>&nbsp;&nbsp;&nbsp; <input type="text" name="address2"
-						size="50" />
-					</td>
-				</tr>
 			</table>
 			<table width="80%">
 				<tr>
 					<td align="center"><br /> 
-					<input type="submit" value="회원가입" />
-						<input type="button" value="메인으로"
+					<input type="submit" class="btn btn-default" value="회원가입" />
+					<input type="button" class="btn btn-default" value="메인으로"
 						onclick="javascript:window.location='./index.jsp'"></td>
 				</tr>
 			</table>

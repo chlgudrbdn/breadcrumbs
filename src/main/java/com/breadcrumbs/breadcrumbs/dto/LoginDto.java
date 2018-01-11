@@ -3,7 +3,7 @@ package com.breadcrumbs.breadcrumbs.dto;
 //로그인 처리만을 위한 DTO
 public class LoginDto {
 	private String email;
-	private String pw;
+	private String pass;
 
 	public String getEmail() {
 		return email;
@@ -13,17 +13,17 @@ public class LoginDto {
 		this.email = email;
 	}
 
-	public String getPw() {
-		return pw;
+	public String getPass() {
+		return pass;
 	}
 
-	public void setPw(String pw) {
-		this.pw = pw;
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
 
 	@Override
 	public String toString() {
-		return "LoginDto [email=" + email + ", pw=" + pw + "]";
+		return "LoginDto [email=" + email + ", pass=" + pass + "]";
 	}
 
 }

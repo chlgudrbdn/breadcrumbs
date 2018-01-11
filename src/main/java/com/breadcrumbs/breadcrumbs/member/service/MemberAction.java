@@ -83,13 +83,8 @@ public class MemberAction {
 			}
 		}
 
-		member.setName(request.getParameter("name"));
-		member.setPw(request.getParameter("pw"));
 		member.setEmail(request.getParameter("email"));
-		member.setImage(filename);
-		member.setMobile(request.getParameter("mobile"));
-		member.setAddress1(request.getParameter("address1"));
-		member.setAddress2(request.getParameter("address2"));
+		member.setPass(request.getParameter("pw"));
 
 		result = memberDao.updateMember(member);
 		return result;
@@ -111,38 +106,33 @@ public class MemberAction {
 			UseraccountDto member = new UseraccountDto();
 			// 파일 업로드 처리
 			// 업로드 할 폴더이름 설정
-			String uploadPath = request.getRealPath("image");
-			System.out.println("uploadPath="+uploadPath);
+//			String uploadPath = request.getRealPath("image");
+//			System.out.println("uploadPath="+uploadPath);
 			
 			// 매개변수로 넘어온 파일 가져오기
-			MultipartFile report = request.getFile("imgInp");
-			String filename = report.getOriginalFilename();
+//			MultipartFile report = request.getFile("imgInp");
+//			String filename = report.getOriginalFilename();
 			// 이메일과 파일 이름을 합성
-			filename = request.getParameter("email") + filename;
+//			filename = request.getParameter("email") + filename;
 			// 파일 저장 경로 생성
-			String filepath = uploadPath + "\\" + filename;
+//			String filepath = uploadPath + "\\" + filename;
 
-			File f = new File(filepath);
-			FileOutputStream fos = null;
-			try {
-				fos = new FileOutputStream(f);
-				fos.write(report.getBytes());
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			} finally {
-				try {
-					fos.close();
-				} catch (Exception e) {
-				}
-			}
+//			File f = new File(filepath);
+//			FileOutputStream fos = null;
+//			try {
+////				fos = new FileOutputStream(f);
+//				fos.write(report.getBytes());
+//			} catch (Exception e) {
+//				System.out.println(e.getMessage());
+//			} finally {
+//				try {
+//					fos.close();
+//				} catch (Exception e) {
+//				}
+//			}
 
 			member.setEmail(request.getParameter("email"));
-			member.setName(request.getParameter("name"));
-			member.setPw(request.getParameter("pw"));
-			member.setImage(filename);
-			member.setMobile(request.getParameter("mobile"));
-			member.setAddress1(request.getParameter("address1"));
-			member.setAddress2(request.getParameter("address2"));
+			member.setPass(request.getParameter("pass"));
 
 			if (memberDao.insertMember(member))
 				result = true;

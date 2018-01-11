@@ -26,7 +26,7 @@ public class MemberController {
 	private MemberAction memberAction;
 	
 	
-	@RequestMapping("/Login.member")
+	@RequestMapping("/Login.member")//done
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView();
 		// 이동할 페이지 설정
@@ -35,28 +35,30 @@ public class MemberController {
 	}
 
 	@RequestMapping("/MainView.member")
-	public ModelAndView main() {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("index");
-		return mav;
+	public String main() {
+		return "index";
 	}
 
 	
 
 
-	@RequestMapping("/LoginAction.member")
+	@RequestMapping("/LoginAction.member")//done
 	public ModelAndView loginAction(LoginDto loginDto, HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		// 로그인 서비스 객체를 작업을 수행
 		UseraccountDto member = memberAction.login(loginDto);
+//		System.out.println("member="+member);
 		// 로그인에 실패했을 때
 		if (member == null) {
+//			System.out.println("loginfail");
 			mav.addObject("login", "fail");
 			mav.setViewName("/member/login");
 		}
 		// 로그인에 성공한 경우
 		else {
+//			System.out.println("loginsucessl");
 			session.setAttribute("member", member);
+//			System.out.println("update session");
 			mav.setViewName("index");
 		}
 
@@ -110,6 +112,7 @@ public class MemberController {
 	@RequestMapping("/JoinProcess.member")
 	public ModelAndView insertMember(MultipartHttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
+		System.out.println("JoinProcess");
 		boolean result = memberAction.insertMember(request);
 		if (result) {
 			mav.setViewName("redirect:Login.member");
