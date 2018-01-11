@@ -18,7 +18,7 @@
 			<value>oracle.jdbc.driver.OracleDriver</value>
 		</property>
 		<property name="url">
-			<value>jdbc:oracle:thin:@localhost:1521:xe</value>
+			<value>jdbc:oracle:thin:@192.168.40.22:1521:xe</value>
 		</property>
 		<property name="username">
 			<value>bread</value>
@@ -32,7 +32,7 @@
 	<!-- 여기서 빈을 만들면 다른 모든 DAO 클래스들은 여기서 만든 SqlSession을 주입받아서 사용만 하면 됩니다. -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-<!-- 		<property name="configLocation" value="classpath:/mapper/mybatis-config.xml" /> -->
+		<!-- <property name="configLocation" value="classpath:/mapper/mybatis-config.xml" /> -->
 		<property name="mapperLocations" value="classpath:/mapper/*.xml" /> <!-- 이전 프로젝트들 보면 configLocation 이 mybatis 환경 설정 파일이 명시 되어 있는데 이제부턴 생략 -->
 	</bean>
 	
