@@ -4,7 +4,7 @@
 <mapper namespace="Test">
 
 	<!-- 게시판 저장 -->
-	<insert id="board_insert" parameterType="board">
+	<insert id="board_insert" parameterType="com.breadcrumbs.breadcrumbs.dto.BoardBean">
 		insert into board53
 		(board_num,board_name,board_pass,board_subject,
 		board_content,board_re_ref,board_re_lev,board_re_seq,board_readcount,board_date)
@@ -19,7 +19,7 @@
 	</select>
 
 	<!-- 게시판 목록 (page번호를 전달받아서 startRow와 endRow를 구함) -->
-	<select id="board_list" parameterType="int" resultType="board">
+	<select id="board_list" parameterType="int" resultType="com.breadcrumbs.breadcrumbs.dto.BoardBean">
 	    <![CDATA[
 		select * from 
 		 (select rownum rnum,BOARD_NUM,BOARD_NAME,BOARD_SUBJECT,BOARD_CONTENT,
@@ -31,7 +31,7 @@
 	</select>
 
 	<!-- 게시판 내용보기 -->
-	<select id="board_cont" resultType="board"
+	<select id="board_cont" resultType="com.breadcrumbs.breadcrumbs.dto.BoardBean"
 		parameterType="int">
 		select * from board53 where board_num=#{board_num}
 	</select>
@@ -44,7 +44,7 @@
 	</update>
 
 	<!-- 게시물 수정 -->
-	<update id="board_edit" parameterType="board">
+	<update id="board_edit" parameterType="com.breadcrumbs.breadcrumbs.dto.BoardBean">
 		update board53 set
 		board_name=#{board_name},
 		board_subject=#{board_subject},
@@ -59,7 +59,7 @@
 	</delete>
 
 	<!-- 답변글 레벨 증가 -->
-	<update id="board_Level" parameterType="board">
+	<update id="board_Level" parameterType="com.breadcrumbs.breadcrumbs.dto.BoardBean">
 		update board53 set
 		board_re_seq=board_re_seq+1
 		where board_re_ref=#{board_re_ref} and
@@ -67,7 +67,7 @@
 	</update>
 
 	<!-- 답변글 저장 -->
-	<insert id="board_reply" parameterType="board">
+	<insert id="board_reply" parameterType="com.breadcrumbs.breadcrumbs.dto.BoardBean">
 		insert into board53
 		(board_num,board_name,board_subject,board_content,
 		board_pass,board_re_ref,board_re_lev,board_re_seq,board_readcount,board_date)
@@ -76,25 +76,4 @@
 	</insert>
 
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

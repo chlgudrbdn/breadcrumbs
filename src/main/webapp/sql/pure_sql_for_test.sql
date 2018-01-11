@@ -1,6 +1,8 @@
--- select * from tab;
+ select * from tab;
 -- select * from useraccount;
 
+ drop table comment7 purge;
+ drop sequence comment_no_seq;
 -- drop table useraccount purge;
 -- drop table m_t_relation purge;
 -- drop table node purge;
@@ -57,6 +59,60 @@ ALTER TABLE useraccount
 			email
 		);
 
+		
+create table board53(
+    board_num number(38) primary key
+  , board_name varchar2(50) not null
+  , board_pass varchar2(30) not null
+  , board_subject varchar2(100) not null
+  , board_content varchar2(4000) not null
+  , board_re_ref number /*占쏙옙 占쌓뤄옙占싫�:占썰변占쏙옙 */
+  , board_re_lev number /*占썰변占쏙옙 占쏙옙占쏙옙 占쏙옙 */
+  , board_re_seq number /*占썰변占쏙옙 화占썽에 占쏙옙占싱댐옙 占쏙옙치 */
+  , board_readcount number /*占쏙옙회占쏙옙*/
+  , board_date date /*占쏙옙毬占승�*/
+);
+--
+create sequence board53_num_seq
+                increment by 1 start with 1 nocache;
+--占쏙옙 캐占쏙옙占쏙옙 占쏙옙占쏙옙玖占� 캐占쏙옙占쏙옙 占쏙옙호占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙 占십는댐옙.
+--increment by 1 start 占실미댐옙 1占쏙옙占쏙옙 占쏙옙占쏙옙占쌔쇽옙 1占쏙옙占쏙옙占쏙옙 
+                
+select * from board53; 
+
+--select * from tab;
+commit;
+
+-- 댓글 테이블
+ create table comment7(
+  comment_no number(20) primary key /*댓글 번호*/
+  ,comment_name varchar2(100) /*댓글이름*/
+  ,comment_cont varchar2(4000) not null /*댓글 내용*/
+  ,comment_date date /*댓글 등록날짜*/
+  ,g_no number(20) not null
+  references guest10(g_no) /*guest10 테이블의 g_no 필드를 주인키로
+  가리키고 있다. 외래키(foreign key) 설정 */
+ );
+ 
+ create sequence comment_no_seq
+ increment by 1 start with 1 nocache;
+ 
+ 
+ -- 원문 테이블
+  create table guest10(
+   g_no number(20) primary key
+   ,g_name varchar2(50)
+   ,g_title varchar2(100)
+   ,g_pwd varchar2(20)
+   ,g_cont varchar2(4000)
+   ,g_image varchar2(4000)
+   ,g_hit number(20) default 0
+   ,g_date date
+  );
+  
+  create sequence g_no_seq10
+  increment by 1 start with 1 nocache;
+		
 /* QnA게시판 */
 CREATE TABLE qna_board (
 	board_Num NUMBER NOT NULL, /* 게시물번호 */
