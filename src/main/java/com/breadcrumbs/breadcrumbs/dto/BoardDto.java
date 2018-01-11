@@ -1,106 +1,79 @@
 package com.breadcrumbs.breadcrumbs.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BoardDto {
-	private int board_Num;
-	private String board_Id;
-	private String board_Subject;
-	private String board_Content;
-	private String board_file;
-	private int board_ReadCount;
-	private Date board_Date;
-	private String board_Ip;
 
-	public BoardDto() {
-		super();
+	private int board_num;
+	private String board_name;
+	private String board_pass;
+	private String board_subject; //글제목
+	private String board_content; //글내용
+	private int board_re_ref; //글그룹번호
+	private int board_re_lev; //화면에 보이는 답변글 위치번호
+	private int board_re_seq; //답변글 레벨 순서
+	private int board_readcount; //조회수
+	private String board_date; //글 등록날짜
+	
+	public int getBoard_num() {
+		return board_num;
 	}
-
-	public BoardDto(int board_Num, String board_Id, String board_Subject,
-			String board_Content, String board_file, int board_ReadCount,
-			Date board_Date, String board_Ip) {
-		super();
-		this.board_Num = board_Num;
-		this.board_Id = board_Id;
-		this.board_Subject = board_Subject;
-		this.board_Content = board_Content;
-		this.board_file = board_file;
-		this.board_ReadCount = board_ReadCount;
-		this.board_Date = board_Date;
-		this.board_Ip = board_Ip;
+	public void setBoard_num(int board_num) {
+		this.board_num = board_num;
 	}
-
-	public int getBoard_Num() {
-		return board_Num;
+	public String getBoard_name() {
+		return board_name;
 	}
-
-	public void setBoard_Num(int board_Num) {
-		this.board_Num = board_Num;
+	public void setBoard_name(String board_name) {
+		this.board_name = board_name;
 	}
-
-	public String getBoard_Id() {
-		return board_Id;
+	public String getBoard_pass() {
+		return board_pass;
 	}
-
-	public void setBoard_Id(String board_Id) {
-		this.board_Id = board_Id;
+	public void setBoard_pass(String board_pass) {
+		this.board_pass = board_pass;
 	}
-
-	public String getBoard_Subject() {
-		return board_Subject;
+	public String getBoard_subject() {
+		return board_subject;
 	}
-
-	public void setBoard_Subject(String board_Subject) {
-		this.board_Subject = board_Subject;
+	public void setBoard_subject(String board_subject) {
+		this.board_subject = board_subject;
 	}
-
-	public String getBoard_Content() {
-		return board_Content;
+	public String getBoard_content() {
+		return board_content;
 	}
-
-	public void setBoard_Content(String board_Content) {
-		this.board_Content = board_Content;
+	public void setBoard_content(String board_content) {
+		this.board_content = board_content;
 	}
-
-	public String getBoard_file() {
-		return board_file;
+	public int getBoard_re_ref() {
+		return board_re_ref;
 	}
-
-	public void setBoard_file(String board_file) {
-		this.board_file = board_file;
+	public void setBoard_re_ref(int board_re_ref) {
+		this.board_re_ref = board_re_ref;
 	}
-
-	public int getBoard_ReadCount() {
-		return board_ReadCount;
+	public int getBoard_re_lev() {
+		return board_re_lev;
 	}
-
-	public void setBoard_ReadCount(int board_ReadCount) {
-		this.board_ReadCount = board_ReadCount;
+	public void setBoard_re_lev(int board_re_lev) {
+		this.board_re_lev = board_re_lev;
 	}
-
-	public Date getBoard_Date() {
-		return board_Date;
+	public int getBoard_re_seq() {
+		return board_re_seq;
 	}
-
-	public void setBoard_Date(Date board_Date) {
-		this.board_Date = board_Date;
+	public void setBoard_re_seq(int board_re_seq) {
+		this.board_re_seq = board_re_seq;
 	}
-
-	public String getBoard_Ip() {
-		return board_Ip;
+	public int getBoard_readcount() {
+		return board_readcount;
 	}
-
-	public void setBoard_Ip(String board_Ip) {
-		this.board_Ip = board_Ip;
+	public void setBoard_readcount(int board_readcount) {
+		this.board_readcount = board_readcount;
 	}
-
-	@Override
-	public String toString() {
-		return "BoardDto [board_Num=" + board_Num + ", board_Id=" + board_Id
-				+ ", board_Subject=" + board_Subject + ", board_Content="
-				+ board_Content + ", board_file=" + board_file
-				+ ", board_ReadCount=" + board_ReadCount + ", board_Date="
-				+ board_Date + ", board_Ip=" + board_Ip + "]";
+	public String getBoard_date() {
+		return board_date;
 	}
-
+	public void setBoard_date(String board_date) {
+		this.board_date = board_date.substring(0,10);
+	}	
+	
 }
