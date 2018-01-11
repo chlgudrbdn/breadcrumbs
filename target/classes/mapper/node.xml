@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -33,13 +32,16 @@
 <!--     update guest10 set g_hit=g_hit+1 where g_no=#{g_no} -->
 <!--    </update> -->
    
-   <!-- 댓글 목록 -->
-<!--    <select id="c_list" parameterType="int" -->
-<!--    resultType="c"> -->
-<!--      select * from comment7 where g_no=#{g_no}  -->
-<!--      order by comment_no asc -->
-<!--    </select> -->
+   <!-- 해당 트리의 노드 목록-->
+   <select id="nodeList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+     select * from node where IN (select id from t_n_relation where tree_no=#{tree_no} )
+   </select>
    
+      <!-- 유사한 카테고리 목록-->
+<!--    <select id="categoryList" parameterType="String" resultType="String"> -->
+   <select id="categoryList" parameterType="String" resultType="String">
+     select * from category where category like '%' || #{value} || '%'
+   </select>
    <!-- 가장 마지막 댓글 comment_no 값 구하기 -->
 <!--    <select id="c_max" parameterType="int" resultType="int"> -->
 <!--     select max(comment_no) from comment7 where g_no=#{g_no} -->
@@ -52,10 +54,9 @@
 <!--     delete from comment7 where comment_no=#{comment_no} -->
 <!--    </delete> -->
    
-   <!-- 방명록 저장 -->
+   <!-- tree 저장 -->
 <!--    <insert id="g_in" parameterType="c"> -->
-<!--     insert into guest10 (g_no,g_name,g_title,g_pwd,g_cont, -->
-<!--     g_date) values(g_no_seq10.nextval,#{g_name},#{g_title}, -->
+<!--     insert into m_t_relation values(g_no_seq10.nextval,#{g_name},#{g_title}, -->
 <!--     #{g_pwd},#{g_cont},sysdate) -->
 <!--    </insert> -->
    
