@@ -473,4 +473,4 @@ insert into category values('Zillow Prize: Zillow’s Home Value Prediction (Zes
 insert into category values('House Prices: Advanced Regression Techniques');
 		
 		
-		
+insert into useraccount values('admin@breadcrumbs.com', '12345678', 'payed');		
