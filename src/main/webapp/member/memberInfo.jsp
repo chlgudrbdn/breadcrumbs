@@ -15,7 +15,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 			<table width="400" border="1">
 				<tr>
 					<th width="50%">이메일</th>
-					<th width="20%">이름</th>
 					<th width="20%">강제탈퇴</th>
 				</tr>
 				<!-- JSTL을 이용한 배열이나
@@ -25,7 +24,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 					변수명.키이름 을 이용하면 출력가능 -->
 					<tr>
 						<td>${item.email}</td>
-						<td>${item.name }</td>
 						<td>
 						<a href="DeleteMember.member?email=${item.email}">
 						삭제</a></td>

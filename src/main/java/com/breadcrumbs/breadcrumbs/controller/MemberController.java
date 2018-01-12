@@ -25,7 +25,6 @@ public class MemberController {
 	@Autowired
 	private MemberAction memberAction;
 	
-	
 	@RequestMapping("/Login.member")//done
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView();
@@ -34,13 +33,10 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping("/MainView.member")
+	@RequestMapping("/MainView.member")//done
 	public String main() {
 		return "index";
 	}
-
-	
-
 
 	@RequestMapping("/LoginAction.member")//done
 	public ModelAndView loginAction(LoginDto loginDto, HttpSession session) {
@@ -66,7 +62,7 @@ public class MemberController {
 	}
 
 	// Logout.member 요청 처리
-	@RequestMapping("/Logout.member")
+	@RequestMapping("/Logout.member")//done
 	public ModelAndView logout(HttpSession session) {
 		// 세션의 모든 내용 클리어
 		session.invalidate();
@@ -78,7 +74,7 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping("/JoinView.member")
+	@RequestMapping("/JoinView.member")//done
 	public ModelAndView join() {
 		ModelAndView mav = new ModelAndView();
 
@@ -87,8 +83,7 @@ public class MemberController {
 		return mav;
 	}
 
-
-	@RequestMapping("/EmailCheck.member")
+	@RequestMapping("/EmailCheck.member")//done
 	@ResponseBody //이게 있어야 json으로 반환되는데 이건 숫자만 반환하므로 없어도 됨.
 	public void check(@RequestParam("email") String email,HttpServletResponse response) throws Exception {
 		PrintWriter out = response.getWriter();
@@ -107,9 +102,7 @@ public class MemberController {
 		out.println(req);//callback으로 리턴되는 부분.
 	}
 
-	
-
-	@RequestMapping("/JoinProcess.member")
+	@RequestMapping("/JoinProcess.member")//done
 	public ModelAndView insertMember(MultipartHttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		System.out.println("JoinProcess");
@@ -124,13 +117,14 @@ public class MemberController {
 	}
 
 
-	@RequestMapping("/UpdateView.member")
+	@RequestMapping("/UpdateView.member")//done
 	public ModelAndView updateView(HttpSession session) {
 
 		ModelAndView mav = new ModelAndView();
 		// 로그인 된 사용자의 정보를 세션에서 가져오기
 		UseraccountDto member = (UseraccountDto) session.getAttribute("member");
 		// 로그인 정보가 없으면 로그인 페이지로 이동
+		System.out.println("get attribute"+member);
 		if (member == null) {
 			mav.setViewName("/member/login");
 		} else {
@@ -142,19 +136,21 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping("/UpdateProcess.member")
+	@RequestMapping("/UpdateProcess.member")//done
 	public ModelAndView update(MultipartHttpServletRequest request,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-
+//		System.out.println("updateprocess");
 		// 로그인을 확인해서 로그인이 안되어있으면
 		// 로그인 페이지로 이동하도록 설정
 		UseraccountDto member = (UseraccountDto) session.getAttribute("member");
+//		System.out.println("get attribute="+member);
 		if (member == null) {
 			mav.setViewName("/member/login");
 		} else {
 			// 이미 로그인 된 상태라면
 			if (memberAction.updateMember(request)) {
+//				System.out.println("already login. and update done");
 				session.invalidate();
 				mav.setViewName("redirect:Login.member");
 			} else {
@@ -167,7 +163,7 @@ public class MemberController {
 	}
 
 	
-	@RequestMapping("/DropView.member")
+	@RequestMapping("/DropView.member")//done
 	public ModelAndView dropView(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		// 로그인 되어 있는지 확인해서
@@ -184,15 +180,16 @@ public class MemberController {
 	}
 
 
-	@RequestMapping("/DropProcess.member")
-	public ModelAndView dropMember(UseraccountDto member, HttpSession session) {
+	@RequestMapping("/DropProcess.member")//done
+	public ModelAndView dropMember(@RequestParam("pw") String pass, UseraccountDto member, HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		if (session.getAttribute("member") == null) {
 			mav.setViewName("/member/login");
 		} else {
 			UseraccountDto sMember = (UseraccountDto) session.getAttribute("member");
-			member.setEmail(sMember.getEmail());
-			boolean result = memberAction.dropMember(member);
+			member.setPass(pass);
+			System.out.println("member="+member);
+			boolean result = memberAction.dropMember(sMember);
 			if (result) {
 				session.invalidate();
 				mav.setViewName("redirect:MainView.member");
@@ -204,7 +201,7 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping("/PassView.member")
+	@RequestMapping("/PassView.member")//done
 	public ModelAndView passView() {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("/member/find");
@@ -212,7 +209,7 @@ public class MemberController {
 	}
 	
 
-	@RequestMapping("/FindPassword.member")
+	@RequestMapping("/FindPassword.member")//done
 	public ModelAndView find(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		boolean result = memberAction.updatePass(request);

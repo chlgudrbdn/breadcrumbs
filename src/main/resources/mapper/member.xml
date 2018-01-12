@@ -35,37 +35,35 @@
 	<update id="updateMember" parameterType="com.breadcrumbs.breadcrumbs.dto.UseraccountDto">
 		update useraccount
 		set pass=#{pass}
-		where email=#{email} and pass=#{pass}
+		where email=#{email}
 	</update>
 
-	<!-- email 주소를 받아서 pw를 찾아오는 sql -->
+	<!-- email 주소를 받아서 pass를 찾아오는 sql -->
 	<select id="pwSelect" parameterType="com.breadcrumbs.breadcrumbs.dto.UseraccountDto"
 		resultType="java.lang.String">
-		select pw from useraccount where email=#{email}
+		select pass from useraccount where email=#{email}
 	</select>
 	
 	<!-- email 주소에 해당하는 데이터를 삭제하는 sql -->
 	<delete id="deleteMember" parameterType="com.breadcrumbs.breadcrumbs.dto.UseraccountDto">
-		delete from useraccount	where email=#{email}
+		delete from useraccount where email=#{email}
 	</delete>
 
 	<!-- email과 pw를 맵으로 받아서 email인 데이터의 pw를 변경하는 sql -->
 	<update id="updatePass" parameterType="java.util.Map">
-		update useraccount set pw=#{pw}	where email=#{email}
+		update useraccount set pass=#{pass}	where email=#{email}
 	</update>
 
-	<!-- gubun이 0인 모든 데이터를 검색해서 리턴하는 sql -->
+	<!-- payed인 모든 데이터를 검색해서 리턴하는 sql -->
 	<select id="selectMember" resultType="com.breadcrumbs.breadcrumbs.dto.UseraccountDto">
-		select * from useraccount where gubun=0
+		select * from useraccount where payment_type='payed'
 	</select>
 
 	<!-- UseraccountDto 테이블에서 gubun이 0이고 logindate가 sysdate 보다 1 이상 작거나 null 인 데이터를 
 		삭제하는 sql -->
 	<delete id="sleepMember">
 		delete from useraccount
-		where gubun = 0 and
-		logindate &lt; (sysdate-1)
-		or logindate is null
+		where payment_type='notpayed'
 	</delete>
 	
 </mapper>

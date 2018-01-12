@@ -80,6 +80,11 @@ $(function(){
 		<%-- 			${b.code_of_parentNodes} --%>
 		<%-- 		</c:forEach> --%>
 		<%-- 	</c:if> --%>
+<!--   library(Rserve) -->
+<!-- Rserve(FALSE,port=6311,args='--RS-encoding utf8 --no-save --slave --encoding utf8  --internet2') -->
+<!-- Rserve(args="--RS- encoding utf8") -->
+<!-- 출처: http://tastydarr.tistory.com/64 [맛동산] -->
+  <p>getwd()
   <p>x1<-c(1,3,5,7,9)
 
   <p># x is numeric or character?

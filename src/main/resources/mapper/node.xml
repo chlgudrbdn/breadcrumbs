@@ -21,6 +21,12 @@
 	    insert into node 
 	    values(#{id}, #{parent}, #{state}, #{text}, #{li_attr})
    </insert>
+
+<!-- 	트리와 노드 관계 추가 -->
+   <insert id="add_node" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+	    insert into node 
+	    values(#{id}, #{parent}, #{state}, #{text}, #{li_attr})
+   </insert>
    
    <!-- 댓글 개수 -->
 <!--    <select id="c_count" parameterType="int" resultType="int"> -->
@@ -37,15 +43,53 @@
      select * from node where IN (select id from t_n_relation where tree_no=#{tree_no} )
    </select>
    
+   
+   
+   
       <!-- 유사한 카테고리 목록-->
-<!--    <select id="categoryList" parameterType="String" resultType="String"> -->
    <select id="categoryList" parameterType="String" resultType="String">
      select * from category where category like '%' || #{value} || '%'
    </select>
-   <!-- 가장 마지막 댓글 comment_no 값 구하기 -->
-<!--    <select id="c_max" parameterType="int" resultType="int"> -->
-<!--     select max(comment_no) from comment7 where g_no=#{g_no} -->
-<!--    </select>    -->
+   
+         <!-- 카테고리 중복 확인-->
+   <select id="category_chk" parameterType="String" resultType="String">
+     select * from category where category = #{category}
+   </select>
+   
+      <!-- 카테고리 추가 -->
+<!--    <insert id="add_category" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryDto"> -->
+   <insert id="add_category" parameterType="String">
+	    insert into category values(#{category})
+   </insert>
+   
+   
+   <!-- 카테고리_선택지 관계 추가 -->
+   <insert id="add_CategoryChoice" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto">
+	    insert into c_c_relation(category,text,pre_choice,choice_pick_freq,choice_weight)
+	    values(#{category}, #{text}, #{pre_choice}, #{choice_pick_freq}, #{choice_weight})
+   </insert>
+   
+   
+   
+   <!-- 선택지 중복 확인-->
+   <select id="choice_chk" parameterType="String" resultType="String">
+     select * from choice_list where text = #{text}
+   </select>
+   
+   <!-- 선택지 추가 -->
+<!--    <insert id="add_category" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryDto"> -->
+   <insert id="add_choice" parameterType="String">
+	    insert into choice_list values(#{text}, #{})
+   </insert>
+   
+   
+   
+   
+   
+   <!-- 가장 마지막 tree_no 값 구하기 -->
+   <select id="tree_max" resultType="int">
+    select max(tree_no) from m_t_relation
+   </select>   
    
     
    
@@ -55,10 +99,9 @@
 <!--    </delete> -->
    
    <!-- tree 저장 -->
-<!--    <insert id="g_in" parameterType="c"> -->
-<!--     insert into m_t_relation values(g_no_seq10.nextval,#{g_name},#{g_title}, -->
-<!--     #{g_pwd},#{g_cont},sysdate) -->
-<!--    </insert> -->
+   <insert id="tree_insert" parameterType="com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto" >
+    insert into m_t_relation values(tree_no_seq.nextval, 0 ,#{category},#{email},#{datafilename})
+   </insert>
    
    <!-- 방명록 수정 -->
 <!--    <update id="g_edit" parameterType="c"> -->

@@ -51,7 +51,7 @@
 	</header>
 </div>
 
-	<div class="containe col-sm-6 col-md-offset-3">
+	<div class="container col-sm-6 col-md-offset-3">
 		<!-- submit을 누르면 check라는 함수를 호출하고
 	이 함수에서 true를 리턴하면 LoginAction.member로
 	name을 가진 객체들의 값을 가지고 이동하고

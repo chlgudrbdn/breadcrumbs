@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
- 	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -42,25 +41,23 @@
 				<!-- 일반 사용자로 로그인 한 경우 -->
 				<c:if test="${member!=null and member.email != 'admin@breadcrumbs.com' }">
 					<li><a href="Logout.member">로그아웃</a></li>
-					<li class="dropdown">
-						<a id="dLabel" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">게시판<span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" id="Borads" onclick="toggle('aboutBorads', 'Borads')" aria-haspopup="true" aria-expanded="false" href="#">게시판<span class="caret"></span></a>
+						<ul class="dropdown-menu" id="aboutBorads">
 <!-- 							<li><a href="NoticeList.board">공지사항보기</a></li> -->
 							<li><a href="BoardList.board">포럼글보기</a></li>
 							<li><a href="BoardWrite.board">게시판글쓰기</a></li>
 						</ul>
 					</li>
 					
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">마이페이지<span class="caret"></span></a>
-						<ul class="dropdown-menu">
+					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" id="Member" onclick="toggle('aboutMember', 'Member')" href="#" role="button" aria-haspopup="true" aria-expanded="false">마이페이지<span class="caret"></span></a>
+						<ul class="dropdown-menu" id="aboutMember">
 							<li><a href="UpdateView.member">회원정보수정</a></li>
 							<li><a href="DropView.member">회원탈퇴</a></li>
 						</ul>
 					</li>
 					
-					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">결정트리<span class="caret"></span></a>
-						<ul class="dropdown-menu">
+					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" id="decisionTree" onclick="toggle('aboutTree', 'decisionTree')" href="#">결정트리<span class="caret"></span></a>
+						<ul class="dropdown-menu" id="aboutTree">
 							<li><a href="makeTree.node">트리 만들기 시작</a></li>
 							<li><a href="myTree.node">내 트리</a></li>
 						</ul>
@@ -70,12 +67,13 @@
 				<!-- 관리자로 로그인 했을 때 -->
 				<c:if test="${member!=null and member.email == 'admin@breadcrumbs.com' }">
 					<li><a href="Logout.member">로그아웃</a></li>
-					<li class="dropdown"><a href="#">게시판</a>
-						<ul>
+					<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="boradForAdmin" onclick="toggle('boradAdmin', 'boradForAdmin')"  href="#">게시판<span class="caret"></span></a>
+						<ul class="dropdown-menu" id="boradAdmin">
 							<li><a href="BoardList.board">전체 글 보기</a></li>
 						</ul></li>
-					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">관리자 기능<span class="caret"></span></a>
-						<ul>
+					<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" id="noticeForAdmin" onclick="toggle('NoticeAndmemberAdmin', 'noticeForAdmin')" aria-expanded="false" href="#">관리자 기능<span class="caret"></span></a>
+						<ul class="dropdown-menu" id="NoticeAndmemberAdmin">
 							<li><a href="NoticeWrite.board">공지사항쓰기</a></li>
 							<li><a href="Management.member">회원정보관리</a></li>
 						</ul></li>
@@ -85,5 +83,21 @@
 		</div>
 	</div>
 	</nav>
+
+<script type="text/javascript">
+  function toggle(id, id2) {
+    var n = document.getElementById(id);
+	if (n.style.display != 'none') 
+	  {
+	  n.style.display = 'none';
+      document.getElementById(id2).setAttribute('aria-expanded', 'false');
+  }
+  else
+  {
+  n.style.display = 'inline';
+  document.getElementById(id2).setAttribute('aria-expanded', 'true');
+	  }
+  }
+</script>
 </body>
 </html>

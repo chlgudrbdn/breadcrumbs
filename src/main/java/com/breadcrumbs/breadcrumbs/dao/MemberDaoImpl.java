@@ -92,6 +92,7 @@ public class MemberDaoImpl implements MemberDao {
 	public boolean dropMember(UseraccountDto member) {
 		// 패스워드를 찾아오는 sql을 실행
 		List<String> list = sqlSession.selectList("member.pwSelect", member);
+		System.out.println("list.get(0)="+list.get(0));
 		if (list.size() >= 1) {
 			// 패스워드 비교
 			if (list.get(0).equals(member.getPass())) {

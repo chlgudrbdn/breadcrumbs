@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+    
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -110,8 +112,13 @@
 
 </head>
 <body>
+<div>
+	<header>
+		<c:import url ="../member/header.jsp" />
+	</header>
+</div>
 
-<div class="container">
+<div class="container col-sm-8 col-md-offset-2">
 		<!-- 회원가입 -->
 		<!-- 폼을 생성할 때 파일이 있으면
 		enctype을 설정해야 하고 
@@ -121,8 +128,9 @@
 			<!-- 아이디 별로 종속된  -->
 			<input type="hidden" name="categoryCheck" value="false" /> <!-- 일단은 이건 새로 카테고리를 추가해야하는가 마는가의 이야기. -->
 			<input type="hidden" name="recommend_cnt" value="0" /><!-- 처음엔 누가  추천할리가 없으므로-->
+			<input type="hidden" name="email" value="${member.email}" /><!-- 처음엔 누가  추천할리가 없으므로-->
 <!-- 			<p align="center"> -->
-			<table class="table" border="1" width="60%" height="80%">
+			<table class="table">
 				<tr>
 					<td colspan="3" align="center"><h2>트리 작성</h2></td>
 				</tr>
@@ -142,9 +150,17 @@
 				</tr>
 				
 				<tr>
-					<td width="17%" bgcolor="#f5f5f5"><font size="2">분석 데이터(파일 하나만)</font><!-- 일단은 하나만 넣을 수 있게. -->
+					<td width="17%" bgcolor="#f5f5f5"><font size="2">분석 데이터<br>(파일 하나만)</font><!-- 일단은 하나만 넣을 수 있게. -->
 					<td><input type='file' class="btn btn-default" id="dataInput" name="dataInp" />
 							<span id="dataInputSpan"></span>
+					</td>
+				</tr>
+				
+				<tr>
+					<td width="17%" bgcolor="#f5f5f5"><font size="2">루트노드명<br>(20자 이하를 권장합니다)</font>
+					</td>
+					<td><input type="text" id="rootnodeName" name="rootnodeName" size="20" /> <!-- 일단 나중에 추천 검색어 처럼 아래에 추천 카테고리가 나오도록 한다. 후순위. http://tcpschool.com/ajax/ajax_application_suggestion-->
+						<span id="rootnodeSpan"></span>
 					</td>
 				</tr>
 <!-- 				<tr> -->
@@ -162,15 +178,7 @@
 <!-- 				</tr> -->
 
 
-<!-- 				<tr> -->
-<!-- 					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;휴대폰</font> -->
-<!-- 					</td> -->
-<!-- 					<td>&nbsp;&nbsp;&nbsp; <input type="text" name="mobile" -->
-<!-- 						size="11" maxlength="11" style="ime-mode: disabled;" -->
-<!-- 						onfocus="this.value='';" onkeydown="return onlyNum(event)" /> <span -->
-<!-- 						id="mobileSpan"></span> -->
-<!-- 					</td> -->
-<!-- 				</tr> -->
+
 <!-- 				<tr> -->
 <!-- 					<td bgcolor="#f5f5f5"><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;기본주소</font> -->
 <!-- 					</td> -->

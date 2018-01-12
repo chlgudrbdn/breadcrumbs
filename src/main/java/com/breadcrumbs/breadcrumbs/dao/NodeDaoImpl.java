@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto;
+import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
+import com.breadcrumbs.breadcrumbs.dto.ChoiceListDto;
 import com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto;
-import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
+import com.breadcrumbs.breadcrumbs.dto.TreeNodeRelationDto;
 
 @Repository
 public class NodeDaoImpl implements NodeDao {
@@ -46,50 +49,94 @@ public class NodeDaoImpl implements NodeDao {
 		this.sqlSession.insert("add_node", node);
 	}
 
-	public void insertCategory(String category) {
-		// TODO Auto-generated method stub
-		
+	public void insertTreeNodeRelation(TreeNodeRelationDto t_n_relation) {
+		this.sqlSession.insert("add_t_n_relation", t_n_relation);
 	}
+	
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public void updateNode(int id) {//노드의 코드 수정 U
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public int getNodeCount(int tree_no) {//각 노드에 노드 개수
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public int getNodeDepth(int id) {//각 노드의 깊이를
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public void node_del(int id) {//노드삭제
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public List<NodeDto> getComList(int tree_no) {//전체 노드 목록
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public int getLeafNode(NodeDto id) { // 가장 마지막 댓글 comment_no 값 구하기 
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public NodeDto getNodeDto(Map m) {// 입력된 댓글 1개 추출
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void insertTree() {
-		this.sqlSession.insert("tree_insert");
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public void insertTree(MemberTreeRelationDto m_t_relation) {
+		this.sqlSession.insert("tree_insert", m_t_relation);
 	}
 
 
+	
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public int getLastTreeSeq() {//전체 노드 목록
+		return this.sqlSession.selectOne("tree_max");
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public List<String> checkDuplicateCategory(String category) {//카테고리 중복여부 확인
+		// TODO Auto-generated method stub
+		return this.sqlSession.selectList("category_chk");
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public void insertCategory(String category) {//카테고리 중복여부 확인
+		// TODO Auto-generated method stub
+		sqlSession.insert("add_category", category);
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public List<String> checkDuplicateChoice(String text) {//선택지 중복여부 확인
+		// TODO Auto-generated method stub
+		return this.sqlSession.selectList("choice_chk");
+	}
+	
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public void insertChoice(ChoiceListDto choiceList) {//선택지 추가
+		// TODO Auto-generated method stub
+		sqlSession.insert("add_choice", choiceList);
+	}
+
+	public void insertCategoryChoice(CategoryChoiceDto cc) {
+		// TODO Auto-generated method stub
+		sqlSession.insert("add_CategoryChoice", cc);
+	}
+
+	
 	/*
 	 *  mybatis 쿼리문 실행 메서드
 	 *   1.단 한개의 레코드만 검색: selectOne()

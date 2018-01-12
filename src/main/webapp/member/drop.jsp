@@ -20,13 +20,21 @@
 </head>
 
 <body>
-	<table width="960" cellspacing="0" cellpadding="0" border="0"
-		align="center">
+<div>
+	<header>
+		<c:import url ="./header.jsp" />
+	</header>
+</div>
+
+	<div class="container col-sm-6 col-md-offset-3">
+
+
+	<table class="table" width="960" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td colspan=2>
 				<p align="center">
 				<form action="./DropProcess.member" method="post">
-					<table border="1" width="380" cellpadding="0" cellspacing="0">
+					<table class="table" width="380" cellpadding="0" cellspacing="0">
 						<tr>
 							<td align="center" colspan="2">
 								<h2>회원 탈퇴</h2> <span id="dropSpan"></span>
@@ -41,14 +49,15 @@
 						</tr>
 
 						<tr>
-							<td align="center" colspan="2" height="35"><input
-								type="submit" value="회원 탈퇴" /> <input type="button"
-								value="초기 화면" onclick="script:location.href = 'index.jsp'" /></td>
+							<td align="center" colspan="2" height="35">
+							<input type="submit" class="btn btn-default"value="회원 탈퇴" />
+							<input type="button" class="btn btn-default" value="초기 화면" onclick="script:location.href = 'index.jsp'" /></td>
 						</tr>
 					</table>
 				</form>
 			</td>
 		</tr>
 	</table>
+	</div>
 </body>
 </html>

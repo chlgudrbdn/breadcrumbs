@@ -49,43 +49,44 @@ public class MemberAction {
 		UseraccountDto member = new UseraccountDto();
 
 		// 이미지 파일을 업로드할 폴더 가져오기
-		String uploadPath = request.getRealPath("image");
+//		String uploadPath = request.getRealPath("image");
 		// 업로드할 파일에 대한 정보 가져오기
-		MultipartFile report = request.getFile("imgInp");
+//		MultipartFile report = request.getFile("imgInp");
 		// 업로드할 파일 이름 가져오기
-		String filename = report.getOriginalFilename();
+//		String filename = report.getOriginalFilename();
 		// 파일을 선택하지 않으면
 		// 이전 파일 이름을 filename에 저장
-		if (filename.length() == 0) {
-			filename = request.getParameter("oldimage");
-		} else {
-			filename = request.getParameter("email") + filename;
-		}
+//		if (filename.length() == 0) {
+//			filename = request.getParameter("oldimage");
+//		} else {
+//			filename = request.getParameter("email") + filename;
+//		}
 
 		// 업로드할 파일 경로 생성
-		String filepath = uploadPath + "\\" + filename;
+//		String filepath = uploadPath + "\\" + filename;
 		// 파일 객체 생성
-		File f = new File(filepath);
-		FileOutputStream fos = null;
-		BufferedOutputStream bos = null;
-		try {
-			fos = new FileOutputStream(f);
-			bos = new BufferedOutputStream(fos);
-			// 업로드한 파일을 fos에 전송 - 저장
-			bos.write(report.getBytes());
-			bos.flush();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			try {
-				fos.close();
-			} catch (Exception e) {
-			}
-		}
+//		File f = new File(filepath);
+//		FileOutputStream fos = null;
+//		BufferedOutputStream bos = null;
+//		try {
+//			fos = new FileOutputStream(f);
+//			bos = new BufferedOutputStream(fos);
+//			// 업로드한 파일을 fos에 전송 - 저장
+//			bos.write(report.getBytes());
+//			bos.flush();
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		} finally {
+//			try {
+//				fos.close();
+//			} catch (Exception e) {
+//			}
+//		}
 
 		member.setEmail(request.getParameter("email"));
-		member.setPass(request.getParameter("pw"));
-
+		member.setPass(request.getParameter("pass"));
+		member.setPayment_type(request.getParameter("payment_type"));
+		System.out.println("ready to input the member"+member);
 		result = memberDao.updateMember(member);
 		return result;
 	}
@@ -133,7 +134,7 @@ public class MemberAction {
 
 			member.setEmail(request.getParameter("email"));
 			member.setPass(request.getParameter("pass"));
-
+			System.out.println("member="+member);
 			if (memberDao.insertMember(member))
 				result = true;
 
@@ -191,7 +192,7 @@ public class MemberAction {
 					// 데이터베이스에 비번 변경 작업
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("email", email);
-					map.put("pw", pw);
+					map.put("pass", pw);
 					result = memberDao.updatePass(map);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());

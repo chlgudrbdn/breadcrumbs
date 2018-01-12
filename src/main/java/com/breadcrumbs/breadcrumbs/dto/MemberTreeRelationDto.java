@@ -9,6 +9,14 @@ public class MemberTreeRelationDto {
 	private int recommend_cnt;
 	private String category;
 	private String email;
+	private String datafilename;
+	
+	public String getDatafilename() {
+		return datafilename;
+	}
+	public void setDatafilename(String datafilename) {
+		this.datafilename = datafilename;
+	}
 	public int getTree_no() {
 		return tree_no;
 	}

@@ -1,6 +1,7 @@
 package com.breadcrumbs.breadcrumbs.node.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,17 @@ import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
-import org.rosuda.REngine.Rserve.RserveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.breadcrumbs.breadcrumbs.dao.NodeDaoImpl;
+import com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto;
+import com.breadcrumbs.breadcrumbs.dto.ChoiceListDto;
+import com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto;
+import com.breadcrumbs.breadcrumbs.dto.TreeNodeRelationDto;
 
 
 @Service
@@ -37,11 +43,100 @@ public class NodeAction{
 		return NodeDao.getRecommendCategoryList(value);
 	}
 	
-	public void makeTreeNo(String category, File dataInput) {
-		if(dataInput!=null) {
-			NodeDao.insertTree();
+	public int makeTreeNo(MultipartHttpServletRequest request) {
+		MemberTreeRelationDto m_t_relation = new MemberTreeRelationDto();
+		
+		
+		//tree_no 미리 예측해서 폴더도 미리 만든다.
+		Integer tree_no=NodeDao.getLastTreeSeq();
+		tree_no = tree_no==null ? 0 : tree_no;//아무것도 없는 경우 가정
+		tree_no++;
+		
+		String uploadPath = request.getRealPath("dataForAnalysis") +"\\"+ tree_no;
+		System.out.println(uploadPath); // C:\Spring\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\breadcrumbs\dataForAnalysis하위에 각 트리이름을 가진 폴더가 있고 거기에 데이터를 저장한다.
+
+		File desti = new File(uploadPath);//폴더 생성.
+		boolean dirResult = desti.mkdir();
+		System.out.println("mkdir work?"+dirResult);
+		
+		// 매개변수로 넘어온 파일 가져오기
+		MultipartFile report = request.getFile("dataInp");
+		String filename = report.getOriginalFilename(); //db엔 이게 저장되는데 아마 이걸로 불러올 것이다.
+		
+		// 파일 저장 경로 생성
+		String filepath = uploadPath + "\\" + filename;
+		
+		File f = new File(filepath);//파일 넣는다.
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(f);
+			fos.write(report.getBytes());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				fos.close();
+			} catch (Exception e) {
+			}
 		}
-		NodeDao.insertCategory(category);
+		
+	//   새로운 카테고리의 경우 추가하는 메소드가 필요하다.
+		String category = request.getParameter("category");
+		if(NodeDao.checkDuplicateCategory(category).size() == 0  ) {//만약 중복되는 카테고리가 없는 새로운 카테고리라면
+			NodeDao.insertCategory(category);
+		}//중복되는 카테고리 있으면 딱히 m_t_relation, c_c_relation의 무결성에 문제 줄 것이 없다.
+		System.out.println("category setting");
+		
+		//새로운 선택지의 경우 추가하는 메소드가 필요.
+		String text = request.getParameter("rootnodeName");//선택지 중복여부 확인 후 없으면 추가.
+		if(NodeDao.checkDuplicateChoice(text).size() == 0  ) {//만약 중복되는 카테고리가 없는 새로운 카테고리라면
+			ChoiceListDto choiceList = new ChoiceListDto();
+			choiceList.setText(text);
+			choiceList.setCode_piece("");//최초엔 코드는 없는 상태로 넣는다.
+			NodeDao.insertChoice(choiceList);
+		}//중복되는 카테고리 있으면 딱히 c_c_relation, node의 무결성에 문제 줄 것이 없다.
+		System.out.println("choiceList setting");
+		
+		// 카테고리_선택지 관계 추가
+		CategoryChoiceDto cc = new CategoryChoiceDto();
+		cc.setCategory(category);
+		cc.setChoice_pick_freq(1);
+		cc.setPre_choice(null);
+		cc.setChoice_weight(0);
+		cc.setText(text);
+		NodeDao.insertCategoryChoice(cc);
+		System.out.println("ccRelation setting");
+		
+		//    node에도 해당 root 노드 추가 시킨다. id, parent, state, text, li_attr 등. 선택지인 text는 일단 비워둔다.
+		//    루트는 파일노드로 간주. 이때 node의 li_attr에 type을 file로 정해둘 것.
+		NodeDto node = new NodeDto();
+		String nodeId = tree_no+"-1-"+text;//root니까 깊이는 1로 간주
+		node.setId(nodeId);
+		node.setLi_attr( "{'type':'file'}" );
+//		node.setParent(null);//Root노드니까 그런거 없다.
+		node.setState("undetermined");//default로 undetermined를 정하긴 했는데 일단 넣는다.
+		node.setText(""); // code
+		NodeDao.insertNode(node);
+		System.out.println("node setting");
+		
+		//사용자-트리 관계 추가
+		//m_t_relation 테이블에 트리 시퀀스+1, 추천수는 0, 카테고리, 세션에 있는 멤버 객체(아마도 useraccount)이메일 넣는다.
+		m_t_relation.setCategory(request.getParameter("category"));
+		m_t_relation.setDatafilename(filename);//파일 명만 넣는다.
+		m_t_relation.setEmail(request.getParameter("email"));
+//		m_t_relation.setRecommend_cnt(0);//null이어도 xml에서 그냥 0으로 처리.
+//		m_t_relation.setTree_no(tree_no); // null이어도 그냥 seq로 넣는다.
+		NodeDao.insertTree(m_t_relation);
+		System.out.println("m_t_relation setting");
+		
+		//       t_n_relation에는 루트 노드로 하나 넣는다. 30자가 넘지 않도로 해야하는데 seq는 27자 까지가 한계. 절충해서 대충 20자 정도만 넣을 수 있게하자.
+		TreeNodeRelationDto t_n_relation=new TreeNodeRelationDto();
+		t_n_relation.setId(nodeId);
+		t_n_relation.setTree_no(tree_no);
+		NodeDao.insertTreeNodeRelation(t_n_relation);
+		System.out.println("t_n_relation setting");
+	
+		return tree_no;
 	}
 
 	public List<String> executeCode(List<String> codes)throws REXPMismatchException, REngineException {

@@ -20,12 +20,22 @@
 </c:if>
 </head>
 <body>
-	<div align="center">
+<div>
+	<header>
+		<c:import url ="./header.jsp" />
+	</header>
+</div>
+
+	<div class="container col-sm-6 col-md-offset-3">
 		<form action="./FindPassword.member" method="get">
-			<span id="emailSpan"></span><br /> <span>비밀번호를 다시 설정하려면 로그인할
-				때 사용하는 이메일 주소를 입력하세요.</span><br /> 이메일 주소<br /> 
+			<span id="emailSpan"></span><br />
+			<span>비밀번호를 다시 설정하려면 로그인할 때 사용하는 이메일 주소를 입력하세요.</span>
+			<br>
+			 이메일 주소
+			 <br> 
 				<input type="text"	name="email" size="50" required="required" /><br /> 
-				<input type="submit" value="비번전송" /> <input type="button" value="메인으로"
+				<input type="submit" class="btn btn-default" value="비번전송" />
+				<input type="button" class="btn btn-default" value="메인으로"
 				onclick="javascript:location.href='./index.jsp'" />
 		</form>
 	</div>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <html>
@@ -17,6 +17,12 @@
 
 </head>
 <body>
+<div>
+	<header>
+		<c:import url ="../member/header.jsp" />
+	</header>
+</div>
+
 <div class="row" style="margin:5px">
 <!-- 	<div class="left" style="width:50%;float:left"> -->
 <!-- 	<div class="mv left"> -->

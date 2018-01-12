@@ -1,19 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"uri="http://java.sun.com/jsp/jstl/core" %>    
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>my Tree</title>
 </head>
 <body>
-
 <div>
-		<table>
+	<header>
+		<c:import url ="../member/header.jsp" />
+	</header>
+</div>
+
+<div class="container col-sm-6 col-md-offset-3">
+		<table  class="table" >
 			<tr>
-				<td colspan="4">
-				<h2>${email} 님의 결정트리 출력.</h2>
+				<td colspan="5">
+				${member.email} 님의 결정트리 출력.
 				</td>
 			</tr>
 			<tr>
@@ -23,26 +28,34 @@
 				<th>추천수</th>
 				<th>삭제</th>
 			</tr>	
-			<c:forEach var="item" items="${treeList}">
-			<tr>
-				<td>${item.tree_no}</td>
-				<td>${item.category}</td>
-				<td>
-					<a href="treeMap.node?tree_no=${item.tree_no}">
-						수정 및 열람
-					</a>
-				</td>
-				<td>
-				${item.recommend_cnt}</td>
-				</tr>	
-				<td>
-					<a href="delTree.node?tree_no=${item.tree_no}">
-						삭제
-					</a>
-				</td>
-			</c:forEach>
-<tr> 
-<td colspan="4" align="center">
+			<c:if test="${treeList == null}">
+					<tr>
+						<td colspan="5" align="center">
+							생성한 트리 또는 포럼에서 가져온 트리가 없습니다.
+						</td>
+					<tr> 
+			</c:if>
+			<c:if test="${treeList != null}">
+				<c:forEach var="item" items="${treeList}">
+					<tr>
+						<td>${item.tree_no}</td>
+						<td>${item.category}</td>
+						<td>
+							<a href="treeMap.node?tree_no=${item.tree_no}">
+								수정 및 열람
+							</a>
+						</td>
+						<td>
+						${item.recommend_cnt}</td>
+						<td>
+							<a href="delTree.node?tree_no=${item.tree_no}">
+								삭제
+							</a>
+						</td>
+					<tr> 
+				</c:forEach>
+			
+				<td colspan="5" align="center">
 <!-- 				현재 page가 1이 아니면 이전 페이지로
 <!-- 				이동할 수 있는 [이전] 링크 만들기 -->
 <%-- 				<c:if test = "${page>1} "> --%>
@@ -73,11 +86,12 @@
 <!-- 				</td> -->
 <!-- 				</tr> -->
 				<tr>
-					<td colspan="4" align="center">
+					<td colspan="5" align="center">
 						<a href="./makeTree.jsp">[새로운 트리 작성]</a>
 						<a href="./treeboard.node">[참고할 트리 확인]</a>
 					</td>
 				</tr>		
+			</c:if>
 		
 		</table>
 	</div>
