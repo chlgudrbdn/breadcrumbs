@@ -9,7 +9,7 @@ public class CategoryChoiceDto {
 	private String text;
 	private String pre_choice;
 	private int choice_pick_freq;
-	private int choice_weight;
+	private double choice_weight;
 	public String getCategory() {
 		return category;
 	}
@@ -34,13 +34,16 @@ public class CategoryChoiceDto {
 	public void setChoice_pick_freq(int choice_pick_freq) {
 		this.choice_pick_freq = choice_pick_freq;
 	}
-	public int getChoice_weight() {
+	public double getChoice_weight() {
 		return choice_weight;
 	}
-	public void setChoice_weight(int choice_weight) {
+	public void setChoice_weight(double choice_weight) {
 		this.choice_weight = choice_weight;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "CategoryChoice [category=" + category + ", text=" + text + ", pre_choice=" + pre_choice+ ", choice_pick_freq=" + choice_pick_freq+", choice_weight=" + choice_weight+"]";
+	}
 
 }

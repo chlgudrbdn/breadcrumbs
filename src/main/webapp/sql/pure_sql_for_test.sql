@@ -15,7 +15,7 @@
 -- drop table qna_board purge;
 
 
-alter table node ADD li_attr varchar2(12) CONSTRAINT defaultType DEFAULT 'default' WITH VALUES;
+--alter table node ADD li_attr varchar2(200) CONSTRAINT defaultType DEFAULT 'default' WITH VALUES;
 -- ALTER TABLE node DROP COLUMN li_attr;
 ALTER TABLE node MODIFY (state  DEFAULT 'undetermined');
 alter table m_t_relation ADD dataFileName varchar2(3000);
@@ -27,7 +27,7 @@ start with 1
 increment by 1
 nocache;
 
-alter table node ADD li_attr varchar2(12) ;
+alter table node ADD li_attr varchar2(200) ;
 alter table node MODIFY li_attr DEFAULT 'default';
 
 ----------필요 시퀀스-----------------

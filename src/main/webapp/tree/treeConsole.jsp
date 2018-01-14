@@ -77,7 +77,7 @@ $(function(){
 		<!-- 레코드가 있으면 -->
 		<%-- 	<c:if test="${search_list_count > 0 }"> --%>
 		<%-- 		<c:forEach var="b" items="${search_list}"> --%>
-		<%-- 			${b.code_of_parentNodes} --%>
+		<%-- 			<p>${b.}</p>--%>
 		<%-- 		</c:forEach> --%>
 		<%-- 	</c:if> --%>
 <!--   library(Rserve) -->

@@ -1,17 +1,17 @@
 package com.breadcrumbs.breadcrumbs.dto;
 
-public class NodeDto {//노드 자바빈 저장 클래스
+public class NodeDto2 {//노드 자바빈 저장 클래스
 
 	private String id;
 	private String parent;
 	private String state;
 	private String text;
-	private String li_attr;
+	private TypeDto li_attr;
 	
-	public String getLi_attr() {
+	public TypeDto getLi_attr() {
 		return li_attr;
 	}
-	public void setLi_attr(String li_attr) {
+	public void setLi_attr(TypeDto li_attr) {
 		this.li_attr = li_attr;
 	}
 	public String getId() {

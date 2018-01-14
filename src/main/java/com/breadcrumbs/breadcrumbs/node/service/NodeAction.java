@@ -48,8 +48,8 @@ public class NodeAction{
 		
 		
 		//tree_no 미리 예측해서 폴더도 미리 만든다.
-		Integer tree_no=NodeDao.getLastTreeSeq();
-		tree_no = tree_no==null ? 0 : tree_no;//아무것도 없는 경우 가정
+		int tree_no=NodeDao.getLastTreeSeq();
+		tree_no = tree_no==-1 ? 0 : tree_no;//아무것도 없는 경우 가정(null리턴할 땐 -1 리턴하도록 sql에서 NVL 함수 써둠)
 		tree_no++;
 		
 		String uploadPath = request.getRealPath("dataForAnalysis") +"\\"+ tree_no;
@@ -80,6 +80,7 @@ public class NodeAction{
 			}
 		}
 		
+		System.out.println("db Setting start");
 	//   새로운 카테고리의 경우 추가하는 메소드가 필요하다.
 		String category = request.getParameter("category");
 		if(NodeDao.checkDuplicateCategory(category).size() == 0  ) {//만약 중복되는 카테고리가 없는 새로운 카테고리라면
@@ -90,9 +91,10 @@ public class NodeAction{
 		//새로운 선택지의 경우 추가하는 메소드가 필요.
 		String text = request.getParameter("rootnodeName");//선택지 중복여부 확인 후 없으면 추가.
 		if(NodeDao.checkDuplicateChoice(text).size() == 0  ) {//만약 중복되는 카테고리가 없는 새로운 카테고리라면
+			System.out.println(text);
 			ChoiceListDto choiceList = new ChoiceListDto();
 			choiceList.setText(text);
-			choiceList.setCode_piece("");//최초엔 코드는 없는 상태로 넣는다.
+			choiceList.setCode_piece("setwd("+uploadPath+")");//최초엔 코드는 없는 상태로 넣는다.
 			NodeDao.insertChoice(choiceList);
 		}//중복되는 카테고리 있으면 딱히 c_c_relation, node의 무결성에 문제 줄 것이 없다.
 		System.out.println("choiceList setting");
@@ -100,10 +102,11 @@ public class NodeAction{
 		// 카테고리_선택지 관계 추가
 		CategoryChoiceDto cc = new CategoryChoiceDto();
 		cc.setCategory(category);
-		cc.setChoice_pick_freq(1);
-		cc.setPre_choice(null);
-		cc.setChoice_weight(0);
 		cc.setText(text);
+		cc.setPre_choice(null);
+		cc.setChoice_pick_freq(1);
+		cc.setChoice_weight(0.0);
+		System.out.println(cc);
 		NodeDao.insertCategoryChoice(cc);
 		System.out.println("ccRelation setting");
 		
@@ -112,17 +115,18 @@ public class NodeAction{
 		NodeDto node = new NodeDto();
 		String nodeId = tree_no+"-1-"+text;//root니까 깊이는 1로 간주
 		node.setId(nodeId);
-		node.setLi_attr( "{'type':'file'}" );
-//		node.setParent(null);//Root노드니까 그런거 없다.
+		node.setLi_attr( "type:file" );
+		node.setParent("#");//Root노드는 #으로 불러오게 되어 .
 		node.setState("undetermined");//default로 undetermined를 정하긴 했는데 일단 넣는다.
-		node.setText(""); // code
+		node.setText(text); // choice
 		NodeDao.insertNode(node);
 		System.out.println("node setting");
 		
 		//사용자-트리 관계 추가
 		//m_t_relation 테이블에 트리 시퀀스+1, 추천수는 0, 카테고리, 세션에 있는 멤버 객체(아마도 useraccount)이메일 넣는다.
-		m_t_relation.setCategory(request.getParameter("category"));
+		m_t_relation.setCategory(category);
 		m_t_relation.setDatafilename(filename);//파일 명만 넣는다.
+		System.out.println("email : ="+request.getParameter("email"));
 		m_t_relation.setEmail(request.getParameter("email"));
 //		m_t_relation.setRecommend_cnt(0);//null이어도 xml에서 그냥 0으로 처리.
 //		m_t_relation.setTree_no(tree_no); // null이어도 그냥 seq로 넣는다.
@@ -163,6 +167,71 @@ public class NodeAction{
 		System.out.println(result);
 		return result;
 	}
+	
+
+	public List<NodeDto> getNodeList(String id) {
+		// TODO Auto-generated method stub
+		return NodeDao.getNodeList(id);
+	}
+	
+	
+
+	public NodeDto getNode(String id) {
+		// TODO Auto-generated method stub
+		
+		return NodeDao.getNode(id);
+	}
+
+
+	public List<NodeDto> getRootNode(String tree_no) {
+		// TODO Auto-generated method stub
+		return NodeDao.getRootNodes(tree_no);//root노드만 있을거라 가정했으므로 다 끌고와봐야 루트노드만 리턴할 것이다. 여러 루트노드가 생길 수도 있게 일단은 넓게 해둔다.
+	}
+
+
+	public List<MemberTreeRelationDto> getTreeList(String email) {
+		
+		return NodeDao.getTreeList(email);
+	}
+
+
+	public boolean insertNode(NodeDto node) {
+		// TODO Auto-generated method stub
+		try {
+			int inserted = NodeDao.addNode(node);//1이면 삽입 성공.
+			TreeNodeRelationDto t_n_relation=new TreeNodeRelationDto();
+			t_n_relation.setId(node.getId());
+			t_n_relation.setTree_no(  Integer.parseInt( node.getId().split("-")[0] )  );
+			NodeDao.insertTreeNodeRelation(t_n_relation);
+			System.out.println("t_n_relation setting");
+	
+			String text = node.getText();
+			if(NodeDao.checkDuplicateChoice(text).size() == 0  ) {//만약 중복되는 카테고리가 없는 새로운 카테고리라면
+				System.out.println(text);
+				ChoiceListDto choiceList = new ChoiceListDto();
+				choiceList.setText(text);
+				choiceList.setCode_piece("");//최초엔 코드는 없는 상태로 넣는다.
+				NodeDao.insertChoice(choiceList);
+			}//중복되는 카테고리 있으면 딱히 c_c_relation, node의 무결성에 문제 줄 것이 없다.
+			System.out.println("choiceList setting");
+			
+			CategoryChoiceDto cc = new CategoryChoiceDto();
+			cc.setCategory(NodeDao.getCategory(node.getId().split("-")[0]));
+			cc.setText(text);
+			cc.setPre_choice( NodeDao.getNode(node.getParent()).getId() );//부모노드 id
+			cc.setChoice_pick_freq(1);
+			cc.setChoice_weight(0.0);
+			System.out.println(cc);
+			NodeDao.insertCategoryChoice(cc);
+			System.out.println("ccRelation setting");
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 //	/* 게시판 목록 */
 //	public Map<String, Object> board_list(HttpServletRequest request,
 //			HttpServletResponse response) throws Exception {
@@ -285,6 +354,8 @@ public class NodeAction{
 //
 //		boardDao.boardReplyOk(b);
 //	}
+
+
 
 
 

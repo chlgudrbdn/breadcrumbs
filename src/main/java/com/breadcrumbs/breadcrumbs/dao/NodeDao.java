@@ -13,7 +13,7 @@ public interface NodeDao {
 
 	List<NodeDto> getNodeList(String tree_no);//목록
 	List<String> getRecommendCategoryList(String term);//목록
-	MemberTreeRelationDto getNode(int g_no);//노드 로딩 R
+	NodeDto getNode(String id);//노드 로딩 R
 	void insertNode(NodeDto node);//노드 저장 C
 	void updateNode(int id);//노드의 코드 수정 U
 	int getNodeCount(int tree_no);//각 노드에 노드 개수
@@ -22,10 +22,13 @@ public interface NodeDao {
 	List<NodeDto> getComList(int tree_no);//전체 노드 목록
 	
 	int getLeafNode(NodeDto id); // 가장 마지막 댓글 comment_no 값 구하기 
-	NodeDto getNodeDto(Map m); // 입력된 댓글 1개 추출
+	NodeDto getNodeDto(Map m); // 노드 추출
+	List<NodeDto> getRootNodes(String tree_no);//루트노드들 추출.
 	
 	void insertTree(MemberTreeRelationDto m_t_relation);//tree 목록. 카테고리가 선행되어야 무결성에 위반되지 않는다.
-	
+	List<MemberTreeRelationDto> getTreeList(String email);
+
+
 	void insertTreeNodeRelation(TreeNodeRelationDto t_n_relation); //t_n_realation 에 tree와 node추가. 다른 테이블의 기본키 되는 tree_no와 node의 id가 선행되어야 무결성 침해되지 않음.
 	
 	List<String> checkDuplicateCategory(String category);//중복되는 카테고리 확인

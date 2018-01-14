@@ -1,9 +1,8 @@
 package com.breadcrumbs.breadcrumbs.controller;
 
-import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,16 +11,19 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.breadcrumbs.breadcrumbs.dto.CategoryDto;
+import com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto;
+import com.breadcrumbs.breadcrumbs.dto.NodeDto;
+import com.breadcrumbs.breadcrumbs.dto.NodeDto2;
+import com.breadcrumbs.breadcrumbs.dto.TypeDto;
+import com.breadcrumbs.breadcrumbs.dto.UseraccountDto;
 import com.breadcrumbs.breadcrumbs.node.service.NodeAction;
 
 
@@ -33,11 +35,11 @@ public class NodeController {
 	@Autowired
 	private NodeAction nodeAction;
 	
-	@RequestMapping("/myTree.node")
-	public String myTreeAction() {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
-		System.out.println("goMyTree");
-		return "tree/myTree";
-	}
+//	@RequestMapping("/myTree.node")
+//	public String myTreeAction() {
+//		System.out.println("goMyTree");
+//		return "tree/myTree";
+//	}
 	
 	@RequestMapping("/makeTree.node")
 	public String noticeWriteAction() {//트리 새로 만드는 페이지로 가는 경로 지정
@@ -45,6 +47,59 @@ public class NodeController {
 		return "tree/makeTree";
 	}
 
+	@RequestMapping("/treeMapView.node")
+	public String treeMapView() {
+		return "tree/treeMap";
+	}
+	
+	@RequestMapping("/treeMain.node")
+	public String treeMainView(@RequestParam("tree_no") String tree_no, Model model) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+		System.out.println("go treeMainView tree_no"+tree_no);
+		
+		model.addAttribute( "tree_no", tree_no);
+		return "tree/treeMain";
+	}
+	
+	public List<NodeDto2> nodeListConvertToNodeDto2List( List<NodeDto> node) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+		List<NodeDto2> nodeListForJson = new ArrayList<NodeDto2>();
+		for (NodeDto n : node) {
+			NodeDto2 n2=new NodeDto2();
+			n2.setId(n.getId());
+			n2.setParent((n.getParent() ));
+			n2.setState((n.getState()));
+			n2.setText( (n.getText()));
+
+			TypeDto t = new TypeDto();
+			String[] arr = n.getLi_attr().split(":");
+			t.setType(arr[1]);
+			n2.setLi_attr( t);
+			
+			nodeListForJson.add(n2);
+		}
+		return nodeListForJson;
+	}
+	
+	@RequestMapping("/treeMapGet.node")
+	@ResponseBody
+	public List<NodeDto2> treeMapGet(@RequestParam("tree_no") String tree_no,
+			@RequestParam("id") String id,
+			HttpServletResponse response, Model model) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+		
+		System.out.println("id="+id);//실상 id의 하위 노드를 불러오게 된다.
+		System.out.println("tree_no="+tree_no);//최초 루트노드 불러올때 기준삼으려고.
+		List<NodeDto> nodeList = new ArrayList<NodeDto>();
+		if(id.equals("#") || id.equals("#") ) {
+			nodeList = this.nodeAction.getRootNode(tree_no);
+			System.out.println(nodeList);
+			return nodeListConvertToNodeDto2List(nodeList);
+		}else {
+			nodeList = this.nodeAction.getNodeList(id) ;
+			System.out.println(nodeList);
+			return nodeListConvertToNodeDto2List(nodeList);
+		}
+//		model.addAttribute( "nodeList", nodeList);
+	}
+	
 	//이게 있어야 json으로 반환	
 	@RequestMapping("/checkRecommendCategory.node")
 	@ResponseBody
@@ -59,25 +114,21 @@ public class NodeController {
 	}
 	
 	@RequestMapping("/makeRootNode.node")
-	public String makeRootNode(MultipartHttpServletRequest request) {
+	public String makeRootNode(MultipartHttpServletRequest request, Model model) {
+		System.out.println("mkRootnode");
 		//할일 : m_t_relation 테이블에 트리 시퀀스+1, 추천수는 0, 카테고리, 세션에 있는 멤버 객체(아마도 useraccount)이메일 넣는다.
 		//       t_n_relation에는 루트 노드로 하나 넣는다. 30자가 넘지 않도로 해야하는데 seq는 27자 까지가 한계. 절충해서 대충 20자 정도만 넣을 수 있게하자.
 		int tree_no=this.nodeAction.makeTreeNo(request);//루트 노드 파트만 건든다.
 		//    node에도 해당 root 노드 추가 시킨다. id, parent, state, text, li_attr 등. 선택지인 text는 일단 비워둔다.
 		//    비슷하게 파일노드도 하나 넣는다. 이때 node의 li_attr에 type을 file로 정해둘 것.
 		//   새로운 카테고리의 경우 추가하는 메소드가 필요하다.
-
-		return "redirect:/treeMapView.node?tree_no="+tree_no;
-	}
-	
-	@RequestMapping("/treeMainView.node")
-	public String treeMainView(@RequestParam("tree_no") String tree_no) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
-		
+		model.addAttribute( "tree_no", tree_no);
 		return "tree/treeMain";
+//		return "redirect:/treeMain.node?tree_no="+tree_no;
 	}
 	
-	@RequestMapping("/treeMapView.node")
-	public String treeMapView(@RequestParam("tree_no") String tree_no) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+	@RequestMapping("/treeMap.node")
+	public String treeMapView(@RequestParam("id") String id) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
 		return "tree/treeMap";
 	}
 	
@@ -85,22 +136,12 @@ public class NodeController {
 	//노드 추가-노드와 연동된 코드 추가와는 다르다.
 	@RequestMapping("/NodeAdd.node")
 	@ResponseBody //이게 있어야 json으로 반환되는데 이건 숫자만 반환하므로 없어도 됨.
-	public void NodeAdd(@RequestParam("id") String id, HttpServletResponse response) throws Exception {
-			// 데이터 삽입
-		PrintWriter out = response.getWriter();
-//		ModelAndView mav = new ModelAndView();
-//		boolean result = emailCheckAction.idCheck(email);
-//		System.out.println("result="+result);
-////		mav.addObject("result", result);
-////		mav.setViewName("emailCheck");
-////		return mav;
-//		int req = 0;
-//		if(result == true)	// 사용 가능한 email
-//			req = 1;
-//		else				// 사용 불가능한 email(중복  email)
-//			req = -1;
-//		System.out.println("req="+req);
-//		out.println(req);//callback으로 리턴되는 부분.
+	public boolean NodeAdd(@ModelAttribute NodeDto node,
+			HttpServletResponse response) throws Exception {
+		System.out.println("insert this node"+node);
+		boolean result = this.nodeAction.insertNode(node);//루트 노드 파트만 건든다.
+
+		return result;
 	}
 
 	@RequestMapping("/executeCode.node")
@@ -112,28 +153,15 @@ public class NodeController {
 		return result;
 	}
 	
-	
-//	
-//	@Autowired
-//	private NoticeListAction noticeListAction;
-//
-//	@RequestMapping("/NoticeList.board")
-//	public ModelAndView noticeList() {
-//		ModelAndView mav = new ModelAndView();
-//
-//		List<NoticeDto> list = noticeListAction.execute();
-//		mav.addObject("result", list);
-//		mav.setViewName("/board/noticeList");
-//
-//		return mav;
-//	}
-//
-//	
-
-//
-
-//
-//	
+	@RequestMapping("/myTree.node")//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+//	@ResponseBody
+	public String myTreeList(HttpSession session, Model model) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+		UseraccountDto member = (UseraccountDto) session.getAttribute("member");
+		System.out.println( member.getEmail());
+		List<MemberTreeRelationDto> treeList = this.nodeAction.getTreeList( member.getEmail() );
+		model.addAttribute( "treeList", treeList );
+		return "tree/myTree";
+	}
 //	@Autowired
 //	private NoticeWriteAction noticeWriteAction;
 //

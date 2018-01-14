@@ -18,30 +18,39 @@
 
    <!-- 노드 추가 -->
    <insert id="add_node" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
-	    insert into node 
-	    values(#{id}, #{parent}, #{state}, #{text}, #{li_attr})
+	    insert into node(id, parent, state, text, li_attr)
+	    values(#{id}, #{parent, jdbcType=VARCHAR}, #{state}, #{text}, #{li_attr})
    </insert>
 
 <!-- 	트리와 노드 관계 추가 -->
-   <insert id="add_node" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
-	    insert into node 
-	    values(#{id}, #{parent}, #{state}, #{text}, #{li_attr})
+   <insert id="add_t_n_relation" parameterType="com.breadcrumbs.breadcrumbs.dto.TreeNodeRelationDto">
+	    insert into t_n_relation(tree_no, id)
+	    values(#{tree_no}, #{id})
    </insert>
    
-   <!-- 댓글 개수 -->
-<!--    <select id="c_count" parameterType="int" resultType="int"> -->
-<!--     select count(comment_no) from comment7 where g_no=#{g_no} -->
-<!--    </select> -->
+   <!-- 노드 1개 검색-->
+   <select id="getNode" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+    select * from node where id=#{id}
+   </select>
+   
+      <!-- 루트 노드 검색-->
+   <select id="getRootNode" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+    select * from node where id IN (select id from t_n_relation where tree_no=#{tree_no} ) and parent='#'
+   </select>
+   
+   <!-- 해당 트리의 자식 노드 목록?-->
+   <select id="nodeList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+<!--    <![CDATA[ -->
+<!--      select * from node where id IN (select id from t_n_relation where tree_no=#{tree_no} ) -->
+<!-- 	]]> -->
+     select * from node where parent=#{id}
+   </select>
    
    <!-- 방명록 조회수 증가 -->
 <!--    <update id="g_hit" parameterType="int"> -->
 <!--     update guest10 set g_hit=g_hit+1 where g_no=#{g_no} -->
 <!--    </update> -->
    
-   <!-- 해당 트리의 노드 목록-->
-   <select id="nodeList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
-     select * from node where IN (select id from t_n_relation where tree_no=#{tree_no} )
-   </select>
    
    
    
@@ -49,6 +58,11 @@
       <!-- 유사한 카테고리 목록-->
    <select id="categoryList" parameterType="String" resultType="String">
      select * from category where category like '%' || #{value} || '%'
+   </select>
+   
+         <!-- 유사한 카테고리 목록-->
+   <select id="category_get" parameterType="String" resultType="String">
+     select category from m_t_relation where tree_no=#{tree_no}
    </select>
    
          <!-- 카테고리 중복 확인-->
@@ -65,8 +79,8 @@
    
    <!-- 카테고리_선택지 관계 추가 -->
    <insert id="add_CategoryChoice" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto">
-	    insert into c_c_relation(category,text,pre_choice,choice_pick_freq,choice_weight)
-	    values(#{category}, #{text}, #{pre_choice}, #{choice_pick_freq}, #{choice_weight})
+	    insert into c_c_relation(category, text, pre_choice, choice_pick_freq, choice_weight)
+	    values(#{category}, #{text}, #{pre_choice, jdbcType=VARCHAR}, #{choice_pick_freq}, #{choice_weight})
    </insert>
    
    
@@ -79,7 +93,7 @@
    <!-- 선택지 추가 -->
 <!--    <insert id="add_category" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryDto"> -->
    <insert id="add_choice" parameterType="String">
-	    insert into choice_list values(#{text}, #{})
+	    insert into choice_list values(#{text}, #{code_piece})
    </insert>
    
    
@@ -88,7 +102,7 @@
    
    <!-- 가장 마지막 tree_no 값 구하기 -->
    <select id="tree_max" resultType="int">
-    select max(tree_no) from m_t_relation
+    select NVL (  max(tree_no), -1) from m_t_relation
    </select>   
    
     
@@ -100,9 +114,13 @@
    
    <!-- tree 저장 -->
    <insert id="tree_insert" parameterType="com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto" >
-    insert into m_t_relation values(tree_no_seq.nextval, 0 ,#{category},#{email},#{datafilename})
+    insert into m_t_relation(tree_no, recommend_cnt, category, email, dataFileName)
+    values(tree_no_seq.nextval, 0 ,#{category},#{email},#{datafilename, jdbcType=VARCHAR})
    </insert>
    
+   <select id="get_treeList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto">
+     select * from m_t_relation where email =#{email}
+   </select>
    <!-- 방명록 수정 -->
 <!--    <update id="g_edit" parameterType="c"> -->
 <!--     update guest10 set g_name=#{g_name},g_title=#{g_title}, -->

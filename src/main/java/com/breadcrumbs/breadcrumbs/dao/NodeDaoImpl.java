@@ -27,10 +27,15 @@ public class NodeDaoImpl implements NodeDao {
 	}//스프링 setter DI 의존관계를 설정
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public List<NodeDto> getNodeList(String tree_no) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
-		return sqlSession.selectList("nodeList");
+	public List<NodeDto> getNodeList(String id) {//t_n_relation에서 노드 id만 불러온 뒤 하위 테이블 불러오기.
+		return sqlSession.selectList("nodeList", id);
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public List<NodeDto> getRootNodes(String tree_no) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 루트에 해당하는 것 불러오기.
+		return sqlSession.selectList("getRootNode", tree_no);
+	}
+	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 //	public List<String> getRecommendCategoryList(String value) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
 	public List<String> getRecommendCategoryList(String value) {//t_n_relation에서 노드 id만 불러온 뒤 node 테이블에 거기에 해당하는 것 불러오기.
@@ -38,9 +43,9 @@ public class NodeDaoImpl implements NodeDao {
 	}
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public MemberTreeRelationDto getNode(int g_no) {//노드 로딩 R
+	public NodeDto getNode(String id) {//노드 로딩 R
 		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectOne("getNode", id );
 	}
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
@@ -104,25 +109,37 @@ public class NodeDaoImpl implements NodeDao {
 	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public int getLastTreeSeq() {//전체 노드 목록
-		return this.sqlSession.selectOne("tree_max");
+		int i = this.sqlSession.selectOne("tree_max");
+		System.out.println("Lastseq"+i);
+//		return this.sqlSession.selectOne("tree_max");
+		return i;
 	}
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public List<String> checkDuplicateCategory(String category) {//카테고리 중복여부 확인
 		// TODO Auto-generated method stub
-		return this.sqlSession.selectList("category_chk");
+		
+		return this.sqlSession.selectList("category_chk", category);
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public String getCategory(String tree_no) {//카테고리 중복여부 확인
+		// TODO Auto-generated method stub
+		return this.sqlSession.selectOne("category_get", tree_no);
+	}
+	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public void insertCategory(String category) {//카테고리 중복여부 확인
 		// TODO Auto-generated method stub
 		sqlSession.insert("add_category", category);
 	}
+	
+	
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public List<String> checkDuplicateChoice(String text) {//선택지 중복여부 확인
 		// TODO Auto-generated method stub
-		return this.sqlSession.selectList("choice_chk");
+		return this.sqlSession.selectList("choice_chk", text);
 	}
 	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
@@ -131,9 +148,23 @@ public class NodeDaoImpl implements NodeDao {
 		sqlSession.insert("add_choice", choiceList);
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public void insertCategoryChoice(CategoryChoiceDto cc) {
 		// TODO Auto-generated method stub
+		System.out.println("ccRelation Add");
 		sqlSession.insert("add_CategoryChoice", cc);
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public List<MemberTreeRelationDto> getTreeList(String email) {
+		// TODO Auto-generated method stub
+		return  this.sqlSession.selectList("get_treeList", email);
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public int addNode(NodeDto node) {
+		// TODO Auto-generated method stub
+		return this.sqlSession.insert("add_node", node);
 	}
 
 	

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,13 +7,13 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/themes/default/style.min.css" /> -->
 <!-- <link rel="stylesheet" href="dist/themes/default/style.min.css" />  기본 테마인데 구림. 위에건 CDN-->
-<link rel="stylesheet" href="dist/themes/proton/style.min.css" />
+<link rel="stylesheet" href="/breadcrumbs/tree/dist/themes/proton/style.min.css" />
 <!-- 출처 : https://github.com/orangehill/jstree-bootstrap-theme -->
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script> CDN-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="dist/jstree.min.js"></script>
+<script src="/breadcrumbs/tree/dist/jstree.min.js"></script>
 
 
 </head>
@@ -29,6 +29,8 @@
 
 	<div id="container"></div>
 	<script>
+	var tree_no = '${tree_no}';
+	var node;
 		$('#container').jstree({
 			"types" : {
 			    "default" : {
@@ -53,10 +55,21 @@
 				    }
 				    return true; // allow everything else
 				},
+				'data':
+					[{"parent":"#","id":"1-1-rootForDog","state":"undetermined","li_attr":"{'type':'file'}","text":"rootForDog"}]	
+				,	
 				'data' : {
-					"url" : "//www.jstree.com/fiddle/?lazy",
+					"url" : "/breadcrumbs/treeMapGet.node?tree_no="+tree_no,
 			        "data" : function (node) {
-			            return { "id" : node.id };
+// 			        	 $(this).each(node,function(index,item){
+// 				        	console.log(JSON.stringify(node))
+// 				        	console.log(JSON.stringify(node.parent))
+// 				        	console.log(JSON.stringify(node.state))
+// 				        	console.log(JSON.stringify(item))
+// 				        	console.log(JSON.stringify($(this)))
+				            return { "id" : node.id , "parent":node.parent, "state":node.state, "text":node.text, "li_attr":node.li_attr};
+// 				            return { "id" : node.id };
+// 			        	 })
 					},
 					"dataType" : "json"
 				},
@@ -65,33 +78,31 @@
 		            'responsive': true
 		        },
 		        'check_callback' : function (operation, node, node_parent, node_position, more) {
-		            // operation can be 'create_node', 'rename_node', 'delete_node', 'move_node', 'copy_node' or 'edit'
 		            // in case of 'rename_node' node_position is filled with the new node name
-// 		            	alert("node_position="+node_position);
-// 		            	alert("node="+node);
-// 		            	alert("node_parent="+node_parent);
-// 		            	alert("more="+more);
+		            
+		            	console.log("node_position="+node_position);
+		            	console.log("node="+JSON.stringify(node));
+		            	console.log("node_parent="+JSON.stringify(node_parent));
+		            	console.log("more="+JSON.stringify(more));
 
 		            if(operation==='create_node'){
-		            	 
 		            	$.ajax({
 		 					type:'post',
 		 					url:'/breadcrumbs/NodeAdd.node',
-		 					data: {"id":id,"state":state,"comment_cont":comment_cont}, 			
+		 					data: {"id" : node.id , "parent": node.parent , "state":"undetermined", "text":"", "li_attr":null}, 			
 		 					/* data : query, */
 		 					dataType:'text', 	 			
 		 					success:function(result){
-		 						$("#comment_cont").val("").focus();//내용 입력후 지우기
-		 						
-		 						alert(result)							
-//		 						console.log("result: " + result);
-		 						var obj = JSON.parse(result);		                     
-		 						
-		 				}});  // ajax() end
-		            	
+		 						console.log("result: " + result);
+		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+		 					}
+		 				});  // ajax() end
 		            	return true;
 		            }
-		            
+		            if(operation==='create_node'){
+		            	
+		            }
+// 		            rename_node, delete_node, move_node and copy_node
 		            
 		            
 		            return operation === 'create_node' ? true : false;
@@ -113,12 +124,16 @@
 				//search : 검색기능
 				//sort : 알파벳 순 정렬. 필요없어서 안넣음.
 		});
-		
+
+			    var selectedNode = $('#container').jstree().get_selected(true)[0];
 		  $('#container').on("changed.jstree", function (e, data) {
+// 			    console.log(JSON.stringify(selectedNode));
 			    console.log("The selected nodes are:");
 			    console.log(data.selected);
+			    console.log($('#container').jstree().get_selected(true)[0]);
+			    node= data.selected;
+// 			    console.log($("#container").jstree(true).get_selected('full', true) );
 		  });
 	</script>
-
 </body>
 </html>

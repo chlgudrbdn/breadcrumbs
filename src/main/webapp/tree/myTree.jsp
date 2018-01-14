@@ -41,7 +41,7 @@
 						<td>${item.tree_no}</td>
 						<td>${item.category}</td>
 						<td>
-							<a href="treeMap.node?tree_no=${item.tree_no}">
+							<a href="treeMain.node?tree_no=${item.tree_no}">
 								수정 및 열람
 							</a>
 						</td>
