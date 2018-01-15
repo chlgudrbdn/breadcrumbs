@@ -69,10 +69,14 @@ public class NodeController {
 			n2.setState((n.getState()));
 			n2.setText( (n.getText()));
 
-			TypeDto t = new TypeDto();
-			String[] arr = n.getLi_attr().split(":");
-			t.setType(arr[1]);
-			n2.setLi_attr( t);
+//			TypeDto t = new TypeDto();
+			if(n.getLi_attr() != null) {
+				String[] arr = n.getLi_attr().split(":");
+				n2.setType(arr[1]);
+			}else {
+				n2.setType("default");
+			}
+
 			
 			nodeListForJson.add(n2);
 		}
@@ -88,19 +92,19 @@ public class NodeController {
 		System.out.println("id="+id);//실상 id의 하위 노드를 불러오게 된다.
 		System.out.println("tree_no="+tree_no);//최초 루트노드 불러올때 기준삼으려고.
 		List<NodeDto> nodeList = new ArrayList<NodeDto>();
-		if(id.equals("#") || id.equals("#") ) {
-			nodeList = this.nodeAction.getRootNode(tree_no);
-			System.out.println(nodeList);
+		if(id.equals("#")) {
+			nodeList = this.nodeAction.getRootNode(tree_no);//일단 다 끌고 오게 해보자. jstree는 기본 jstree형식이 parent같은건 잘 지원하지 않는 모양이다.
+			System.out.println("getRootNode=\n"+nodeList);
 			return nodeListConvertToNodeDto2List(nodeList);
-		}else {
+		}else {// 현재 데이터베이스 구조로는 그냥 일괄로 부르는 방법 밖에 없다. 이하 구문은 무의미.
+//			nodeList = this.nodeAction.getRootNode(tree_no);
 			nodeList = this.nodeAction.getNodeList(id) ;
-			System.out.println(nodeList);
+			System.out.println("getNodeList=\n"+nodeList);
 			return nodeListConvertToNodeDto2List(nodeList);
 		}
 //		model.addAttribute( "nodeList", nodeList);
 	}
 	
-	//이게 있어야 json으로 반환	
 	@RequestMapping("/checkRecommendCategory.node")
 	@ResponseBody
 //	public @ResponseBody List checkRecommendCategory(@RequestParam("value") String value,HttpServletResponse response) throws Exception {
@@ -123,8 +127,8 @@ public class NodeController {
 		//    비슷하게 파일노드도 하나 넣는다. 이때 node의 li_attr에 type을 file로 정해둘 것.
 		//   새로운 카테고리의 경우 추가하는 메소드가 필요하다.
 		model.addAttribute( "tree_no", tree_no);
-		return "tree/treeMain";
-//		return "redirect:/treeMain.node?tree_no="+tree_no;
+//		return "tree/treeMain";
+		return "redirect:/treeMain.node?tree_no="+tree_no;
 	}
 	
 	@RequestMapping("/treeMap.node")
@@ -162,227 +166,4 @@ public class NodeController {
 		model.addAttribute( "treeList", treeList );
 		return "tree/myTree";
 	}
-//	@Autowired
-//	private NoticeWriteAction noticeWriteAction;
-//
-//	@RequestMapping("/NoticeAddAction.board")
-//	public ModelAndView noticeWriteAction(NoticeDto dto) {
-//		ModelAndView mav = new ModelAndView();
-//		boolean r = noticeWriteAction.execute(dto);
-//		if (r) {
-//			// 목록보기로 redirect
-//			mav.setViewName("redirect:NoticeList.board");
-//
-//		} else {
-//			// 공지사항 쓰기로 redirect
-//			mav.setViewName("redirect:NoticeWrite.board");
-//		}
-//		return mav;
-//	}
-//
-//	
-//	@Autowired
-//	private BoardListAction boardListAction;
-//
-//	@RequestMapping("/BoardList.board")
-//	public ModelAndView getBoardList(HttpServletRequest request) {
-//		ModelAndView mav = new ModelAndView();
-//		HttpSession session = request.getSession();
-//		// 로그인 되어 있지 않으면 로그인 페이지로 이동
-//		if (session.getAttribute("member") == null)
-//			mav.setViewName("/member/login");
-//		// 로그인 되어 있으면
-//		else {
-//			// 공지 사항 목록 가져오기
-//			List<NoticeDto> list = noticeListAction.execute();
-//			// 게시물 목록 가져오기
-//			Map<String, Object> map = boardListAction.execute(request);
-//			// 여러 개의 데이터를 묶어서 저장할 때는
-//			// addObject를 사용하지 않고 Map을 저장할 수
-//			// 있습니다.
-//			mav.addAllObjects(map);
-//			// 공지사항을 다음페이지에 전달하기 위해서
-//			// 저장하기
-//			mav.addObject("result", list);
-//			mav.setViewName("/board/boardList");
-//		}
-//		return mav;
-//	}
-//
-//	
-//	@Autowired
-//	private BoardDetailAction boardDetailAction;
-//	@Autowired
-//	private ReplyListAction replyListAction;
-//
-//	@RequestMapping("/BoardDetail.board")
-//	public ModelAndView getBoardDetail(int num, HttpSession session) {
-//		ModelAndView mav = new ModelAndView();
-//		// 로그인 정보를 확인해서 로그인 안되어
-//		// 있으면 로그인 페이지로 이동
-//		if (session.getAttribute("member") == null) {
-//			mav.setViewName("/member/login");
-//		} else {
-//			BoardDto dto = boardDetailAction.execute(num);
-//			List<Map<String, Object>> list = replyListAction.getReplyList(num);
-//			// 데이터를 저장
-//			mav.addObject("boarddata", dto);
-//			mav.addObject("replydata", list);
-//			// 출력할 뷰 파일 설정
-//			mav.setViewName("/board/boardDetail");
-//		}
-//		return mav;
-//	}
-//	
-//
-//	@Autowired
-//	private ReplyInsertAction replyInsertAction;
-//
-//	@RequestMapping("/ReplyAdd.board")
-//	public ModelAndView insertReply(HttpServletRequest request) {
-//		ModelAndView mav = new ModelAndView();
-//		// 로그인 되어 있지 않으면 로그인 페이지로 이동
-//		HttpSession session = request.getSession();
-//		if (session.getAttribute("member") == null) {
-//			mav.setViewName("/member/login");
-//		} else {
-//			// 데이터 삽입
-//			boolean r = replyInsertAction.execute(request);
-//			// 삽입에 실패했을 때 목록보기로 이동
-//			if (!r) {
-//				List<NoticeDto> list = noticeListAction.execute();
-//				Map<String, Object> map = boardListAction.execute(request);
-//				mav.addObject("result", list);
-//				mav.addAllObjects(map);
-//				mav.setViewName("/board/boardList");
-//			} else {
-//				// 상세보기 수행
-//				// 글번호가져오기
-//				int num = Integer.parseInt(request.getParameter("num"));
-//				// redirect 할 때는 출력할 파일이름을
-//				// 직접 사용하지 않고 요청 주소를 이용합니다.
-//				mav.setViewName("redirect:BoardDetail.board?num=" + num);
-//
-//			}
-//		}
-//		return mav;
-//	}
-//
-//	
-//	// BoardWrite.board 요청이 오면
-//	// board/boardwrite.jsp로 이동하도록
-//	// 요청을 처리하는 메소드
-//	// session에 로그인 정보가 없으면
-//	// member/login.jsp로 이동
-//	@RequestMapping("/BoardWrite.board")
-//	public ModelAndView writeView(HttpSession session) {
-//		ModelAndView mav = new ModelAndView();
-//		if (session.getAttribute("member") == null) {
-//			mav.setViewName("/member/login");
-//		} else {
-//			mav.setViewName("/board/boardwrite");
-//		}
-//		return mav;
-//	}
-//
-//	
-//	@Autowired
-//	private BoardInsertAction boardInsertAction;
-//
-//	@RequestMapping("/BoardAddAction.board")
-//	public ModelAndView writeBoard(FormBoardDto dto, HttpServletRequest request) {
-//		ModelAndView mav = new ModelAndView();
-//		boolean r = boardInsertAction.execute(dto, request);
-//		if (r) {
-//			// 목록보기로 리다이렉트
-//			mav.setViewName("redirect:BoardList.board");
-//		} else {
-//			// 글쓰기 페이지로 포워딩
-//			mav.setViewName("board/boardwrite");
-//		}
-//		return mav;
-//	}
-//	
-//
-//	@Autowired
-//	private BoardModifyView boardModifyView;
-//
-//	@RequestMapping("/BoardModify.board")
-//	public ModelAndView modifyView(@RequestParam("num") int num,
-//			HttpSession session) {
-//		ModelAndView mav = new ModelAndView();
-//		// 로그인 되어 있지 않으면 로그인페이지로
-//		// 이동하도록 설정
-//		if (session.getAttribute("member") == null) {
-//			mav.setViewName("/member/login");
-//		}
-//		// 로그인 되어 있으면 서비스를 수행
-//		else {
-//			BoardDto dto = boardModifyView.execute(num);
-//			mav.addObject("boarddata", dto);
-//			mav.setViewName("/board/boardModify");
-//		}
-//		return mav;
-//	}
-//
-//	
-//	@Autowired
-//	private BoardUpdateAction boardUpdateAction;
-//
-//	@RequestMapping("/BoardModifyAction.board")
-//	public ModelAndView updateBoard(FormBoardDto formBoardDto,
-//			HttpServletRequest request) {
-//		ModelAndView mav = new ModelAndView();
-//
-//		// 로그인 한 상태가 아니면 로그인 페이지로 이동
-//		HttpSession session = request.getSession();
-//		if (session.getAttribute("member") == null) {
-//			mav.setViewName("/member/login");
-//		} else {
-//			boolean r = boardUpdateAction.execute(formBoardDto, request);
-//			if (r) {
-//				// 목록보기로 리다이렉트
-//				mav.setViewName("redirect:BoardList.board");
-//			} else {
-//				// index.jsp로 포워딩
-//				mav.setViewName("index");
-//			}
-//		}
-//
-//		return mav;
-//	}
-//
-//	
-//	@Autowired
-//	private BoardDeleteAction boardDeleteAction;
-//
-//	@RequestMapping("/BoardDelete.board")
-//	public ModelAndView deleteBoard(@RequestParam("num") int num,
-//			HttpSession session) {
-//		ModelAndView mav = new ModelAndView();
-//		// 로그인 되어 있지 않으면 로그인 페이지로 이동
-//		if (session.getAttribute("member") == null) {
-//			mav.setViewName("/member/login");
-//		} else {
-//			boolean r = boardDeleteAction.execute(num);
-//			if (r) {
-//				mav.setViewName("redirect:BoardList.board");
-//			} else {
-//				mav.setViewName("index");
-//			}
-//		}
-//		return mav;
-//	}
-//
-//	
-//	@RequestMapping("/download.board")
-//	public ModelAndView download(String filename, HttpServletRequest request) {
-//		String realPath = request.getSession().getServletContext()
-//				.getRealPath("boardupload");
-//		File downloadFile = new File(realPath + "\\" + filename);
-//		// download 라는 View에 출력하고
-//		// downloadFile 이라는 이름으로
-//		// downloadFile 이라는 데이터를 전송
-//		return new ModelAndView("download", "downloadFile", downloadFile);
-//	}
 }

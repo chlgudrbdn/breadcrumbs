@@ -6,13 +6,13 @@ public class NodeDto2 {//노드 자바빈 저장 클래스
 	private String parent;
 	private String state;
 	private String text;
-	private TypeDto li_attr;
+	private String type;
 	
-	public TypeDto getLi_attr() {
-		return li_attr;
+	public String getType() {
+		return type;
 	}
-	public void setLi_attr(TypeDto li_attr) {
-		this.li_attr = li_attr;
+	public void setType(String type) {
+		this.type = type;
 	}
 	public String getId() {
 		return id;
@@ -41,8 +41,8 @@ public class NodeDto2 {//노드 자바빈 저장 클래스
 	
 	@Override
 	public String toString() {
-		return "NodeDto [id =" + id+ ", parent=" + parent + ", state=" + state
-				+ ", text=" + text + ", li_attr="+ li_attr+ "]\n";
+		return "NodeDto2 [id =" + id+ ", parent=" + parent + ", state=" + state
+				+ ", text=" + text + ", type="+ type+ "]\n";
 	}
 	
 }

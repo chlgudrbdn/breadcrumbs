@@ -26,9 +26,9 @@ create sequence tree_no_seq
 start with 1
 increment by 1
 nocache;
-
-alter table node ADD li_attr varchar2(200) ;
-alter table node MODIFY li_attr DEFAULT 'default';
+--drop sequence tree_no_seq;
+--alter table node ADD li_attr varchar2(200) ;
+--alter table node MODIFY li_attr DEFAULT 'default';
 
 ----------필요 시퀀스-----------------
 
@@ -471,6 +471,9 @@ insert into category values('Statoil/C-CORE Iceberg Classifier Challenge');
 insert into category values('Mercari Price Suggestion Challenge');
 insert into category values('Zillow Prize: Zillow’s Home Value Prediction (Zestimate)');
 insert into category values('House Prices: Advanced Regression Techniques');
-		
+
 		
 insert into useraccount values('admin@breadcrumbs.com', '12345678', 'payed');		
+
+
+insert into choice_list(text, code_piece) values('New node', '#type this nodes code');

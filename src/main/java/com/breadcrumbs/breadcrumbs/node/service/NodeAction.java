@@ -113,7 +113,7 @@ public class NodeAction{
 		//    node에도 해당 root 노드 추가 시킨다. id, parent, state, text, li_attr 등. 선택지인 text는 일단 비워둔다.
 		//    루트는 파일노드로 간주. 이때 node의 li_attr에 type을 file로 정해둘 것.
 		NodeDto node = new NodeDto();
-		String nodeId = tree_no+"-1-"+text;//root니까 깊이는 1로 간주
+		String nodeId = tree_no+"-0-"+text;//root니까 깊이는 0으로 간주(jstree기준)
 		node.setId(nodeId);
 		node.setLi_attr( "type:file" );
 		node.setParent("#");//Root노드는 #으로 불러오게 되어 .
@@ -218,7 +218,7 @@ public class NodeAction{
 			CategoryChoiceDto cc = new CategoryChoiceDto();
 			cc.setCategory(NodeDao.getCategory(node.getId().split("-")[0]));
 			cc.setText(text);
-			cc.setPre_choice( NodeDao.getNode(node.getParent()).getId() );//부모노드 id
+			cc.setPre_choice( NodeDao.getNode(node.getParent()).getText() );//부모노드의 선택지
 			cc.setChoice_pick_freq(1);
 			cc.setChoice_weight(0.0);
 			System.out.println(cc);

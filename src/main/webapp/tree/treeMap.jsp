@@ -28,6 +28,7 @@
 </div>
 
 	<div id="container"></div>
+	<div><span id="systemAlert"></span></div>
 	<script>
 	var tree_no = '${tree_no}';
 	var node;
@@ -55,20 +56,16 @@
 				    }
 				    return true; // allow everything else
 				},
-				'data':
-					[{"parent":"#","id":"1-1-rootForDog","state":"undetermined","li_attr":"{'type':'file'}","text":"rootForDog"}]	
-				,	
 				'data' : {
 					"url" : "/breadcrumbs/treeMapGet.node?tree_no="+tree_no,
 			        "data" : function (node) {
 // 			        	 $(this).each(node,function(index,item){
-// 				        	console.log(JSON.stringify(node))
+				        	console.log(JSON.stringify(node))
 // 				        	console.log(JSON.stringify(node.parent))
 // 				        	console.log(JSON.stringify(node.state))
 // 				        	console.log(JSON.stringify(item))
 // 				        	console.log(JSON.stringify($(this)))
 				            return { "id" : node.id , "parent":node.parent, "state":node.state, "text":node.text, "li_attr":node.li_attr};
-// 				            return { "id" : node.id };
 // 			        	 })
 					},
 					"dataType" : "json"
@@ -79,41 +76,82 @@
 		        },
 		        'check_callback' : function (operation, node, node_parent, node_position, more) {
 		            // in case of 'rename_node' node_position is filled with the new node name
-		            
+		            	console.log("operation="+operation);
 		            	console.log("node_position="+node_position);
 		            	console.log("node="+JSON.stringify(node));
 		            	console.log("node_parent="+JSON.stringify(node_parent));
 		            	console.log("more="+JSON.stringify(more));
 
 		            if(operation==='create_node'){
+		            	node_position=parseInt(node_parent.id.split("-")[1])+1;
+						console.log("node_position="+node_position)
 		            	$.ajax({
 		 					type:'post',
 		 					url:'/breadcrumbs/NodeAdd.node',
-		 					data: {"id" : node.id , "parent": node.parent , "state":"undetermined", "text":"", "li_attr":null}, 			
+		 					data: {"id" : tree_no+"-"+node_position+"-"+"New node"
+		 						, "parent": node_parent.id , "state":"undetermined", "text":"New node", "li_attr":""}, 			
+		 					/* data : query, */
+		 					dataType:'text', 	 			
+		 					success:function(result){
+		 						console.log("result: " + result);
+		 						$("#systemAlert").val("New Node라는 이름으로 내버려 두면 같은 depth의 노드에 New Node라는 이름의 디렉토리는 저장되지 않습니다.");
+		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+				            	if(result===true){
+			 						return true;
+				            	}else{
+									return false;
+				            	}
+		 					},
+		 					error: function (error) {
+		 					    alert('error; ' + eval(error));
+								return false;
+		 					}
+		 				});  // ajax() end
+		            }
+		            if(operation==='rename_node'){
+		            	$.ajax({
+		 					type:'post',
+		 					url:'/breadcrumbs/NodeUpdate.node',
+		 					data: {"id" : node_id
+		 						, "parent": node_parent.id , "state":"undetermined", "text": node.text, "li_attr":""}, 			
 		 					/* data : query, */
 		 					dataType:'text', 	 			
 		 					success:function(result){
 		 						console.log("result: " + result);
 		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+				            	if(result===true){
+			 						return true;
+				            	}else{
+									return false;
+				            	}
+		 					},
+		 					error: function (error) {
+		 					    alert('error; ' + eval(error));
+								return false;
 		 					}
 		 				});  // ajax() end
 		            	return true;
 		            }
-		            if(operation==='create_node'){
+		            if(operation==='delete_node'){
 		            	
+		            	return true;
 		            }
-// 		            rename_node, delete_node, move_node and copy_node
-		            
-		            
-		            return operation === 'create_node' ? true : false;
+		            if(operation==='move_node'){
+		            	
+		            	return true;
+		            }
+		            if(operation==='copy_node'){
+		            	return true;
+		            }
+// 		            return operation === 'create_node' ? true : false;
 		        }
 			},
-// 				'massload' : { //아직 활성화시킬 수 없다. 한꺼번에 로딩해야할 url을 다르게 하여 반응토록 만들 예정.
-// 			        "url" : "api/nodes",
-// 			        "data" : function (ids) {
-// 			            return { "id" : ids.join(",") };
-// 			        }
-// 			    },
+// 			'massload' : { //아직 활성화시킬 수 없다. 한꺼번에 로딩해야할 url을 다르게 하여 반응토록 만들 예정.
+// 			    "url" : "/breadcrumbs/treeMapGet.node?tree_no="+tree_no,
+// 			    "data" : function (ids) {
+// 				return { "id" : ids.join(",") };
+// 			    }
+// 			},
 			"plugins" : [ "dnd", "contextmenu", "checkbox", "state", "massload","search" ,"types"]
 				//플러그인 종류
 				//dnd : drag and drop
@@ -125,13 +163,15 @@
 				//sort : 알파벳 순 정렬. 필요없어서 안넣음.
 		});
 
-			    var selectedNode = $('#container').jstree().get_selected(true)[0];
+// 			    var selectedNode = $('#container').jstree().get_selected(true)[0];
 		  $('#container').on("changed.jstree", function (e, data) {
 // 			    console.log(JSON.stringify(selectedNode));
 			    console.log("The selected nodes are:");
 			    console.log(data.selected);
-			    console.log($('#container').jstree().get_selected(true)[0]);
+// 			    console.log($('#container').jstree().get_selected(true)[0]);
 			    node= data.selected;
+			    console.log( node);
+			    
 // 			    console.log($("#container").jstree(true).get_selected('full', true) );
 		  });
 	</script>

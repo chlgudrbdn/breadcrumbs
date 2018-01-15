@@ -35,7 +35,8 @@
    
       <!-- 루트 노드 검색-->
    <select id="getRootNode" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
-    select * from node where id IN (select id from t_n_relation where tree_no=#{tree_no} ) and parent='#'
+<!--     select * from node where id IN (select id from t_n_relation where tree_no=#{tree_no} ) and parent='#' -->
+    select * from node where id IN (select id from t_n_relation where tree_no=#{tree_no} )
    </select>
    
    <!-- 해당 트리의 자식 노드 목록?-->
