@@ -47,10 +47,7 @@
      select * from node where parent=#{id}
    </select>
    
-   <!-- 방명록 조회수 증가 -->
-<!--    <update id="g_hit" parameterType="int"> -->
-<!--     update guest10 set g_hit=g_hit+1 where g_no=#{g_no} -->
-<!--    </update> -->
+
    
    
    
@@ -83,6 +80,22 @@
 	    insert into c_c_relation(category, text, pre_choice, choice_pick_freq, choice_weight)
 	    values(#{category}, #{text}, #{pre_choice, jdbcType=VARCHAR}, #{choice_pick_freq}, #{choice_weight})
    </insert>
+      <!-- 카테고리_선택지 관계 중복여부확인 -->
+   <select id="chkDuplicateCC" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto" resultType="com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto">
+	    select * from c_c_relation
+<!-- 	    (category, text, pre_choice, choice_pick_freq, choice_weight) -->
+	    where category=#{category} and text = #{text}
+	    	and pre_choice=#{pre_choice, jdbcType=VARCHAR} <!-- 이전 선택지와 같은 경우 -->
+	    	
+<!-- 	    values(#{category}, #{text}, #{pre_choice, jdbcType=VARCHAR}, #{choice_pick_freq}, #{choice_weight}) -->
+   </select>
+    <!-- 카테고리_선택지 관계 중복된 경우 choice_pick_freq 1증가-->
+   <update id="updateCC" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto">
+    update c_c_relation
+    set choice_pick_freq=choice_pick_freq+1
+    where category=#{category} and text = #{text}
+	    	and pre_choice=#{pre_choice, jdbcType=VARCHAR} 
+   </update>
    
    
    
@@ -96,14 +109,18 @@
    <insert id="add_choice" parameterType="String">
 	    insert into choice_list values(#{text}, #{code_piece})
    </insert>
-   
+      <!-- 선택지 중복 확인-->
+   <select id="selectChoice" parameterType="String" resultType="String">
+     select * from choice_list where text = #{text}
+   </select>
    
    
    
    
    <!-- 가장 마지막 tree_no 값 구하기 -->
    <select id="tree_max" resultType="int">
-    select NVL (  max(tree_no), -1) from m_t_relation
+   select tree_no_seq.currval from dual
+<!--     select NVL (  max(tree_no), -1) from m_t_relation -->
    </select>   
    
     

@@ -86,7 +86,7 @@ public class NodeAction{
 		if(NodeDao.checkDuplicateCategory(category).size() == 0  ) {//만약 중복되는 카테고리가 없는 새로운 카테고리라면
 			NodeDao.insertCategory(category);
 		}//중복되는 카테고리 있으면 딱히 m_t_relation, c_c_relation의 무결성에 문제 줄 것이 없다.
-		System.out.println("category setting");
+		System.out.println("category setting done");
 		
 		//새로운 선택지의 경우 추가하는 메소드가 필요.
 		String text = request.getParameter("rootnodeName");//선택지 중복여부 확인 후 없으면 추가.
@@ -97,7 +97,7 @@ public class NodeAction{
 			choiceList.setCode_piece("setwd("+uploadPath+")");//최초엔 코드는 없는 상태로 넣는다.
 			NodeDao.insertChoice(choiceList);
 		}//중복되는 카테고리 있으면 딱히 c_c_relation, node의 무결성에 문제 줄 것이 없다.
-		System.out.println("choiceList setting");
+		System.out.println("choiceList setting done");
 		
 		// 카테고리_선택지 관계 추가
 		CategoryChoiceDto cc = new CategoryChoiceDto();
@@ -106,14 +106,18 @@ public class NodeAction{
 		cc.setPre_choice(null);
 		cc.setChoice_pick_freq(1);
 		cc.setChoice_weight(0.0);
-		System.out.println(cc);
-		NodeDao.insertCategoryChoice(cc);
-		System.out.println("ccRelation setting");
+		System.out.println("chk the cc="+cc);
+		if(NodeDao.checkDuplicateCC(cc).size() < 1   ) {
+			NodeDao.insertCategoryChoice(cc);
+		}else {
+			NodeDao.updateCategoryChoice(cc);
+		}
+		System.out.println("ccRelation setting done");
 		
 		//    node에도 해당 root 노드 추가 시킨다. id, parent, state, text, li_attr 등. 선택지인 text는 일단 비워둔다.
 		//    루트는 파일노드로 간주. 이때 node의 li_attr에 type을 file로 정해둘 것.
 		NodeDto node = new NodeDto();
-		String nodeId = tree_no+"-0-"+text;//root니까 깊이는 0으로 간주(jstree기준)
+		String nodeId = tree_no+"-1-"+text;//root니까 깊이는 1로 간주(jstree기준)
 		node.setId(nodeId);
 		node.setLi_attr( "type:file" );
 		node.setParent("#");//Root노드는 #으로 불러오게 되어 .
@@ -231,6 +235,13 @@ public class NodeAction{
 		}
 		return true;
 	}
+	
+	
+	
+	public String selectChoice(String text) { //code_piece반환
+		return NodeDao.selectChoice(text);
+	}
+	
 	
 //	/* 게시판 목록 */
 //	public Map<String, Object> board_list(HttpServletRequest request,

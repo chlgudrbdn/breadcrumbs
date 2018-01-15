@@ -34,7 +34,7 @@
 	<!-- 스프링의 파일 업로드 기능을 사용하기 위한 리졸버 설정 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="1000000"/> <!-- 1MB까지만 첨부 가능 -->
+		<property name="maxUploadSize" value="1000000000"/> <!-- 10000MB까지만 첨부 가능 -->
 	</bean>
 	
 	

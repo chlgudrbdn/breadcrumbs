@@ -96,13 +96,32 @@ public class NodeController {
 			nodeList = this.nodeAction.getRootNode(tree_no);//일단 다 끌고 오게 해보자. jstree는 기본 jstree형식이 parent같은건 잘 지원하지 않는 모양이다.
 			System.out.println("getRootNode=\n"+nodeList);
 			return nodeListConvertToNodeDto2List(nodeList);
-		}else {// 현재 데이터베이스 구조로는 그냥 일괄로 부르는 방법 밖에 없다. 이하 구문은 무의미.
+		}else {// 현재 노드 테이블의 구조로는 그냥 일괄로 부르는 방법 밖에 없다. 이하 else구문은 무의미하나 추후를 대비해 남겨놓음.
 //			nodeList = this.nodeAction.getRootNode(tree_no);
 			nodeList = this.nodeAction.getNodeList(id) ;
 			System.out.println("getNodeList=\n"+nodeList);
 			return nodeListConvertToNodeDto2List(nodeList);
 		}
 //		model.addAttribute( "nodeList", nodeList);
+	}
+	
+	@RequestMapping("/getChioice.node")
+	@ResponseBody
+	public String getChioice(@RequestParam("id") String id, @RequestParam("path") String path,
+			HttpServletResponse response, Model model) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
+		
+		String text = this.nodeAction.getNode(id).getText();
+		System.out.println("text="+text);//최초 루트노드 불러올때 기준삼으려고.
+		
+		List<String> code_piece_list = new ArrayList<String>();
+		String[] parents= path.split("/");
+		for(String n : parents) {
+			code_piece_list.add(    this.nodeAction.selectChoice( this.nodeAction.getNode(n).getText() )   );
+		}
+		model.addAttribute("code_piece_list", code_piece_list);
+		model.addAttribute("code_piece_list_cnt", code_piece_list.size());
+	
+		return this.nodeAction.selectChoice(text);
 	}
 	
 	@RequestMapping("/checkRecommendCategory.node")
@@ -126,8 +145,9 @@ public class NodeController {
 		//    node에도 해당 root 노드 추가 시킨다. id, parent, state, text, li_attr 등. 선택지인 text는 일단 비워둔다.
 		//    비슷하게 파일노드도 하나 넣는다. 이때 node의 li_attr에 type을 file로 정해둘 것.
 		//   새로운 카테고리의 경우 추가하는 메소드가 필요하다.
-		model.addAttribute( "tree_no", tree_no);
+//		model.addAttribute( "tree_no", tree_no);
 //		return "tree/treeMain";
+		System.out.println(tree_no);
 		return "redirect:/treeMain.node?tree_no="+tree_no;
 	}
 	

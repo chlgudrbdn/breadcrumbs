@@ -40,7 +40,7 @@
 			    "diabled" : { //li 태그에 <li data-jstree='{"opened":true, "type":"demo"}'>같은 느낌으로 type이 부여되야함.
 			      "icon" : "glyphicon glyphicon-er"
 			    },
-			    "data" : { //type 부여는 li_attr컬럼에 '{"type":"demo"}' 형식으로 넣어야할 것이다.
+			    "file" : { //type 부여는 li_attr컬럼에 '{"type":"demo"}' 형식으로 넣어야할 것이다.
 				      "icon" : "glyphicon glyphicon-file"
 				},
 			    "leaf" : { //li 태그에 <li data-jstree='{"opened":true, "type":"demo"}'>같은 느낌으로 type이 부여되야함.
@@ -83,12 +83,13 @@
 		            	console.log("more="+JSON.stringify(more));
 
 		            if(operation==='create_node'){
-		            	node_position=parseInt(node_parent.id.split("-")[1])+1;
+		            	var depth =parseInt(node_parent.id.split("-")[1])+1;
+		            	var newNodeId = tree_no+"-"+depth+"-"+"New node";
 						console.log("node_position="+node_position)
 		            	$.ajax({
 		 					type:'post',
 		 					url:'/breadcrumbs/NodeAdd.node',
-		 					data: {"id" : tree_no+"-"+node_position+"-"+"New node"
+		 					data: {"id" : newNodeId
 		 						, "parent": node_parent.id , "state":"undetermined", "text":"New node", "li_attr":""}, 			
 		 					/* data : query, */
 		 					dataType:'text', 	 			
@@ -109,28 +110,30 @@
 		 				});  // ajax() end
 		            }
 		            if(operation==='rename_node'){
-		            	$.ajax({
-		 					type:'post',
-		 					url:'/breadcrumbs/NodeUpdate.node',
-		 					data: {"id" : node_id
-		 						, "parent": node_parent.id , "state":"undetermined", "text": node.text, "li_attr":""}, 			
-		 					/* data : query, */
-		 					dataType:'text', 	 			
-		 					success:function(result){
-		 						console.log("result: " + result);
-		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
-				            	if(result===true){
-			 						return true;
-				            	}else{
-									return false;
-				            	}
-		 					},
-		 					error: function (error) {
-		 					    alert('error; ' + eval(error));
-								return false;
-		 					}
-		 				});  // ajax() end
-		            	return true;
+		            	
+		            	
+// 		            	$.ajax({
+// 		 					type:'post',
+// 		 					url:'/breadcrumbs/NodeUpdate.node',
+// 		 					data: {"id" : node_id
+// 		 						, "parent": node_parent.id , "state":"undetermined", "text": node.text, "li_attr":""}, 			
+// 		 					/* data : query, */
+// 		 					dataType:'text', 	 			
+// 		 					success:function(result){
+// 		 						console.log("result: " + result);
+// 		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+// 				            	if(result===true){
+// 			 						return true;
+// 				            	}else{
+// 									return false;
+// 				            	}
+// 		 					},
+// 		 					error: function (error) {
+// 		 					    alert('error; ' + eval(error));
+// 								return false;
+// 		 					}
+// 		 				});  // ajax() end
+// 		            	return true;
 		            }
 		            if(operation==='delete_node'){
 		            	
@@ -169,9 +172,30 @@
 			    console.log("The selected nodes are:");
 			    console.log(data.selected);
 // 			    console.log($('#container').jstree().get_selected(true)[0]);
-			    node= data.selected;
-			    console.log( node);
+			    var SelectedOneNode= data.selected[0];
+			    console.log( SelectedOneNode);
 			    
+			    var path = data.instance.get_path(data.node,'/');
+			    console.log('Selected path: ' + path); 
+			    
+			    $.ajax({
+ 					type:'post',
+ 					url:'/breadcrumbs/getChoice.node',
+ 					data: {"id" : SelectedOneNode, "path":path}, 			
+ 					/* data : query, */
+ 					dataType:'text', 	 			
+ 					success:function(result){
+ 						console.log("result : "+ result);
+//  						$("#systemAlert").val("New Node라는 이름으로 내버려 두면 같은 depth의 노드에 New Node라는 이름의 디렉토리는 저장되지 않습니다.");
+ 						$("#codeTypingArea").val(result).focus();//지우고 커서 옮기기
+ 						return true;
+ 					},
+ 					error: function (error) {
+ 					    alert('error; ' + eval(error));
+						return false;
+ 					}
+ 				});  // ajax() end
+ 				
 // 			    console.log($("#container").jstree(true).get_selected('full', true) );
 		  });
 	</script>

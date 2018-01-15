@@ -27,7 +27,7 @@ public interface NodeDao {
 	
 	void insertTree(MemberTreeRelationDto m_t_relation);//tree 목록. 카테고리가 선행되어야 무결성에 위반되지 않는다.
 	List<MemberTreeRelationDto> getTreeList(String email);
-
+	
 
 	void insertTreeNodeRelation(TreeNodeRelationDto t_n_relation); //t_n_realation 에 tree와 node추가. 다른 테이블의 기본키 되는 tree_no와 node의 id가 선행되어야 무결성 침해되지 않음.
 	
@@ -36,8 +36,11 @@ public interface NodeDao {
 	
 	List<String> checkDuplicateChoice(String text);//중복되는 선택지 확인
 	void insertChoice(ChoiceListDto choiceList); //선택지 추가
-	
+	String selectChoice(String text);//text로 code_piece 찾기.
+
 	void insertCategoryChoice(CategoryChoiceDto cc); // c_c_relation 추가
+	List<CategoryChoiceDto> checkDuplicateCC(CategoryChoiceDto cc);//중복되는 CC확인
+	int updateCategoryChoice(CategoryChoiceDto cc);
 	
 	int getLastTreeSeq();//Tree_no 마지막 번호 확인
 	

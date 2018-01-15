@@ -75,21 +75,21 @@ $(function(){
 <body>
 	<div class="h-100 p-3" id="accumlatedCodes">
 		<!-- 레코드가 있으면 -->
-		<%-- 	<c:if test="${search_list_count > 0 }"> --%>
-		<%-- 		<c:forEach var="b" items="${search_list}"> --%>
-		<%-- 			<p>${b.}</p>--%>
-		<%-- 		</c:forEach> --%>
-		<%-- 	</c:if> --%>
+			<c:if test="${code_piece_list_cnt > 0 }">
+				<c:forEach var="b" items="${code_piece_list}">
+					<p>${b}</p>
+				</c:forEach>
+			</c:if>
 <!--   library(Rserve) -->
 <!-- Rserve(FALSE,port=6311,args='--RS-encoding utf8 --no-save --slave --encoding utf8  --internet2') -->
 <!-- Rserve(args="--RS- encoding utf8") -->
 <!-- 출처: http://tastydarr.tistory.com/64 [맛동산] -->
-  <p>getwd()
-  <p>x1<-c(1,3,5,7,9)
+<!--   <p>getwd() -->
+<!--   <p>x1<-c(1,3,5,7,9) -->
 
-  <p># x is numeric or character?
-  <p>class(x1)
-  <p>is.numeric(x1)
+<!--   <p># x is numeric or character? -->
+<!--   <p>class(x1) -->
+<!--   <p>is.numeric(x1) -->
 	</div>
 
 	<div class="controllPanel h-50 p-3" >
@@ -100,7 +100,7 @@ $(function(){
 						id="codeTypingArea" ></textarea>
 				</div>
 				<button type="submit" class="btn btn-default" id=addCode>코드 수정/등록</button> <!-- CU -->
-				<button type="button" class="btn btn-default" id=delNode >노드 삭제</button> <!-- D --> <!-- R은 그냥 노드 클릭하면 누적되서 보인다. -->
+<!-- 				<button type="button" class="btn btn-default" id=delNode >노드 삭제</button> D R은 그냥 노드 클릭하면 누적되서 보인다. -->
 				<button type="button" class="btn btn-default" id=deactivateNode>노드 비활성화</button>
 				<button type="button" class="btn btn-default" id=downloadTree>리프노드 코드 다운로드</button>
 				<button type="button" class="btn btn-default" id=executeCode>선택 코드 실행(유료)</button>

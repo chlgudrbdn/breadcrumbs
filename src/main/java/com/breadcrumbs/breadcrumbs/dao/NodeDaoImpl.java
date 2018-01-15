@@ -167,6 +167,24 @@ public class NodeDaoImpl implements NodeDao {
 		return this.sqlSession.insert("add_node", node);
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public List<CategoryChoiceDto> checkDuplicateCC(CategoryChoiceDto cc) {
+		// TODO Auto-generated method stub
+		return this.sqlSession.selectList("chkDuplicateCC", cc);
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public int updateCategoryChoice(CategoryChoiceDto cc) {//중복되는 cc가 있으면 choice_pick_freq 1증가
+		// TODO Auto-generated method stub
+		return this.sqlSession.update("updateCC", cc);
+	}
+
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public String selectChoice(String text) {
+		// TODO Auto-generated method stub
+		return this.sqlSession.selectOne("selectChoice",text);
+	}
+
 	
 	/*
 	 *  mybatis 쿼리문 실행 메서드
