@@ -185,6 +185,12 @@ public class NodeDaoImpl implements NodeDao {
 		return this.sqlSession.selectOne("selectChoice",text);
 	}
 
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public int updateChoice(NodeDto node) {
+		// TODO Auto-generated method stub
+		return this.sqlSession.update("updateChoice", node);
+	}
+
 	
 	/*
 	 *  mybatis 쿼리문 실행 메서드

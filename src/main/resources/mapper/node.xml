@@ -111,7 +111,7 @@
    </insert>
       <!-- 선택지 중복 확인-->
    <select id="selectChoice" parameterType="String" resultType="String">
-     select * from choice_list where text = #{text}
+     select code_piece from choice_list where text = #{text}
    </select>
    
    

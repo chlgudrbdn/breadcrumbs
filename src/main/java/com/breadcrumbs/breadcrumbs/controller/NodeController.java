@@ -2,7 +2,9 @@ package com.breadcrumbs.breadcrumbs.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -105,23 +107,31 @@ public class NodeController {
 //		model.addAttribute( "nodeList", nodeList);
 	}
 	
-	@RequestMapping("/getChioice.node")
+	@RequestMapping("/getChoice.node")
 	@ResponseBody
-	public String getChioice(@RequestParam("id") String id, @RequestParam("path") String path,
+	public Map getChioice(@RequestParam("id") String id, @RequestParam("path") String path,
 			HttpServletResponse response, Model model) {//사용자가 만든 트리 관리하는 페이지로 가는 경로 지정
 		
 		String text = this.nodeAction.getNode(id).getText();
 		System.out.println("text="+text);//최초 루트노드 불러올때 기준삼으려고.
+		System.out.println("path="+path);//최초 루트노드 불러올때 기준삼으려고.
 		
 		List<String> code_piece_list = new ArrayList<String>();
 		String[] parents= path.split("/");
 		for(String n : parents) {
-			code_piece_list.add(    this.nodeAction.selectChoice( this.nodeAction.getNode(n).getText() )   );
+			code_piece_list.add(    this.nodeAction.selectChoice( n )   );
 		}
-		model.addAttribute("code_piece_list", code_piece_list);
-		model.addAttribute("code_piece_list_cnt", code_piece_list.size());
-	
-		return this.nodeAction.selectChoice(text);
+		System.out.println("code_piece_list"+code_piece_list);
+		System.out.println("code_piece_list_cnt"+ code_piece_list.size());
+		Map m = new HashMap();
+		m.put("choice", this.nodeAction.selectChoice(text));
+		m.put("code_piece_list", code_piece_list);
+		m.put("code_piece_list_cnt", code_piece_list.size());
+//		model.addAttribute("code_piece_list", code_piece_list);
+//		model.addAttribute("code_piece_list_cnt", code_piece_list.size());
+		
+//		return this.nodeAction.selectChoice(text);
+		return m;
 	}
 	
 	@RequestMapping("/checkRecommendCategory.node")
@@ -165,6 +175,26 @@ public class NodeController {
 		System.out.println("insert this node"+node);
 		boolean result = this.nodeAction.insertNode(node);//루트 노드 파트만 건든다.
 
+		return result;
+	}
+	
+	//노드 추가-노드와 연동된 코드 추가와는 다르다.
+	@RequestMapping("/NodeTextUpdate.node") // rename시에 사용.
+	@ResponseBody //이게 있어야 json으로 반환되는데 이건 숫자만 반환하므로 없어도 됨.
+	public boolean NodeUpdate(@RequestParam("id") String id,
+											@RequestParam("text") String text,
+			HttpServletResponse response) throws Exception {
+		System.out.println("update node = "+id+" to "+text);
+		NodeDto node = new NodeDto();
+		node.setId(id);
+		node.setText(text);
+		
+		if(this.nodeAction.checkDuplicateChoice(text)) {
+			
+		}
+		boolean result = this.nodeAction.updateNodeChoice(node);//루트 노드 파트만 건든다.
+		
+		
 		return result;
 	}
 

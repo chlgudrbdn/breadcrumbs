@@ -73,13 +73,13 @@ $(function(){
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="h-100 p-3" id="accumlatedCodes">
+	<div id="accumlatedCodes" style="word-break:break-all;">
 		<!-- 레코드가 있으면 -->
-			<c:if test="${code_piece_list_cnt > 0 }">
-				<c:forEach var="b" items="${code_piece_list}">
-					<p>${b}</p>
-				</c:forEach>
-			</c:if>
+<%-- 			<c:if test="${code_piece_list_cnt > 0 }"> --%>
+<%-- 				<c:forEach var="item" items="${code_piece_list}"> --%>
+<%-- 					<p>${b}</p> --%>
+<%-- 				</c:forEach> --%>
+<%-- 			</c:if> --%>
 <!--   library(Rserve) -->
 <!-- Rserve(FALSE,port=6311,args='--RS-encoding utf8 --no-save --slave --encoding utf8  --internet2') -->
 <!-- Rserve(args="--RS- encoding utf8") -->

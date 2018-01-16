@@ -241,6 +241,11 @@ public class NodeAction{
 	public String selectChoice(String text) { //code_piece반환
 		return NodeDao.selectChoice(text);
 	}
+
+	public boolean updateNodeChoice(NodeDto node) {
+		// TODO Auto-generated method stub
+		return NodeDao.updateChoice(node);
+	}
 	
 	
 //	/* 게시판 목록 */

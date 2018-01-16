@@ -95,9 +95,15 @@
 		 					dataType:'text', 	 			
 		 					success:function(result){
 		 						console.log("result: " + result);
+		 						console.log("now created node : "+node)
 		 						$("#systemAlert").val("New Node라는 이름으로 내버려 두면 같은 depth의 노드에 New Node라는 이름의 디렉토리는 저장되지 않습니다.");
 		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
-				            	if(result===true){
+		 						
+		 						var n = result.obj;
+		 						n.attr("id", newNodeId);
+		 						console.log("node="+JSON.stringify(node));
+		 						
+		 						if(result===true){
 			 						return true;
 				            	}else{
 									return false;
@@ -112,28 +118,27 @@
 		            if(operation==='rename_node'){
 		            	
 		            	
-// 		            	$.ajax({
-// 		 					type:'post',
-// 		 					url:'/breadcrumbs/NodeUpdate.node',
-// 		 					data: {"id" : node_id
-// 		 						, "parent": node_parent.id , "state":"undetermined", "text": node.text, "li_attr":""}, 			
-// 		 					/* data : query, */
-// 		 					dataType:'text', 	 			
-// 		 					success:function(result){
-// 		 						console.log("result: " + result);
-// 		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
-// 				            	if(result===true){
-// 			 						return true;
-// 				            	}else{
-// 									return false;
-// 				            	}
-// 		 					},
-// 		 					error: function (error) {
-// 		 					    alert('error; ' + eval(error));
-// 								return false;
-// 		 					}
-// 		 				});  // ajax() end
-// 		            	return true;
+		            	$.ajax({
+		 					type:'post',
+		 					url:'/breadcrumbs/NodeUpdate.node',
+		 					data: {"id" : node.parent, "text": node.text}, 			
+		 					/* data : query, */
+		 					dataType:'text', 	 			
+		 					success:function(result){
+		 						console.log("result: " + result);
+		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+				            	if(result===true){
+			 						return true;
+				            	}else{
+									return false;
+				            	}
+		 					},
+		 					error: function (error) {
+		 					    alert('error; ' + eval(error));
+								return false;
+		 					}
+		 				});  // ajax() end
+		            	return true;
 		            }
 		            if(operation==='delete_node'){
 		            	
@@ -167,35 +172,52 @@
 		});
 
 // 			    var selectedNode = $('#container').jstree().get_selected(true)[0];
-		  $('#container').on("changed.jstree", function (e, data) {
+		  $('#container').on("select_node.jstree", function (e, data) {
 // 			    console.log(JSON.stringify(selectedNode));
 			    console.log("The selected nodes are:");
 			    console.log(data.selected);
 // 			    console.log($('#container').jstree().get_selected(true)[0]);
 			    var SelectedOneNode= data.selected[0];
-			    console.log( SelectedOneNode);
+			    console.log("SelectedOneNode="+ SelectedOneNode);
 			    
-			    var path = data.instance.get_path(data.node,'/');
-			    console.log('Selected path: ' + path); 
-			    
-			    $.ajax({
- 					type:'post',
- 					url:'/breadcrumbs/getChoice.node',
- 					data: {"id" : SelectedOneNode, "path":path}, 			
- 					/* data : query, */
- 					dataType:'text', 	 			
- 					success:function(result){
- 						console.log("result : "+ result);
-//  						$("#systemAlert").val("New Node라는 이름으로 내버려 두면 같은 depth의 노드에 New Node라는 이름의 디렉토리는 저장되지 않습니다.");
- 						$("#codeTypingArea").val(result).focus();//지우고 커서 옮기기
- 						return true;
- 					},
- 					error: function (error) {
- 					    alert('error; ' + eval(error));
-						return false;
- 					}
- 				});  // ajax() end
- 				
+			    if(SelectedOneNode !== undefined){
+				    var path = data.instance.get_path(data.node,'/');
+				    console.log('Selected path: ' + path); 
+				    
+				    $.ajax({
+	 					type:'post',
+	 					url:'/breadcrumbs/getChoice.node',
+	 					data: {"id" : SelectedOneNode, "path":path}, 			
+	 					/* data : query, */
+	 					dataType:'json', 	 			
+	 					success:function(result){//Map형태로 리턴.
+	 						console.log("result.choice : "+ result.choice);
+	 					
+// 	 						request.setRequestHeader("code_piece_list", result.choice);
+	 						console.log("result.code_piece_list : "+ JSON.stringify(result.code_piece_list));
+	 						
+// 	 						request.setRequestHeader("code_piece_list_cnt", result.choice);
+	 						console.log("result.code_piece_list_cnt : "+ JSON.stringify(result.code_piece_list_cnt));
+	
+	//  						$("#systemAlert").val("New Node라는 이름으로 내버려 두면 같은 depth의 노드에 New Node라는 이름의 디렉토리는 저장되지 않습니다.");
+	 						$("#codeTypingArea").val(result.choice).focus();//지우고 커서 옮기기
+	 						$("#accumlatedCodes").empty();//지운뒤 추가하는 방식으로 간다.
+
+// 	 						var obj = JSON.parse(result);	
+	 						var output='';
+	 						for(var i = 0; i < result.code_piece_list.length; i++) {
+	 							output+= "<p>" +result.code_piece_list[i] + "</p>";
+	 						}
+	 						console.log(output);
+	 						$("#accumlatedCodes").append(output); // 코드를 추가.
+	 						return true;
+	 					},
+	 					error: function (error) {
+	 					    alert('error; ' + eval(error));
+							return false;
+	 					}
+	 				});  // ajax() end
+			    }
 // 			    console.log($("#container").jstree(true).get_selected('full', true) );
 		  });
 	</script>
