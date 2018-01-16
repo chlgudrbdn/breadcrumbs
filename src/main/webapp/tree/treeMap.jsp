@@ -23,7 +23,7 @@
 	<form id="s">
 	  <input type="search" id="q" class="form-control d-inline-block" placeholder="Search" />
 	  <button type="submit" class="btn btn-default d-inline-block" >Search</button>
-	  <button type="button" class="btn btn-default d-inline-block" >file upload(유료)</button>
+	  <button type="button" class="btn btn-default d-inline-block" >file upload</button>
 	</form>
 </div>
 
@@ -96,12 +96,12 @@
 		 					success:function(result){
 		 						console.log("result: " + result);
 		 						console.log("now created node : "+node)
-		 						$("#systemAlert").val("New Node라는 이름으로 내버려 두면 같은 depth의 노드에 New Node라는 이름의 디렉토리는 저장되지 않습니다.");
-		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+		 						$("#systemAlert").html("New Node is not allowed when same depth has same name.");
+		 						$("#codeTypingArea").focus();//지우고 커서 옮기기
 		 						
-		 						var n = result.obj;
-		 						n.attr("id", newNodeId);
-		 						console.log("node="+JSON.stringify(node));
+// 		 						var n = result.obj;
+// 		 						n.attr("id", newNodeId);
+// 		 						console.log("node="+JSON.stringify(node));
 		 						
 		 						if(result===true){
 			 						return true;
@@ -110,23 +110,23 @@
 				            	}
 		 					},
 		 					error: function (error) {
-		 					    alert('error; ' + eval(error));
+		 					    console.log('error; ' + eval(error));
 								return false;
 		 					}
 		 				});  // ajax() end
 		            }
 		            if(operation==='rename_node'){
 		            	
-		            	
+		            	var code_piece=$("#codeTypingArea").val();
 		            	$.ajax({
 		 					type:'post',
-		 					url:'/breadcrumbs/NodeUpdate.node',
-		 					data: {"id" : node.parent, "text": node.text}, 			
+		 					url:'/breadcrumbs/NodeTextUpdate.node',
+		 					data: {"id" : node.id, "text": node_position, "code_piece": code_piece, "node_parent_id" : node_parent.id}, 			
 		 					/* data : query, */
-		 					dataType:'text', 	 			
+		 					dataType:'json', 	 			
 		 					success:function(result){
-		 						console.log("result: " + result);
-		 						$("#codeTypingArea").val("").focus();//지우고 커서 옮기기
+		 						console.log("rename result: " + result);
+		 						$("#codeTypingArea").focus();//지우고 커서 옮기기
 				            	if(result===true){
 			 						return true;
 				            	}else{
@@ -134,10 +134,12 @@
 				            	}
 		 					},
 		 					error: function (error) {
-		 					    alert('error; ' + eval(error));
+		 					    console.log('error; ' + JSON.stringify(eval(error)));
 								return false;
 		 					}
 		 				});  // ajax() end
+		 				
+		 				location.reload();//일단 방법이 없다. 다시 refresh해서 반영 여부 넣어야 한다. 임시일 뿐 이거 빼고도 실시간으로 id가 갱신되어야 한다.
 		            	return true;
 		            }
 		            if(operation==='delete_node'){
@@ -170,14 +172,14 @@
 				//search : 검색기능
 				//sort : 알파벳 순 정렬. 필요없어서 안넣음.
 		});
-
+		 var SelectedOneNode;
 // 			    var selectedNode = $('#container').jstree().get_selected(true)[0];
 		  $('#container').on("select_node.jstree", function (e, data) {
 // 			    console.log(JSON.stringify(selectedNode));
 			    console.log("The selected nodes are:");
 			    console.log(data.selected);
 // 			    console.log($('#container').jstree().get_selected(true)[0]);
-			    var SelectedOneNode= data.selected[0];
+			    SelectedOneNode= data.selected[0];
 			    console.log("SelectedOneNode="+ SelectedOneNode);
 			    
 			    if(SelectedOneNode !== undefined){

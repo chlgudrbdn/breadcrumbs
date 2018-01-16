@@ -37,7 +37,10 @@ public class NodeAction{
 		NodeDao.insertNode(node);
 	}
 	
-
+	public int insertChoice(ChoiceListDto choice) {
+		return NodeDao.insertChoice(choice);
+	}
+	
 //	public List<String> getRecommendCategoryList(String value) {
 	public List<String> getRecommendCategoryList(String value) {
 		return NodeDao.getRecommendCategoryList(value);
@@ -49,8 +52,8 @@ public class NodeAction{
 		
 		//tree_no 미리 예측해서 폴더도 미리 만든다.
 		int tree_no=NodeDao.getLastTreeSeq();
-		tree_no = tree_no==-1 ? 0 : tree_no;//아무것도 없는 경우 가정(null리턴할 땐 -1 리턴하도록 sql에서 NVL 함수 써둠)
-		tree_no++;
+//		tree_no = tree_no==-1 ? 0 : tree_no;//아무것도 없는 경우 가정(null리턴할 땐 -1 리턴하도록 sql에서 NVL 함수 써둠)
+//		tree_no++;
 		
 		String uploadPath = request.getRealPath("dataForAnalysis") +"\\"+ tree_no;
 		System.out.println(uploadPath); // C:\Spring\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\breadcrumbs\dataForAnalysis하위에 각 트리이름을 가진 폴더가 있고 거기에 데이터를 저장한다.
@@ -236,15 +239,75 @@ public class NodeAction{
 		return true;
 	}
 	
+	public String getCategory(String tree_no) {
+		return NodeDao.getCategory(tree_no);		
+	}
 	
+	public String getParentText(NodeDto node) {
+		return 	NodeDao.getNode( node.getParent() ).getText() ;		
+	}	
+
 	
 	public String selectChoice(String text) { //code_piece반환
 		return NodeDao.selectChoice(text);
 	}
 
-	public boolean updateNodeChoice(NodeDto node) {
+//	public boolean updateNodeChoice(NodeDto node) {
+//		// TODO Auto-generated method stub
+//		return NodeDao.updateChoice(node);
+//	}
+
+
+	public List<String> checkDuplicateChoice(String text) {
 		// TODO Auto-generated method stub
-		return NodeDao.updateChoice(node);
+		return NodeDao.checkDuplicateChoice(text);
+	}
+
+	public int updateNodeName(NodeDto node, String code_piece) {
+		// TODO Auto-generated method stub
+		String text= node.getText();
+		String tree_no=node.getId().split("-")[0];
+
+		CategoryChoiceDto cc = new CategoryChoiceDto();
+		cc.setCategory(getCategory(tree_no) );
+		cc.setText(text);
+		cc.setPre_choice( getParentText(node) );
+		cc.setChoice_pick_freq(1);
+		cc.setChoice_weight(0.0);
+		System.out.println("chk the cc="+cc);
+		
+		if(NodeDao.checkDuplicateCC(cc).size() > 0) { //일단 이 같은 이름의 choice가 존재하는데(+sql구문으로 이미 pre_choice,카테고리와 도 동일한지 확인) code_piece가 다를 때.
+			// 카테고리_선택지 관계 갱신. 같은 코드를 사용하기 때문.
+			// text만 잘 지정하면 getChoice.node ajax로 이미 자동으로 갱신하고 있을 것이다.
+			NodeDao.updateCategoryChoice(cc);
+			return 0;//이건 그냥 기존 choice를 갖도록 하는 게 좋을 것 같다. 원래대로라면 추천 코드를 넣는 식으로 하겠지만 아직 어렵다. 후순위로 둔다.
+//		}else if(checkDuplicateChoice(text).size() > 0 && NodeDao.selectChoice(text).equals(code_piece) ) {//기존에 있는 choice를 사용했단 얘기다. 역시 내버려두는게 상책이다.
+//			return 0;
+		}else if(checkDuplicateChoice(text).size() <= 0) {//choiceList가 중복된 경우가 그냥 없는 경우 새로운 노드 넣는 것 처럼하되 세부 사항이 조금 다른 방식으로 간다. 크게 세곳을 건드린다. c_c_relation, choice_list, node
+			// 선택지 추가
+			ChoiceListDto choice = new ChoiceListDto();
+			choice.setText(text);
+			choice.setCode_piece(code_piece);
+			int insertChoiceResult = insertChoice(choice);//기본키인 choice 먼저 건든다. 되면 1이 출력
+			System.out.println("choiceList setting done result="+insertChoiceResult);
+			if(insertChoiceResult <1) {
+				return 1;
+			}
+			
+			// 카테고리_선택지 관계 추가
+			int insertCCResult=NodeDao.insertCategoryChoice(cc);
+			System.out.println("ccRelation setting done result="+insertCCResult);
+			if(insertCCResult <1) {
+				return 2;
+			}
+			
+			int updateNodeNameResult = NodeDao.updateNodeName(node);
+			System.out.println("updateNodeNameResult="+updateNodeNameResult);
+			if(updateNodeNameResult <1) {
+				return 3;
+			}
+		}
+		return 0;
 	}
 	
 	

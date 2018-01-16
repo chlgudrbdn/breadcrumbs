@@ -35,10 +35,10 @@ public interface NodeDao {
 	void insertCategory(String category);//카테고리 추가
 	
 	List<String> checkDuplicateChoice(String text);//중복되는 선택지 확인
-	void insertChoice(ChoiceListDto choiceList); //선택지 추가
+	int insertChoice(ChoiceListDto choiceList); //선택지 추가
 	String selectChoice(String text);//text로 code_piece 찾기.
 
-	void insertCategoryChoice(CategoryChoiceDto cc); // c_c_relation 추가
+	int insertCategoryChoice(CategoryChoiceDto cc); // c_c_relation 추가
 	List<CategoryChoiceDto> checkDuplicateCC(CategoryChoiceDto cc);//중복되는 CC확인
 	int updateCategoryChoice(CategoryChoiceDto cc);
 	

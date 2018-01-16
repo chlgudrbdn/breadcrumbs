@@ -143,16 +143,16 @@ public class NodeDaoImpl implements NodeDao {
 	}
 	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public void insertChoice(ChoiceListDto choiceList) {//선택지 추가
+	public int insertChoice(ChoiceListDto choice) {//선택지 추가
 		// TODO Auto-generated method stub
-		sqlSession.insert("add_choice", choiceList);
+		return sqlSession.insert("add_choice", choice);
 	}
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public void insertCategoryChoice(CategoryChoiceDto cc) {
+	public int insertCategoryChoice(CategoryChoiceDto cc) {
 		// TODO Auto-generated method stub
-		System.out.println("ccRelation Add");
-		sqlSession.insert("add_CategoryChoice", cc);
+		System.out.println("ccRelation Add"+cc);
+		return sqlSession.insert("add_CategoryChoice", cc);
 	}
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
@@ -191,75 +191,13 @@ public class NodeDaoImpl implements NodeDao {
 		return this.sqlSession.update("updateChoice", node);
 	}
 
-	
-	/*
-	 *  mybatis 쿼리문 실행 메서드
-	 *   1.단 한개의 레코드만 검색: selectOne()
-	 *   2.하나이상의 레코드를 검색해서 컬렉션 List로 반환:selectList()
-	 *   3.레코드 저장:insert()
-	 *   4.레코드 수정:update()
-	 *   5.레코드 삭제:delete() 
-	 */
-//	public List<MemberTreeRelationDto> getGList() {
-//		return sqlSession.selectList("Gt.g_list");
-//	//Gt는 네임 스페이스 이름, g_list는 select 아이디 이름
-//	}
-//
-//	/*방명록 내용*/
-//	public MemberTreeRelationDto getCont(int g_no) {
-//		return this.sqlSession.selectOne("Gt.g_cont",g_no);
-//	}
-//
-//	/*댓글 저장*/
-//	public void insertCom(NodeDto c) {
-//		this.sqlSession.insert("Gt.com_in",c);		
-//	}
-//
-//	//댓글 개수
-//	public int getComCount(int g_no) {
-//		return this.sqlSession.selectOne("Gt.c_count",g_no);
-//	}
-//
-//	//방명록 조회수 증가
-//	public void updatehit(int g_no) {
-//		this.sqlSession.update("Gt.g_hit",g_no);
-//		//Gt는 네임스페이스 이름, g_hit는  update id 이름
-//	}
-//
-//	/*댓글목록*/
-//	public List<NodeDto> getComList(int g_no) {
-//		return this.sqlSession.selectList("Gt.c_list",g_no);
-//	}
-//
-//	//댓글 삭제
-//	public void com_del(int comment_no) {
-//		this.sqlSession.delete("Gt.c_del", comment_no);
-//		//Gt는 네임스페이스 이름,c_del은 delete 아이디이름
-//	}
-//
-//	/* 댓글 저장 */
-//	public void insertG(NodeDto c) {		
-//		this.sqlSession.insert("Gt.g_in",c);
-//	}
-//	
-//	/* 가장 마지막 댓글 comment_no 값 구하기 */
-//	public int getComMax(int g_no){
-//		return sqlSession.selectOne("Gt.c_max",g_no);
-//	}
-//	
-//	
-//	/* 입력된 댓글 1개 추출 */
-//	public NodeDto getNodeDto(Map m){
-//		return sqlSession.selectOne("Gt.c_bean",m);
-//	}	
-//	
-//
-//	/*방명록 수정*/
-//	public void updateG(NodeDto ec) {
-//		this.sqlSession.update("Gt.g_edit",ec);		
-//	}
-//
-//	/*방명록 삭제*/
+	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
+	public int updateNodeName(NodeDto node) {
+		// TODO Auto-generated method stub
+		return this.sqlSession.update("update_node_name" , node);
+	}
+
+
 //	public void delG(int g_no) {
 //		this.sqlSession.delete("Gt.g_del",g_no);		
 //	}		

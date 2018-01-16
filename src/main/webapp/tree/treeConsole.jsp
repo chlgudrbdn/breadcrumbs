@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%@ page import="java.io.*"%>
+<%@ page import="java.text.*" %>
+<%@ page import="java.lang.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.net.*" %>
+ 
+<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <html>
@@ -11,9 +18,6 @@
 <title>Insert title here</title>
 <script>
 $(function(){
-	
-	
-
 	$("#addCode").click(function(){
 // 		$.ajax({
 // 			type:'post',
@@ -63,14 +67,36 @@ $(function(){
 	
 	});
 	
+	$("#downloadTree").click(function(){
+		var codes = $("#accumlatedCodes").text();
+		console.log(codes);
+	
+	});
+	
+	
 });
 </script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script>
+function download(text) {
+	console.log("text for download : "+text)
+	  var element = document.createElement('a');
+	  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	  element.setAttribute('download', SelectedOneNode+".R");
+
+	  element.style.display = 'none';
+	  document.body.appendChild(element);
+
+	  element.click();
+
+	  document.body.removeChild(element);
+}
+//출처  https://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
+</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div id="accumlatedCodes" style="word-break:break-all;">
@@ -99,10 +125,10 @@ $(function(){
 					<textarea class="form-control" name="codeTypingArea" rows="5"
 						id="codeTypingArea" ></textarea>
 				</div>
-				<button type="submit" class="btn btn-default" id=addCode>코드 수정/등록</button> <!-- CU -->
+				<button type="submit" class="btn btn-default" id=addCode>코드 등록(새 이름을 짓지 않으면 수정 불가)</button> <!-- CU -->
 <!-- 				<button type="button" class="btn btn-default" id=delNode >노드 삭제</button> D R은 그냥 노드 클릭하면 누적되서 보인다. -->
-				<button type="button" class="btn btn-default" id=deactivateNode>노드 비활성화</button>
-				<button type="button" class="btn btn-default" id=downloadTree>리프노드 코드 다운로드</button>
+<!-- 				<button type="button" class="btn btn-default" id=deactivateNode>노드 비활성화</button> -->
+				<button type="button" class="btn btn-default" id=downloadTree onclick="download( $('#accumlatedCodes > div > p').val() )">해당 노드의 코드 다운로드</button>
 				<button type="button" class="btn btn-default" id=executeCode>선택 코드 실행(유료)</button>
 <%-- <input type="button" value="삭제"onclick="location='g_cont.do?g_no=${g.g_no}&state=del'" /> --%>
 			</form>
@@ -111,5 +137,6 @@ $(function(){
 	<div class="h-50 p-3" id="codeExecuteResult">
 	</div>
 <!-- 	</div> -->
+
 </body>
 </html>

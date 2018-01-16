@@ -21,6 +21,10 @@
 	    insert into node(id, parent, state, text, li_attr)
 	    values(#{id}, #{parent, jdbcType=VARCHAR}, #{state}, #{text}, #{li_attr})
    </insert>
+   <!-- 노드의 text를 수정(사전에 연관된 것도 수정했다고 가정.) -->
+   <update id="update_node_name" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+    update node set text=#{text} where id=#{id}
+   </update>
 
 <!-- 	트리와 노드 관계 추가 -->
    <insert id="add_t_n_relation" parameterType="com.breadcrumbs.breadcrumbs.dto.TreeNodeRelationDto">
@@ -58,7 +62,7 @@
      select * from category where category like '%' || #{value} || '%'
    </select>
    
-         <!-- 유사한 카테고리 목록-->
+         <!-- 해당 트리 카테고리 얻기 -->
    <select id="category_get" parameterType="String" resultType="String">
      select category from m_t_relation where tree_no=#{tree_no}
    </select>
@@ -105,9 +109,9 @@
    </select>
    
    <!-- 선택지 추가 -->
-<!--    <insert id="add_category" parameterType="com.breadcrumbs.breadcrumbs.dto.CategoryDto"> -->
-   <insert id="add_choice" parameterType="String">
-	    insert into choice_list values(#{text}, #{code_piece})
+   <insert id="add_choice" parameterType="com.breadcrumbs.breadcrumbs.dto.ChoiceListDto">
+<!--    <insert id="add_choice" parameterType="String"> -->
+	    insert into choice_list(text, code_piece) values(#{text}, #{code_piece})
    </insert>
       <!-- 선택지 중복 확인-->
    <select id="selectChoice" parameterType="String" resultType="String">
@@ -119,7 +123,8 @@
    
    <!-- 가장 마지막 tree_no 값 구하기 -->
    <select id="tree_max" resultType="int">
-   select tree_no_seq.currval from dual
+   SELECT LAST_NUMBER FROM USER_SEQUENCES WHERE SEQUENCE_NAME = 'TREE_NO_SEQ'
+<!--    select tree_no_seq.currval from dual --> <!-- 첫 트리 생성시 오히려 방해된다. -->
 <!--     select NVL (  max(tree_no), -1) from m_t_relation -->
    </select>   
    
@@ -139,11 +144,7 @@
    <select id="get_treeList" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto">
      select * from m_t_relation where email =#{email}
    </select>
-   <!-- 방명록 수정 -->
-<!--    <update id="g_edit" parameterType="c"> -->
-<!--     update guest10 set g_name=#{g_name},g_title=#{g_title}, -->
-<!--     g_cont=#{g_cont} where g_no=#{g_no} -->
-<!--    </update> -->
+
    
    <!-- 방명록 삭제 -->
 <!--    <delete id="g_del" parameterType="int"> -->

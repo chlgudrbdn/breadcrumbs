@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.breadcrumbs.breadcrumbs.dto.CategoryChoiceDto;
+import com.breadcrumbs.breadcrumbs.dto.ChoiceListDto;
 import com.breadcrumbs.breadcrumbs.dto.MemberTreeRelationDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto;
 import com.breadcrumbs.breadcrumbs.dto.NodeDto2;
@@ -180,20 +182,28 @@ public class NodeController {
 	
 	//노드 추가-노드와 연동된 코드 추가와는 다르다.
 	@RequestMapping("/NodeTextUpdate.node") // rename시에 사용.
-	@ResponseBody //이게 있어야 json으로 반환되는데 이건 숫자만 반환하므로 없어도 됨.
+	@ResponseBody
 	public boolean NodeUpdate(@RequestParam("id") String id,
 											@RequestParam("text") String text,
+											@RequestParam("code_piece") String code_piece,
+											@RequestParam("node_parent_id") String node_parent_id,
 			HttpServletResponse response) throws Exception {
-		System.out.println("update node = "+id+" to "+text);
+		System.out.println("update node = "+id+" to(or rename) text="+text+" node_parent_id="+node_parent_id+"\n code_piece="+code_piece);
+		System.out.println("----------------------------------------");
+		boolean result =false;
+		
 		NodeDto node = new NodeDto();
 		node.setId(id);
 		node.setText(text);
+		node.setLi_attr("");
+		node.setState("");
+		node.setParent(node_parent_id);
 		
-		if(this.nodeAction.checkDuplicateChoice(text)) {
-			
+		int rslt = this.nodeAction.updateNodeName(node, code_piece);
+		System.out.println("rslt="+rslt);
+		if( rslt == 0) {//만약 잘됐다면 0만 리턴. 그외엔 일단 분류는 해두긴 했지만 false
+			result =true;
 		}
-		boolean result = this.nodeAction.updateNodeChoice(node);//루트 노드 파트만 건든다.
-		
 		
 		return result;
 	}
