@@ -59,9 +59,9 @@ public class NodeDaoImpl implements NodeDao {
 	}
 	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
-	public void updateNode(int id) {//노드의 코드 수정 U
+	public int updateNode(NodeDto node) {//노드의 id 수정 U // 바꿀 새로운 아이디는text에 저장해둠.
 		// TODO Auto-generated method stub
-		
+		return this.sqlSession.update("update_node_id" , node);
 	}
 
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
@@ -125,7 +125,7 @@ public class NodeDaoImpl implements NodeDao {
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
 	public String getCategory(String tree_no) {//카테고리 중복여부 확인
 		// TODO Auto-generated method stub
-		return this.sqlSession.selectOne("category_get", tree_no);
+		return this.sqlSession.selectOne("category_get", Integer.parseInt( tree_no ) );
 	}
 	
 	@Transactional// 메소드 수행 중에 예외가 발생하면 rollback 그렇지 않으면 commit
@@ -195,6 +195,11 @@ public class NodeDaoImpl implements NodeDao {
 	public int updateNodeName(NodeDto node) {
 		// TODO Auto-generated method stub
 		return this.sqlSession.update("update_node_name" , node);
+	}
+
+	public int updateTN(NodeDto node) {//li_attr에 바꿀 tree_no 위치. text에 새로운 아이디. id에 기존 id가 들음.
+		// TODO Auto-generated method stub
+		return this.sqlSession.update("update_TN" , node);
 	}
 
 

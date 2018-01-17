@@ -139,7 +139,7 @@
 		 					}
 		 				});  // ajax() end
 		 				
-		 				location.reload();//일단 방법이 없다. 다시 refresh해서 반영 여부 넣어야 한다. 임시일 뿐 이거 빼고도 실시간으로 id가 갱신되어야 한다.
+// 		 				location.reload();//일단 방법이 없다. 다시 refresh해서 반영 여부 넣어야 한다. 임시일 뿐 이거 빼고도 실시간으로 id가 갱신되어야 한다.
 		            	return true;
 		            }
 		            if(operation==='delete_node'){
@@ -222,6 +222,13 @@
 			    }
 // 			    console.log($("#container").jstree(true).get_selected('full', true) );
 		  });
+		  
+		  $('#container').on('rename_node.jstree', function (node,obj) {
+			  console.log("rename_node.jstree");
+          	  console.log("node="+JSON.stringify(node));
+          	  console.log("node="+JSON.stringify(obj));
+		  });
+
 	</script>
 </body>
 </html>

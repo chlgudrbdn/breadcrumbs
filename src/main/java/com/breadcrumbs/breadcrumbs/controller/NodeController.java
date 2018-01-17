@@ -193,6 +193,7 @@ public class NodeController {
 		boolean result =false;
 		
 		NodeDto node = new NodeDto();
+
 		node.setId(id);
 		node.setText(text);
 		node.setLi_attr("");

@@ -15,7 +15,7 @@ public interface NodeDao {
 	List<String> getRecommendCategoryList(String term);//목록
 	NodeDto getNode(String id);//노드 로딩 R
 	void insertNode(NodeDto node);//노드 저장 C
-	void updateNode(int id);//노드의 코드 수정 U
+	int updateNode(NodeDto node);//노드의 id 수정 U // 바꿀 id는 text에 따로 저장해둠.
 	int getNodeCount(int tree_no);//각 노드에 노드 개수
 	int getNodeDepth(int id);//각 노드의 깊이를
 	void node_del(int id);//노드삭제

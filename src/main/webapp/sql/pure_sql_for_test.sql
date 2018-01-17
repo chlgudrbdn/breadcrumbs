@@ -14,14 +14,10 @@
 -- drop table forum_board purge;
 -- drop table qna_board purge;
 
-
 --alter table node ADD li_attr varchar2(200) CONSTRAINT defaultType DEFAULT 'default' WITH VALUES;
 -- ALTER TABLE node DROP COLUMN li_attr;
-ALTER TABLE node MODIFY (state  DEFAULT 'undetermined');
-alter table m_t_relation ADD dataFileName varchar2(3000);
+
 ---------------수정용----------------------------------
-
-
 create sequence tree_no_seq
 start with 1
 increment by 1
@@ -40,11 +36,8 @@ CREATE TABLE useraccount (
 );
 
 COMMENT ON TABLE useraccount IS '사용자계정정보';
-
 COMMENT ON COLUMN useraccount.email IS '이메일';
-
 COMMENT ON COLUMN useraccount.PASS IS '암호';
-
 COMMENT ON COLUMN useraccount.payment_type IS '유료결제유형';
 
 CREATE UNIQUE INDEX PK_useraccount
@@ -127,23 +120,14 @@ CREATE TABLE qna_board (
 );
 
 COMMENT ON TABLE qna_board IS 'QnA게시판';
-
 COMMENT ON COLUMN qna_board.board_Num IS '게시물번호';
-
 COMMENT ON COLUMN qna_board.email IS '이메일';
-
 COMMENT ON COLUMN qna_board.board_name IS '이름';
-
 COMMENT ON COLUMN qna_board.board_pass IS '게시물암호';
-
 COMMENT ON COLUMN qna_board.board_subject IS '제목';
-
 COMMENT ON COLUMN qna_board.board_content IS '본문';
-
 COMMENT ON COLUMN qna_board.board_file IS '첨부파일';
-
 COMMENT ON COLUMN qna_board.board_readcount IS '조회수';
-
 COMMENT ON COLUMN qna_board.board_date IS '게시시간';
 
 CREATE UNIQUE INDEX PK_qna_board
@@ -160,33 +144,22 @@ ALTER TABLE qna_board
 
 /* 노드 */
 CREATE TABLE node (
-	id VARCHAR2(2000) NOT NULL, /* 노드번호 */
+	id VARCHAR2(2000), /* 노드번호 */
 	parent VARCHAR2(2000), /* 부모 노드번호 */
 	state VARCHAR(12), /* 활성 정보 */
 	text VARCHAR2(2000) /* 선택지 */
 );
 
 COMMENT ON TABLE node IS '노드';
-
 COMMENT ON COLUMN node.id IS '노드번호';
-
 COMMENT ON COLUMN node.parent IS '부모 노드번호';
-
 COMMENT ON COLUMN node.state IS '활성 정보';
-
 COMMENT ON COLUMN node.text IS '선택지';
 
 CREATE UNIQUE INDEX PK_node
 	ON node (
 		id ASC
 	);
-
-ALTER TABLE node
-	ADD
-		CONSTRAINT PK_node
-		PRIMARY KEY (
-			id
-		);
 
 /* 포럼게시판 */
 CREATE TABLE forum_board (
@@ -204,25 +177,15 @@ CREATE TABLE forum_board (
 );
 
 COMMENT ON TABLE forum_board IS '포럼게시판';
-
 COMMENT ON COLUMN forum_board.board_Num IS '게시물번호';
-
 COMMENT ON COLUMN forum_board.board_name IS '이름';
-
 COMMENT ON COLUMN forum_board.board_pass IS '게시물암호';
-
 COMMENT ON COLUMN forum_board.board_subject IS '제목';
-
 COMMENT ON COLUMN forum_board.board_content IS '본문';
-
 COMMENT ON COLUMN forum_board.board_file IS '첨부파일';
-
 COMMENT ON COLUMN forum_board.board_readcount IS '조회수';
-
 COMMENT ON COLUMN forum_board.board_date IS '게시시간';
-
 COMMENT ON COLUMN forum_board.tree_no IS '트리 번호';
-
 COMMENT ON COLUMN forum_board.recommend_cnt IS '트리 추천수';
 
 COMMENT ON COLUMN forum_board.email IS '이메일';
@@ -248,13 +211,9 @@ CREATE TABLE m_t_relation (
 );
 
 COMMENT ON TABLE m_t_relation IS '사용자-트리 관계';
-
 COMMENT ON COLUMN m_t_relation.tree_no IS '트리 번호';
-
 COMMENT ON COLUMN m_t_relation.recommend_cnt IS '트리 추천수';
-
 COMMENT ON COLUMN m_t_relation.category IS '카테고리';
-
 COMMENT ON COLUMN m_t_relation.email IS '이메일';
 
 CREATE UNIQUE INDEX PK_m_t_relation
@@ -276,9 +235,7 @@ CREATE TABLE choice_list (
 );
 
 COMMENT ON TABLE choice_list IS '선택지 목록';
-
 COMMENT ON COLUMN choice_list.text IS '선택지';
-
 COMMENT ON COLUMN choice_list.code_piece IS '코드 조각';
 
 CREATE UNIQUE INDEX PK_choice_list
@@ -303,15 +260,10 @@ CREATE TABLE c_c_relation (
 );
 
 COMMENT ON TABLE c_c_relation IS '카테고리-선택지 관계';
-
 COMMENT ON COLUMN c_c_relation.category IS '카테고리';
-
 COMMENT ON COLUMN c_c_relation.text IS '선택지';
-
 COMMENT ON COLUMN c_c_relation.pre_choice IS '이전 선택지';
-
 COMMENT ON COLUMN c_c_relation.choice_pick_freq IS '선택 횟수';
-
 COMMENT ON COLUMN c_c_relation.choice_weight IS '선택 가중치';
 
 /* 트리-노드 관계 */
@@ -321,9 +273,7 @@ CREATE TABLE t_n_relation (
 );
 
 COMMENT ON TABLE t_n_relation IS '트리-노드 관계';
-
 COMMENT ON COLUMN t_n_relation.tree_no IS '트리 번호';
-
 COMMENT ON COLUMN t_n_relation.id IS '노드번호';
 
 /* 카테고리 */
@@ -332,7 +282,6 @@ CREATE TABLE category (
 );
 
 COMMENT ON TABLE category IS '카테고리';
-
 COMMENT ON COLUMN category.category IS '카테고리';
 
 CREATE UNIQUE INDEX PK_category
@@ -446,13 +395,12 @@ ALTER TABLE t_n_relation
 		REFERENCES node (
 			id
 		);
-		
-		
-		
-		
-		
-		
 ----------------------pre data setting----------------
+
+---------------------- editing after data setting----------------------
+ALTER TABLE node MODIFY (state  DEFAULT 'undetermined');
+alter table m_t_relation ADD dataFileName varchar2(3000);
+		
 insert into category values('ImageNet Object Detection from Video Challenge');
 insert into category values('Dog Breed Identification');
 insert into category values('Plant Seedlings Classification');
@@ -477,3 +425,11 @@ insert into useraccount values('admin@breadcrumbs.com', '12345678', 'payed');
 
 
 insert into choice_list(text, code_piece) values('New node', '#type this nodes code');
+
+alter session set ddl_lock_timeout = 600;
+ALTER TABLE node DROP PRIMARY KEY;
+ALTER TABLE node ADD CONSTRAINT node_uk_id UNIQUE (id);
+
+
+
+

@@ -267,7 +267,7 @@ public class NodeAction{
 		// TODO Auto-generated method stub
 		String text= node.getText();
 		String tree_no=node.getId().split("-")[0];
-
+		System.out.println("tree_no chk="+tree_no);
 		CategoryChoiceDto cc = new CategoryChoiceDto();
 		cc.setCategory(getCategory(tree_no) );
 		cc.setText(text);
@@ -294,18 +294,29 @@ public class NodeAction{
 				return 1;
 			}
 			
-			// 카테고리_선택지 관계 추가
-			int insertCCResult=NodeDao.insertCategoryChoice(cc);
-			System.out.println("ccRelation setting done result="+insertCCResult);
-			if(insertCCResult <1) {
+			//node 수정.
+			int updateNodeNameResult = NodeDao.updateNodeName(node);
+			String[] idSplit = node.getId().split("-");
+			String newId = idSplit[0]+"-"+idSplit[1]+"-"+text;
+			node.setText(newId);
+			node.setLi_attr(tree_no);
+			int updatedNodeIdResult = NodeDao.updateNode(node);
+			int updateTNResult = NodeDao.updateTN(node);
+			System.out.println("updateNodeNameResult="+updateNodeNameResult);
+			System.out.println("updatedNodeIdResult="+updatedNodeIdResult);
+			System.out.println("updateTNResult="+updateTNResult);
+			if((updateNodeNameResult+updatedNodeIdResult+updateTNResult) <1) {
 				return 2;
 			}
 			
-			int updateNodeNameResult = NodeDao.updateNodeName(node);
-			System.out.println("updateNodeNameResult="+updateNodeNameResult);
-			if(updateNodeNameResult <1) {
+			// 카테고리_선택지 관계 수정
+			int insertCCResult=NodeDao.insertCategoryChoice(cc);
+			System.out.println("ccRelation setting done result="+insertCCResult);
+			if(insertCCResult <1) {
 				return 3;
 			}
+			
+
 		}
 		return 0;
 	}

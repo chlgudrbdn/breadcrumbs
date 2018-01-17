@@ -25,12 +25,23 @@
    <update id="update_node_name" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
     update node set text=#{text} where id=#{id}
    </update>
+   
+      <!-- 노드의 id 수정 -->
+   <update id="update_node_id" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+    update node set id=#{text} where id=#{id}
+   </update>
+
+
 
 <!-- 	트리와 노드 관계 추가 -->
    <insert id="add_t_n_relation" parameterType="com.breadcrumbs.breadcrumbs.dto.TreeNodeRelationDto">
 	    insert into t_n_relation(tree_no, id)
 	    values(#{tree_no}, #{id})
    </insert>
+<!--  노드 id바꿀 때 이에 맞춰  TN의 id 바꾸기. li_attr에 바꿀 tree_no 위치. text에 새로운 아이디. id에 기존 id가 들음.-->
+   <update id="update_TN" parameterType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
+    update node set id=#{text} where tree_no=#{li_attr}
+   </update>
    
    <!-- 노드 1개 검색-->
    <select id="getNode" parameterType="String" resultType="com.breadcrumbs.breadcrumbs.dto.NodeDto">
@@ -63,7 +74,7 @@
    </select>
    
          <!-- 해당 트리 카테고리 얻기 -->
-   <select id="category_get" parameterType="String" resultType="String">
+   <select id="category_get" parameterType="int" resultType="String">
      select category from m_t_relation where tree_no=#{tree_no}
    </select>
    
